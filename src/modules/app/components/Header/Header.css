@@ -1,0 +1,24 @@
+.navbar {
+  background-color: #990000!important;
+}
+
+img {
+  height: 50px!important;
+  padding: 5px 0px!important;
+  margin-right: 10px; 
+}
+
+.navbar-header > a {
+  color: white!important;
+}
+
+.nav > li > a {
+  color: white!important;
+}
+
+.nav > li > a:hover {
+  background-color: black!important;
+  color: whitesmoke!important;
+}
+
+  

@@ -18,7 +18,8 @@ class Login extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if((this.props.isAuthenticated !== nextProps.isAuthenticated) && nextProps.isAuthenticated){
+    if(nextProps.isAuthenticated){
+      console.log('isAuthenticated...');
       this.props.storeCredentials(this.state.username);
       this.context.router.push('/');
     }

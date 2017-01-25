@@ -1,4 +1,5 @@
 import Immutable from 'seamless-immutable';
+import {LOGIN, STORE_CREDENTIALS, LOGOUT} from './actionTypes';
 
 const credentials = {
   username: 'omg',
@@ -12,17 +13,17 @@ const INITIAL_STATE = {
 
 const loginReducer = (state = Immutable.from(INITIAL_STATE), action) => {
   switch (action.type) {
-    case 'LOGIN':
-      return (action.payload.username === credentials.username && action.payload.password === credentials.password) 
-        ? state.set('isAuthenticated', true)
-        : state;
-
-    case 'STORE_CREDENTIALS':
+    case LOGIN: 
+      return (action.payload.username === credentials.username 
+        && action.payload.password === credentials.password) ? 
+          state.set('isAuthenticated', true) : state;
+          
+    case STORE_CREDENTIALS:
       return state
         .set('username', action.payload.username);
 
-    case 'LOGOUT':
-      window.location.assign('/');
+    case LOGOUT:
+      // window.location.assign('/');
       return Immutable.from(INITIAL_STATE);
 
     default:

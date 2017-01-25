@@ -1,0 +1,35 @@
+.navbarStyle {
+  background-color: #993333!important;
+}
+
+img {
+  height: 50px!important;
+  padding: 5px 0px!important;
+  margin-right: 10px; 
+}
+
+.nav > li > a {
+  color: whitesmoke!important;
+}
+
+.nav > li > a:hover {
+  background-color: #990000!important;
+  color: whitesmoke!important;
+}
+
+.dropdown.open > a {
+  color: #990000!important;
+}
+
+.dropdown-menu {
+  background-color: #993333!important;
+}
+
+.dropdown-menu > li > a {
+  color: whitesmoke!important;
+}
+
+.dropdown-menu > li > a:hover {
+  background-color: whitesmoke!important;
+  color: #990000!important;
+}

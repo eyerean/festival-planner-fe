@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #990000!important;
+  background-color: #f2f2f2!important;
 }
 
 img {
@@ -9,16 +9,6 @@ img {
 }
 
 .navbar-header > a {
-  color: white!important;
+  color: black!important;
 }
-
-.nav > li > a {
-  color: white!important;
-}
-
-.nav > li > a:hover {
-  background-color: black!important;
-  color: whitesmoke!important;
-}
-
   

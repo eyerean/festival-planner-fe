@@ -14,6 +14,18 @@ class App extends React.Component {
     router: React.PropTypes.object.isRequired
   };
 
+  componentWillMount(){
+    if(!this.props.isAuthenticated){
+      this.context.router.push('/login');
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+   if((this.props.isAuthenticated !== nextProps.isAuthenticated) && !nextProps.isAuthenticated){
+      this.context.router.push('/login');
+    } 
+  }
+
   handleLogout = () => {
     this.props.logout();
   }
@@ -22,9 +34,9 @@ class App extends React.Component {
 
     const {isAuthenticated, children, username } = this.props;
     return (
-      <div style={{backgroundColor: '#f9ecec', height: HEIGHT}}>
-        <Header isAuthenticated={isAuthenticated} onLogout={this.handleLogout} username={username}/>
-        <Page children={children} />
+      <div style={{backgroundColor: '#f2f2f2', height: HEIGHT}}>
+        <Header />
+        <Page children={children} isAuthenticated={isAuthenticated} onLogout={this.handleLogout} username={username}/>
       </div>
     );
   }

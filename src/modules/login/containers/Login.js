@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {FormGroup, ControlLabel,  Button, FormControl } from 'react-bootstrap';
+import {Form, FormGroup, ControlLabel,  Button, FormControl } from 'react-bootstrap';
 import {bindActionCreators} from 'redux';
 import actions from '../actions';
 import selectors from '../selectors';
@@ -34,14 +34,14 @@ class Login extends React.Component {
   };
 
   handleSignInClick = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     this.props.login(this.state.username, this.state.password);
   };
 
   render() {
     const {username, password, submitting} = this.state;
-    return (<form>
-      <h2>Please sign in.</h2>       
+    return (<Form>
+      <h2>Please sign in</h2>       
       <FormGroup controlId="username">
         <ControlLabel>Username</ControlLabel>
         <FormControl type="text" placeholder="Username" value={username} onChange={this.handleUsernameChange}/>
@@ -54,13 +54,13 @@ class Login extends React.Component {
 
       <Button 
         bsStyle="primary" 
-        type="submit" 
+        type="submit"
         onClick={this.handleSignInClick} 
         disabled={submitting}
       >
         {submitting ? <i className="fa fa-spinner fa-pulse fa-3x fa-fw" /> : `Sign in`}
       </Button>
-    </form>);
+    </Form>);
   }
 }
 

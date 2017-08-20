@@ -1,18 +1,24 @@
 import React from 'react';
+import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
+import reduxFetch from 'react-redux-fetch';
 import {Form, FormGroup, ControlLabel,  Button, FormControl } from 'react-bootstrap';
-import {bindActionCreators} from 'redux';
+import { Field, reduxForm } from 'redux-form';
+import apiRoutes from '../../../api/routes';
 import actions from '../actions';
 import selectors from '../selectors';
 import './Login.css';
 
-class Login extends React.Component {
-  state = {
-    username: '',
-    password: '',
-    submitting: false
-  };
+const required = value => value ? undefined : 'Required field.';
 
+const Input = ({input, type, step, meta: {touched, error, warning}}) => (
+  <div>
+    <input {...input} type={type} step={step} className="form-control"/>
+    {touched && ((error && <span className="error">{error}</span>))}
+  </div>
+);
+
+class Login extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   };
@@ -25,40 +31,46 @@ class Login extends React.Component {
     }
   }
 
-  handleUsernameChange = (e) => {
-    this.setState({username: e.currentTarget.value})
-  };
-
-  handlePasswordChange = (e) => {
-    this.setState({password: e.currentTarget.value})
-  };
-
-  handleSignInClick = (e) => {
-    e.preventDefault();
-    this.props.login(this.state.username, this.state.password);
+  handleAuthenticate = (formData) => {
+    console.log('dispatchLoginPost', formData);
+    this.props.dispatchAuthenticatePost(formData);
   };
 
   render() {
-    const {username, password, submitting} = this.state;
-    return (<Form>
+    const { handleSubmit, pristine, reset, submitting } = this.props;
+
+    return (<Form onSubmit={handleSubmit(this.handleAuthenticate)}>
       <h2>Please sign in</h2>       
       <FormGroup controlId="username">
         <ControlLabel>Username</ControlLabel>
-        <FormControl type="text" placeholder="Username" value={username} onChange={this.handleUsernameChange}/>
+        <Field
+          className="form-group"
+          name="username"
+          component={Input}
+          type="text"
+          placeholder="Username"
+          validate={required}
+        />
       </FormGroup>
 
       <FormGroup controlId="password">
         <ControlLabel>Password</ControlLabel>
-        <FormControl type="password" placeholder="Password" value={password} onChange={this.handlePasswordChange}/>
+        <Field
+          className="form-group"
+          name="password"
+          component={Input}
+          type="password"
+          placeholder="Password"
+          validate={required}
+        />
       </FormGroup>
 
-      <Button 
-        bsStyle="primary" 
+      <Button
         type="submit"
-        onClick={this.handleSignInClick} 
+        bsStyle="primary"
         disabled={submitting}
       >
-        {submitting ? <i className="fa fa-spinner fa-pulse fa-3x fa-fw" /> : `Sign in`}
+        {submitting ? <i className="fa fa-spinner fa-pulse fa-3x fa-fw" /> : 'Sign in'}
       </Button>
     </Form>);
   }
@@ -69,8 +81,26 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  login: bindActionCreators(actions.login, dispatch),
   storeCredentials: bindActionCreators(actions.storeCredentials, dispatch)
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+const mapPropsToDispatchToProps = (props) => [
+  {
+    resource: 'authenticate',
+    method: 'POST',
+    request: (credentials) => ({
+      url: apiRoutes().authenticate(),
+      body: credentials
+    })
+  }
+];
+
+const enhance = compose(
+  reduxFetch(mapPropsToDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
+  reduxForm({
+    form: 'loginForm'
+  })
+);
+
+export default enhance(Login);

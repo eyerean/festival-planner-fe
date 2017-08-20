@@ -3,8 +3,7 @@ import { Navbar } from 'react-bootstrap';
 // import logo from '../../../../../public/assets/logo.jpeg';
 import './Header.css';
 
-const Header = ({isAuthenticated, onLogout, username}) => {
-  const title = (<span><i className="fa fa-user" /> {username}</span>);
+const Header = ({isAuthenticated, onLogout}) => {
   return (
     <Navbar>
       <Navbar.Header>

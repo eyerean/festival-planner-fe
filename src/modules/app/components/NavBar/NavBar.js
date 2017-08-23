@@ -2,8 +2,8 @@ import React from 'react';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
 import './NavBar.css';
 
-const NavBar = ({onLogout, username}) => {
-  const title = (<span><i className="fa fa-user" /> {username}</span>);
+const NavBar = ({onLogout, user}) => {
+  const title = (<span><i className="fa fa-user" /> {user}</span>);
   return (
     <Navbar className="navbarStyle">
       <Nav>

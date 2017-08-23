@@ -24,15 +24,13 @@ class Login extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.isAuthenticated){
-      console.log('isAuthenticated...');
-      this.props.storeCredentials(this.state.username);
+    if(nextProps.authenticateFetch.fulfilled && this.props.authenticateFetch.pending){
+      this.props.storeSession(nextProps.authenticateFetch.value.token, nextProps.authenticateFetch.value.user);
       this.context.router.push('/');
     }
   }
 
   handleAuthenticate = (formData) => {
-    console.log('dispatchLoginPost', formData);
     this.props.dispatchAuthenticatePost(formData);
   };
 
@@ -81,16 +79,19 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  storeCredentials: bindActionCreators(actions.storeCredentials, dispatch)
+  storeSession: bindActionCreators(actions.storeSession, dispatch)
 });
 
 const mapPropsToDispatchToProps = (props) => [
   {
     resource: 'authenticate',
     method: 'POST',
-    request: (credentials) => ({
+    request: ({username, password}) => ({
       url: apiRoutes().authenticate(),
-      body: credentials
+      body: {
+        name: username,
+        password
+      }
     })
   }
 ];

@@ -33,11 +33,11 @@ class App extends React.Component {
 
   render() {
 
-    const {isAuthenticated, children, username } = this.props;
+    const {isAuthenticated, children, user } = this.props;
     return (
       <div style={{backgroundColor: '#f2f2f2', height: HEIGHT}}>
         <Header />
-        <Page children={children} isAuthenticated={isAuthenticated} onLogout={this.handleLogout} username={username}/>
+        <Page children={children} isAuthenticated={isAuthenticated} onLogout={this.handleLogout} user={user}/>
       </div>
     );
   }
@@ -47,7 +47,7 @@ class App extends React.Component {
 const mapStateToProps = (state) => {
   return ({
     isAuthenticated: loginSelectors.isAuthenticated(state),
-    username: loginSelectors.getUsername(state)
+    user: loginSelectors.getUser(state)
   });
 };
 

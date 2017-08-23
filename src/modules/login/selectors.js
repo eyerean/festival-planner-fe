@@ -1,7 +1,7 @@
 const isAuthenticated = state => state.login.isAuthenticated;
-const getUsername = state => state.login.username;
+const getUser = state => state.login.user;
 
 export default {
   isAuthenticated,
-  getUsername
+  getUser
 };

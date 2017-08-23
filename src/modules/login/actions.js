@@ -1,20 +1,10 @@
-import {LOGIN, STORE_CREDENTIALS, LOGOUT} from './actionTypes';
+import {STORE_SESSION, LOGOUT} from './actionTypes';
 
-const login = (username, password) => {
-  console.log('login action!', username, password);
-  return ({
-    type: LOGIN,
-    payload: {
-      username,
-      password
-    }
-  })
-};
-
-const storeCredentials = (username) => ({
-  type: STORE_CREDENTIALS,
+const storeSession = (token, user) => ({
+  type: STORE_SESSION,
   payload: {
-    username
+    token,
+    user
   }
 });
 
@@ -24,7 +14,6 @@ const logout = () => ({
 });
 
 export default {
-  login,
-  storeCredentials,
+  storeSession,
   logout
 }

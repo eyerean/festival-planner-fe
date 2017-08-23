@@ -1,3 +1,2 @@
-export const LOGIN = 'login';
-export const STORE_CREDENTIALS = 'storeCredentials';
+export const STORE_SESSION = 'storeSession';
 export const LOGOUT = 'logout';

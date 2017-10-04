@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 // import { bindActionCreators } from 'redux';
-import { Alert } from 'react-bootstrap';
+// import { Alert } from 'react-bootstrap';
 import selectors from '../modules/login/selectors';
 // import actions from '../actions';
 // import appSelectors from '../../app/selectors';

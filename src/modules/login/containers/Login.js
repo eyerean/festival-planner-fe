@@ -3,18 +3,18 @@ import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
 import {Form, FormGroup, ControlLabel,  Button, FormControl } from 'react-bootstrap';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, SubmissionError } from 'redux-form';
 import apiRoutes from '../../../api/routes';
 import actions from '../actions';
 import selectors from '../selectors';
 import './Login.css';
 
-const required = value => value ? undefined : 'Required field.';
+const validationRequired = value => value ? undefined : 'Required field.';
 
 const Input = ({input, type, step, meta: {touched, error, warning}}) => (
   <div>
     <input {...input} type={type} step={step} className="form-control"/>
-    {touched && ((error && <span className="error">{error}</span>))}
+    {touched && error && <span className="error">{error}</span>}
   </div>
 );
 
@@ -28,18 +28,25 @@ class Login extends React.Component {
       this.props.storeSession(nextProps.authenticateFetch.value.token, nextProps.authenticateFetch.value.user);
       this.context.router.push('/');
     }
+    if(this.props.authenticateFetch.pending && nextProps.authenticateFetch.rejected){
+      if (nextProps.authenticateFetch.reason.cause) {
+        console.log('do.i.get.here', nextProps);
+        // throw new SubmissionError({username: 'wrong', _error: nextProps.authenticateFetch.reason.cause.message});
+      }
+    }
   }
 
   handleAuthenticate = (formData) => {
-    this.props.dispatchAuthenticatePost(formData);
+    this.props.dispatchAuthenticatePost(formData)
   };
 
   render() {
-    const { handleSubmit, pristine, reset, submitting } = this.props;
+    const { handleSubmit, pristine, reset, dirty, anyTouched, error, submitting, authenticateFetch } = this.props;
 
     return (<Form onSubmit={handleSubmit(this.handleAuthenticate)}>
-      <h2>Please sign in</h2>       
-      <FormGroup controlId="username">
+      <h2>Please sign in</h2>
+      {authenticateFetch.reason && <p className="error">{authenticateFetch.reason.cause.message}</p>}
+      <FormGroup controlId="username" validationState={error && error.username && 'error'}>
         <ControlLabel>Username</ControlLabel>
         <Field
           className="form-group"
@@ -47,11 +54,11 @@ class Login extends React.Component {
           component={Input}
           type="text"
           placeholder="Username"
-          validate={required}
+          validate={validationRequired}
         />
       </FormGroup>
 
-      <FormGroup controlId="password">
+      <FormGroup controlId="password" validationState={error && error.password && 'error'}>
         <ControlLabel>Password</ControlLabel>
         <Field
           className="form-group"
@@ -59,7 +66,7 @@ class Login extends React.Component {
           component={Input}
           type="password"
           placeholder="Password"
-          validate={required}
+          validate={validationRequired}
         />
       </FormGroup>
 
@@ -100,7 +107,9 @@ const enhance = compose(
   reduxFetch(mapPropsToDispatchToProps),
   connect(mapStateToProps, mapDispatchToProps),
   reduxForm({
-    form: 'loginForm'
+    form: 'loginForm',
+    touchOnChange: true,
+    touchOnBlur: true
   })
 );
 

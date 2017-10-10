@@ -7,7 +7,7 @@ const NavBar = ({onLogout, user}) => {
   return (
     <Navbar className="navbarStyle">
       <Nav>
-        <NavItem eventKey={1} href="#/"><i className="fa fa-key" /> Home</NavItem>
+        <NavItem eventKey={1} href="#/"><i className="fa fa-key" /> Dashboard</NavItem>
         <NavItem eventKey={2} href="#/artists"><i className="fa fa-car" /> Artists</NavItem>
         <NavItem eventKey={3} href="#/sound"><i className="fa fa-gear" /> Sound</NavItem>
         <NavItem eventKey={4} href="#/visual"><i className="fa fa-gear" /> Visual</NavItem>

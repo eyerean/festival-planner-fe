@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 // import { bindActionCreators } from 'redux';
-// import { Alert } from 'react-bootstrap';
 import selectors from '../modules/login/selectors';
 // import actions from '../actions';
 // import appSelectors from '../../app/selectors';
@@ -21,12 +20,6 @@ export const requireAuthentication = (Component) => {
       this.checkAuth(this.props);
       // this.props.storeRedirectAfterLoginLocation(this.props.locationBeforeTransitions.pathname);
     };
-
-    // componentWillUpdate(nextProps) {
-    //   if (!nextProps.authenticated) {
-    //     this.context.router.push('/');
-    //   }
-    // }
 
     checkAuth(props) {
       if (!props.isAuthenticated) {

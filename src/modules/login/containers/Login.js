@@ -40,7 +40,6 @@ class Login extends React.Component {
       this.context.router.push('/');
     }
     if(this.props.authenticateFetch.pending && nextProps.authenticateFetch.fulfilled){
-      console.log('authenticateFetch', nextProps.authenticateFetch);
       this.props.authenticate();
       this.context.router.push('/');
     }
@@ -51,7 +50,7 @@ class Login extends React.Component {
   };
 
   render() {
-    const { handleSubmit, pristine, reset, dirty, anyTouched, error, submitting, loginFetch } = this.props;
+    const { handleSubmit, error, submitting, loginFetch } = this.props;
 
     return (<Form onSubmit={handleSubmit(this.handleAuthenticate)}>
       <h2>Please sign in</h2>
@@ -116,8 +115,7 @@ const mapPropsToDispatchToProps = (props) => [
     resource: 'authenticate',
     method: 'GET',
     request: (token) => ({
-      url: apiRoutes().authenticate(token),
-      // headers: {'x-access-token': token}
+      url: apiRoutes().authenticate(token)
     })
   }
 ];

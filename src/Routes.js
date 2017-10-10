@@ -15,7 +15,7 @@ const Routes = ({history}) => {
   return(
     <Router history={history}>
       <Route path="/" component={App}>
-        <IndexRoute component={Dashboard}/>
+        <IndexRoute component={requireAuthentication(Dashboard)}/>
         <Route path="/login" component={Login}/>
         <Route path="/artists" component={requireAuthentication(Artists)}/>
         <Route path="/sound" component={requireAuthentication(Sound)}/>

@@ -28,7 +28,7 @@ class App extends React.Component {
   }
 
   handleLogout = () => {
-    console.log('handleLogout');
+    localStorage.removeItem('token');
     this.props.logout();
   }
 

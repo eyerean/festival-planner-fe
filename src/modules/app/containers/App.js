@@ -21,7 +21,8 @@ class App extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-   if((this.props.isAuthenticated !== nextProps.isAuthenticated) && !nextProps.isAuthenticated){
+   // if((this.props.isAuthenticated !== nextProps.isAuthenticated) && !nextProps.isAuthenticated){
+   if(!localStorage.getItem('token') || localStorage.getItem('token') === ""){
       this.context.router.push('/login');
     } 
   }

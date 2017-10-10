@@ -1,5 +1,6 @@
 const apiRoutes = () => ({
-  authenticate: () => `/api/authenticate`,
+  login: () => `/api/login`,
+  authenticate: (token) => `/api/?token=${token}`
 });
 
 export default apiRoutes;

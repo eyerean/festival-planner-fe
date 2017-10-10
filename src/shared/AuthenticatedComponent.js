@@ -18,10 +18,15 @@ export const requireAuthentication = (Component) => {
     };
 
     componentWillMount() {
-      console.log('edo tsekaro AUTH', this.props);
       this.checkAuth(this.props);
       // this.props.storeRedirectAfterLoginLocation(this.props.locationBeforeTransitions.pathname);
     };
+
+    // componentWillUpdate(nextProps) {
+    //   if (!nextProps.authenticated) {
+    //     this.context.router.push('/');
+    //   }
+    // }
 
     checkAuth(props) {
       if (!props.isAuthenticated) {
@@ -33,8 +38,6 @@ export const requireAuthentication = (Component) => {
     render() {
       if (this.props.isAuthenticated) {
         return <Component {...this.props}/>;
-      // } else if (this.props.isAuthenticated){ //opote isos den to xreiazesai auto
-      //   return <Alert bsStyle="danger">Access denied</Alert>;
       } else {
         return <i className="centered-spinner fa fa-spinner fa-pulse fa-3x fa-fw"></i>
       }

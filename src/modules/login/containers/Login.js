@@ -2,8 +2,8 @@ import React from 'react';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import {Form, FormGroup, ControlLabel,  Button, FormControl } from 'react-bootstrap';
-import { Field, reduxForm, SubmissionError } from 'redux-form';
+import {Form, FormGroup, ControlLabel,  Button } from 'react-bootstrap';
+import { Field, reduxForm } from 'redux-form';
 import apiRoutes from '../../../api/routes';
 import actions from '../actions';
 import selectors from '../selectors';
@@ -23,29 +23,39 @@ class Login extends React.Component {
     router: React.PropTypes.object.isRequired
   };
 
+
+  componentWillMount() {
+    if (this.props.isAuthenticated) {
+      setTimeout(() => this.context.router.push('/'), 1500);
+    } else {
+      this.props.dispatchAuthenticateGet(localStorage.getItem('token')); 
+    }
+  };
+
   componentWillReceiveProps(nextProps) {
-    if(nextProps.authenticateFetch.fulfilled && this.props.authenticateFetch.pending){
-      this.props.storeSession(nextProps.authenticateFetch.value.token, nextProps.authenticateFetch.value.user);
+    if(this.props.loginFetch.pending && nextProps.loginFetch.fulfilled){
+      this.props.storeSession(nextProps.loginFetch.value.token, nextProps.loginFetch.value.user);
+      this.props.authenticate();
+      localStorage.setItem('token', nextProps.loginFetch.value.token);
       this.context.router.push('/');
     }
-    if(this.props.authenticateFetch.pending && nextProps.authenticateFetch.rejected){
-      if (nextProps.authenticateFetch.reason.cause) {
-        console.log('do.i.get.here', nextProps);
-        // throw new SubmissionError({username: 'wrong', _error: nextProps.authenticateFetch.reason.cause.message});
-      }
+    if(this.props.authenticateFetch.pending && nextProps.authenticateFetch.fulfilled){
+      console.log('authenticateFetch', nextProps.authenticateFetch);
+      this.props.authenticate();
+      this.context.router.push('/');
     }
   }
 
   handleAuthenticate = (formData) => {
-    this.props.dispatchAuthenticatePost(formData)
+    this.props.dispatchLoginPost(formData)
   };
 
   render() {
-    const { handleSubmit, pristine, reset, dirty, anyTouched, error, submitting, authenticateFetch } = this.props;
+    const { handleSubmit, pristine, reset, dirty, anyTouched, error, submitting, loginFetch } = this.props;
 
     return (<Form onSubmit={handleSubmit(this.handleAuthenticate)}>
       <h2>Please sign in</h2>
-      {authenticateFetch.reason && <p className="error">{authenticateFetch.reason.cause.message}</p>}
+      {loginFetch && loginFetch.reason && <p className="error">{loginFetch.reason.cause.message}</p>}
       <FormGroup controlId="username" validationState={error && error.username && 'error'}>
         <ControlLabel>Username</ControlLabel>
         <Field
@@ -82,23 +92,32 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: selectors.isAuthenticated(state)
+  isAuthenticated: selectors.isAuthenticated(state),
+  token: selectors.getToken(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  storeSession: bindActionCreators(actions.storeSession, dispatch)
+  storeSession: bindActionCreators(actions.storeSession, dispatch),
+  authenticate: bindActionCreators(actions.authenticate, dispatch)
 });
 
 const mapPropsToDispatchToProps = (props) => [
   {
-    resource: 'authenticate',
+    resource: 'login',
     method: 'POST',
     request: ({username, password}) => ({
-      url: apiRoutes().authenticate(),
+      url: apiRoutes().login(),
       body: {
         name: username,
         password
       }
+    })
+  },{
+    resource: 'authenticate',
+    method: 'GET',
+    request: (token) => ({
+      url: apiRoutes().authenticate(token),
+      // headers: {'x-access-token': token}
     })
   }
 ];

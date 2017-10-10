@@ -1,4 +1,4 @@
-import {STORE_SESSION, LOGOUT} from './actionTypes';
+import {STORE_SESSION, LOGOUT, AUTHENTICATE} from './actionTypes';
 
 const storeSession = (token, user) => ({
   type: STORE_SESSION,
@@ -13,7 +13,13 @@ const logout = () => ({
   payload: {},
 });
 
+const authenticate = () => ({
+  type: AUTHENTICATE,
+  payload: {}
+})
+
 export default {
   storeSession,
-  logout
+  logout,
+  authenticate
 }

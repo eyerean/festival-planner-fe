@@ -1,5 +1,5 @@
 import Immutable from 'seamless-immutable';
-import {STORE_SESSION, LOGOUT} from './actionTypes';
+import {STORE_SESSION, LOGOUT, AUTHENTICATE} from './actionTypes';
 
 const INITIAL_STATE = {
   isAuthenticated: false,
@@ -12,11 +12,12 @@ const loginReducer = (state = Immutable.from(INITIAL_STATE), action) => {
     case STORE_SESSION:
       return state
         .set('token', action.payload.token)
-        .set('user', action.payload.user)
-        .set('isAuthenticated', true);
+        .set('user', action.payload.user);
+
+    case AUTHENTICATE:
+      return state.set('isAuthenticated', true);
 
     case LOGOUT:
-      // window.location.assign('/');
       return Immutable.from(INITIAL_STATE);
 
     default:

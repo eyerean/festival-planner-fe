@@ -15,11 +15,11 @@ const Routes = ({history}) => {
   return(
     <Router history={history}>
       <Route path="/" component={App}>
-        <IndexRoute component={requireAuthentication(Dashboard)} />
+        <IndexRoute component={Dashboard}/>
         <Route path="/login" component={Login}/>
-        <Route path="/artists" component={Artists}/> {/* test gia to refresh + login */}
-        <Route path="/sound" component={Sound}/>
-        <Route path="/visual" component={Visual}/>
+        <Route path="/artists" component={requireAuthentication(Artists)}/>
+        <Route path="/sound" component={requireAuthentication(Sound)}/>
+        <Route path="/visual" component={requireAuthentication(Visual)}/>
       </Route>
     </Router>
   );

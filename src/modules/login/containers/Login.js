@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
@@ -20,7 +21,7 @@ const Input = ({input, type, step, meta: {touched, error, warning}}) => (
 
 class Login extends React.Component {
   static contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   };
 
 

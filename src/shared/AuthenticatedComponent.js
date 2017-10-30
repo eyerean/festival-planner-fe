@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 // import { bindActionCreators } from 'redux';
 import selectors from '../modules/login/selectors';
@@ -9,11 +10,11 @@ export const requireAuthentication = (Component) => {
 
   class AuthenticatedComponent extends React.Component {
     static propTypes = {
-      isAuthenticated: React.PropTypes.bool
+      isAuthenticated: PropTypes.bool
     };
 
     static contextTypes = {
-      router: React.PropTypes.object.isRequired
+      router: PropTypes.object.isRequired
     };
 
     componentWillMount() {

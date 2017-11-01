@@ -5,6 +5,7 @@ const DashboardLayout = () => (<div>
     Dashboooooard blah
 
     <Button>I AM A BUTTON</Button>
+    <Button primary>I AM A PRIMARY BUTTON</Button>
 
   </div>
 );

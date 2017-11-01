@@ -1,8 +1,11 @@
 import React from 'react';
-// import {Well} from 'react-bootstrap';
+import Button from '../../../shared/Button';
 
 const DashboardLayout = () => (<div>
-      Dashboooooard blah
+    Dashboooooard blah
+
+    <Button>I AM A BUTTON</Button>
+
   </div>
 );
 

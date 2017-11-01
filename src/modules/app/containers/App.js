@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import AppWrapper from '../components/AppWrapper';
 import Header from '../components/Header/Header';
 import Page from '../components/Page/Page';
 import loginActions from '../../login/actions';
@@ -34,13 +35,12 @@ class App extends React.Component {
   }
 
   render() {
-
     const {isAuthenticated, children, user } = this.props;
     return (
-      <div style={{backgroundColor: '#f2f2f2', height: HEIGHT}}>
+      <AppWrapper height={HEIGHT}>
         <Header />
         <Page children={children} isAuthenticated={isAuthenticated} onLogout={this.handleLogout} user={user}/>
-      </div>
+      </AppWrapper>
     );
   }
 }

@@ -38,9 +38,12 @@ class Login extends React.Component {
       this.props.storeSession(nextProps.loginFetch.value.token, nextProps.loginFetch.value.user);
       this.props.authenticate();
       localStorage.setItem('token', nextProps.loginFetch.value.token);
+      localStorage.setItem('user', nextProps.loginFetch.value.user);
       this.context.router.push('/');
     }
     if(this.props.authenticateFetch.pending && nextProps.authenticateFetch.fulfilled){
+      //token is correct so user is correct so store them
+      this.props.storeSession(localStorage.getItem('token'), localStorage.getItem('user'));
       this.props.authenticate();
       this.context.router.push('/');
     }

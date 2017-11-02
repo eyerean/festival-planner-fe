@@ -1,11 +1,11 @@
 import React from 'react';
 import { Navbar } from 'react-bootstrap';
 // import logo from '../../../../../public/assets/logo.jpeg';
-import './Header.css';
+import NavBarComponent from '../NavBarComponent';
 
 const Header = ({isAuthenticated, onLogout}) => {
   return (
-    <Navbar>
+    <NavBarComponent comp='header'>
       <Navbar.Header>
         <Navbar.Brand>
           {/* <img src={logo} alt="header_logo" /> */}
@@ -14,7 +14,7 @@ const Header = ({isAuthenticated, onLogout}) => {
           <a href="#/">Festival Planner</a>
         </Navbar.Brand>
       </Navbar.Header>
-    </Navbar>
+    </NavBarComponent>
   );
 }
 

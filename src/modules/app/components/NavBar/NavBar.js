@@ -1,11 +1,11 @@
 import React from 'react';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
-import './NavBar.css';
+import { Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
+import NavBarComponent from '../NavBarComponent';
 
 const NavBar = ({onLogout, user}) => {
   const title = (<span><i className="fa fa-user" /> {user}</span>);
   return (
-    <Navbar className="navbarStyle">
+    <NavBarComponent comp='nav'>
       <Nav>
         <NavItem eventKey={1} href="#/"><i className="fa fa-key" /> Dashboard</NavItem>
         <NavItem eventKey={2} href="#/artists"><i className="fa fa-car" /> Artists</NavItem>
@@ -20,7 +20,7 @@ const NavBar = ({onLogout, user}) => {
           <MenuItem eventKey={6.2} onClick={onLogout}>Logout</MenuItem>
         </NavDropdown>
       </Nav>
-    </Navbar>
+    </NavBarComponent>
   );
 }
 

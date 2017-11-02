@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar } from 'react-bootstrap';
+import NavBarComponent from './NavBarComponent';
 // import logo from '../../../../../public/assets/logo.jpeg';
-import NavBarComponent from '../NavBarComponent';
 
 const Header = ({isAuthenticated, onLogout}) => {
   return (

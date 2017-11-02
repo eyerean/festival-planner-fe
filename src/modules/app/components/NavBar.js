@@ -1,6 +1,6 @@
 import React from 'react';
 import { Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
-import NavBarComponent from '../NavBarComponent';
+import NavBarComponent from './NavBarComponent';
 
 const NavBar = ({onLogout, user}) => {
   const title = (<span><i className="fa fa-user" /> {user}</span>);

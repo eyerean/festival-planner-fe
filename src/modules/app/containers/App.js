@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import AppWrapper from '../components/AppWrapper';
-import Header from '../components/Header/Header';
-import Page from '../components/Page/Page';
+import Header from '../components/Header';
+import Page from '../components/Page';
 import loginActions from '../../login/actions';
 import loginSelectors from '../../login/selectors';
 

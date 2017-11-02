@@ -17,7 +17,7 @@ const validationRequired = value => value ? undefined : 'Required field.';
 const Input = ({input, type, step, meta: {touched, error, warning}}) => (
   <div>
     <input {...input} type={type} step={step} className="form-control"/>
-    {touched && error && <span className="error">{error}</span>}
+    {touched && error && <ErrorText>{error}</ErrorText>}
   </div>
 );
 
@@ -65,7 +65,6 @@ class Login extends React.Component {
         <FormGroup controlId="username" validationState={error && error.username && 'error'}>
           <ControlLabel>Username</ControlLabel>
           <Field
-            className="form-group"
             name="username"
             component={Input}
             type="text"
@@ -77,7 +76,6 @@ class Login extends React.Component {
         <FormGroup controlId="password" validationState={error && error.password && 'error'}>
           <ControlLabel>Password</ControlLabel>
           <Field
-            className="form-group"
             name="password"
             component={Input}
             type="password"

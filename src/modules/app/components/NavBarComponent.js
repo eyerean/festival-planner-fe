@@ -15,6 +15,7 @@ const NavBarComponent = styled(Navbar)`
     background-color: #990000!important;
     color: whitesmoke!important;
   }
+  
   .dropdown.open > a {
     color: #990000!important;
   }

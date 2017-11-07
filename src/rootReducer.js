@@ -3,14 +3,15 @@ import { routerReducer } from 'react-router-redux';
 import {reducer as fetchReducer} from 'react-redux-fetch';
 import {reducer as formReducer} from 'redux-form';
 
-
-import loginReducer from './modules/login/reducer';
 import appReducer from './modules/app/reducer';
+import loginReducer from './modules/login/reducer';
+import festivalReducer from './modules/dashboard/reducer';
 
 export default combineReducers({
-  routing: routerReducer,
   app: appReducer,
+  festival: festivalReducer,
+  form: formReducer,
   login: loginReducer,
-  repository: fetchReducer,
-  form: formReducer
+  routing: routerReducer,
+  repository: fetchReducer
 });

@@ -5,7 +5,6 @@ import reduxFetch from 'react-redux-fetch';
 import apiRoutes from '../../../api/routes';
 import DashboardLayout from '../components/DashboardLayout';
 import selectors from '../selectors';
-import loginSelectors from '../../login/selectors';
 import actions from '../actions';
 
 class Dashboard extends React.Component {

@@ -11,6 +11,7 @@ import Visual from '../../visual';
 import Planner from '../../planner';
 
 import AppWrapper from '../components/AppWrapper';
+import Grid from '../../../shared/Grid';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import loginActions from '../../login/actions';
@@ -44,12 +45,14 @@ class App extends React.Component {
       <AppWrapper height={HEIGHT}>
         <Header />
         {isAuthenticated && <NavBar onLogout={this.handleLogout} user={user} location={location} /> }
-        <Route exact path="/" component={requireAuthentication(Dashboard)} />
-        <Route path="/login" component={Login}/>
-        <Route path="/artists" component={requireAuthentication(Artists)} />
-        <Route path="/sound" component={requireAuthentication(Sound)} />
-        <Route path="/visual" component={requireAuthentication(Visual)} />
-        <Route path="/planner" component={requireAuthentication(Planner)} />
+        <Grid>
+          <Route exact path="/" component={requireAuthentication(Dashboard)} />
+          <Route path="/login" component={Login}/>
+          <Route path="/artists" component={requireAuthentication(Artists)} />
+          <Route path="/sound" component={requireAuthentication(Sound)} />
+          <Route path="/visual" component={requireAuthentication(Visual)} />
+          <Route path="/planner" component={requireAuthentication(Planner)} />
+        </Grid>
       </AppWrapper>
     );
   }

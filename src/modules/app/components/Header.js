@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import { Navbar } from 'react-bootstrap';
 import NavBarComponent from './NavBarComponent';
 // import logo from '../../../../../public/assets/logo.jpeg';
@@ -11,7 +12,7 @@ const Header = ({isAuthenticated, onLogout}) => {
           {/* <img src={logo} alt="header_logo" /> */}
         </Navbar.Brand>
         <Navbar.Brand>
-          <a href="#/">Festival Planner</a>
+          <Link to='/'>Festival Planner</Link>
         </Navbar.Brand>
       </Navbar.Header>
     </NavBarComponent>

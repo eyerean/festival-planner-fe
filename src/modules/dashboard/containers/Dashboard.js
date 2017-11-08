@@ -1,12 +1,22 @@
 import React from 'react';
+import {bindActionCreators, compose} from 'redux';
+import {connect} from 'react-redux';
+import reduxFetch from 'react-redux-fetch';
+import apiRoutes from '../../../api/routes';
 import DashboardLayout from '../components/DashboardLayout';
+import selectors from '../selectors';
+import loginSelectors from '../../login/selectors';
+import actions from '../actions';
 
 class Dashboard extends React.Component {
-  state = {
-
+  componentDidMount(){
+    this.props.dispatchFestivalsGet();
   }
-  componentWillMount(){
-    console.log('DashboardContainer!');
+
+  componentWillReceiveProps(nextProps, nextState) {
+    if(this.props.festivalsFetch.pending && nextProps.festivalsFetch.fulfilled){
+      this.props.storeFestivals(nextProps.festivalsFetch.value);
+    }
   }
 
   render(){
@@ -19,4 +29,27 @@ class Dashboard extends React.Component {
 
 }
 
-export default Dashboard;
+const mapStateToProps = (state) => ({
+  festivals: selectors.getFestivals(state)
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  storeFestivals: bindActionCreators(actions.storeFestivals, dispatch)
+});
+
+const mapPropsToDispatchToProps = (props) => [
+  {
+    resource: 'festivals',
+    method: 'GET',
+    request: () => ({
+      url: apiRoutes().festivals()
+    })
+  }
+];
+
+const enhance = compose(
+  reduxFetch(mapPropsToDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps)
+);
+
+export default enhance(Dashboard);

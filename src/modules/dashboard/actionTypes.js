@@ -1,1 +1,1 @@
-export const GET_FESTIVALS = 'get festivals';
+export const STORE_FESTIVALS = 'store festivals';

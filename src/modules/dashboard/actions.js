@@ -1,10 +1,10 @@
-import {GET_FESTIVALS} from './actionTypes';
+import {STORE_FESTIVALS} from './actionTypes';
 
-const getFestivals = (token, user) => ({
-  type: GET_FESTIVALS,
-  payload: {}
+const storeFestivals = (festivals) => ({
+  type: STORE_FESTIVALS,
+  payload: {festivals}
 });
 
 export default {
-  getFestivals,
+  storeFestivals,
 }

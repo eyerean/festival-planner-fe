@@ -25,7 +25,6 @@ class Dashboard extends React.Component {
     // and in them the components that should be displayed
     return <DashboardLayout />;
   }
-
 }
 
 const mapStateToProps = (state) => ({

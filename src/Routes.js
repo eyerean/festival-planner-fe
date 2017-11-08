@@ -7,6 +7,7 @@ import Dashboard from './modules/dashboard';
 import Artists from './modules/artists';
 import Sound from './modules/sound';
 import Visual from './modules/visual';
+import Planner from './modules/planner';
 
 import {requireAuthentication} from './shared/AuthenticatedComponent';
 
@@ -20,6 +21,7 @@ const Routes = ({history}) => {
         <Route path="/artists" component={requireAuthentication(Artists)}/>
         <Route path="/sound" component={requireAuthentication(Sound)}/>
         <Route path="/visual" component={requireAuthentication(Visual)}/>
+        <Route path="/planner" component={requireAuthentication(Planner)}/>
       </Route>
     </Router>
   );

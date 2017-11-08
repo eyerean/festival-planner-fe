@@ -3,19 +3,24 @@ import { Navbar } from 'react-bootstrap';
 
 const NavBarComponent = styled(Navbar)`
   background-color: ${props => props.comp === 'header' ? '#f2f2f2' : (props.comp === 'nav' && '#993333')}!important;
-  .nav > li > a {
-    color: whitesmoke!important;
+  
+  .nav > li.active > a{
+    background-color: #990000!important;
   }
-
+  
   .navbar-header > a {
     color: black!important;
   }
 
-  .nav > li > a:hover {
-    background-color: #990000!important;
+  .nav > li > a {
     color: whitesmoke!important;
   }
-  
+
+  .nav > li > a:hover {
+    background-color: #900000!important;
+    color: whitesmoke!important;
+  }
+
   .dropdown.open > a {
     color: #990000!important;
   }
@@ -32,7 +37,6 @@ const NavBarComponent = styled(Navbar)`
     background-color: whitesmoke!important;
     color: #990000!important;
   }
-
 `;
 
 export default NavBarComponent;

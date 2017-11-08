@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
@@ -22,14 +21,9 @@ const Input = ({input, type, step, meta: {touched, error, warning}}) => (
 );
 
 class Login extends React.Component {
-  static contextTypes = {
-    router: PropTypes.object.isRequired
-  };
-
-
   componentWillMount() {
     if (this.props.isAuthenticated) {
-      setTimeout(() => this.context.router.push('/'), 1500);
+      setTimeout(() => this.props.history.push('/'), 1500);
     } else {
       this.props.dispatchAuthenticateGet(localStorage.getItem('token')); 
     }
@@ -41,13 +35,13 @@ class Login extends React.Component {
       this.props.authenticate();
       localStorage.setItem('token', nextProps.loginFetch.value.token);
       localStorage.setItem('user', nextProps.loginFetch.value.user);
-      this.context.router.push('/');
+      this.props.history.push('/');
     }
     if(this.props.authenticateFetch.pending && nextProps.authenticateFetch.fulfilled){
       //token is correct so user is correct so store them
       this.props.storeSession(localStorage.getItem('token'), localStorage.getItem('user'));
       this.props.authenticate();
-      this.context.router.push('/');
+      this.props.history.push('/');
     }
   }
 

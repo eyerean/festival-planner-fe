@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-// import { bindActionCreators } from 'redux';
 import selectors from '../modules/login/selectors';
-// import actions from '../actions';
-// import appSelectors from '../../app/selectors';
 
 export const requireAuthentication = (Component) => {
 
@@ -13,18 +10,13 @@ export const requireAuthentication = (Component) => {
       isAuthenticated: PropTypes.bool
     };
 
-    static contextTypes = {
-      router: PropTypes.object.isRequired
-    };
-
     componentWillMount() {
       this.checkAuth(this.props);
-      // this.props.storeRedirectAfterLoginLocation(this.props.locationBeforeTransitions.pathname);
     };
 
     checkAuth(props) {
       if (!props.isAuthenticated) {
-        this.context.router.push('/login');
+        this.props.history.push('/login');
       }
     };
 
@@ -40,12 +32,7 @@ export const requireAuthentication = (Component) => {
 
   const mapStateToProps = (state) => ({
     isAuthenticated: selectors.isAuthenticated(state),
-    // locationBeforeTransitions: appSelectors.getLocationBeforeTransitions(state)
   });
 
-  const mapDispatchToProps = (dispatch) => ({
-    // storeRedirectAfterLoginLocation: bindActionCreators(actions.storeRedirectAfterLoginLocation, dispatch)
-  });
-
-  return connect(mapStateToProps, mapDispatchToProps)(AuthenticatedComponent);
+  return connect(mapStateToProps)(AuthenticatedComponent);
 };

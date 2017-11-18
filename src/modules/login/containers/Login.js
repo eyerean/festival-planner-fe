@@ -3,7 +3,6 @@ import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
 import {FormGroup, ControlLabel } from 'react-bootstrap';
-import {Link} from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import apiRoutes from '../../../api/routes';
 import actions from '../actions';

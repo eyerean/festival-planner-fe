@@ -3,6 +3,7 @@ import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
 import {FormGroup, ControlLabel } from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import apiRoutes from '../../../api/routes';
 import actions from '../actions';
@@ -52,10 +53,17 @@ class Login extends React.Component {
   render() {
     const { handleSubmit, error, submitting, loginFetch } = this.props;
 
+    if(loginFetch.rejected && loginFetch.meta.status === 500){
+      return <div>
+        <p>Something went wrong on the server side of the application...</p>
+        <a href='/'>Go back to home page.</a>
+      </div>;
+    }
+
     return (
       <LoginForm onSubmit={handleSubmit(this.handleAuthenticate)}>
         <h2>Please sign in</h2>
-        {loginFetch && loginFetch.reason && <ErrorText>{loginFetch.reason.cause.message}</ErrorText>}
+        {loginFetch.rejected && loginFetch.reason && <ErrorText>{loginFetch.reason.cause.message}</ErrorText>}
         <FormGroup controlId="username" validationState={error && error.username && 'error'}>
           <ControlLabel>Username</ControlLabel>
           <Field

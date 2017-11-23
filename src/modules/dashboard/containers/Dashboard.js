@@ -2,28 +2,95 @@ import React from 'react';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
+import {Col, Table} from 'react-bootstrap';
+import forEach from 'lodash/forEach';
 import apiRoutes from '../../../api/routes';
-import DashboardLayout from '../components/DashboardLayout';
+import {CreateNewCard, Label, TableHeader} from '../../../shared';
 import selectors from '../selectors';
 import actions from '../actions';
 
+
 class Dashboard extends React.Component {
+  state = {
+    draftFestivals: [],
+    plannedFestivals: [],
+    ongoingFestivals: [],
+    completedFestivals: [],
+  };
+
   componentDidMount(){
     this.props.dispatchFestivalsGet();
-  }
+  };
 
   componentWillReceiveProps(nextProps, nextState) {
     if(this.props.festivalsFetch.pending && nextProps.festivalsFetch.fulfilled){
       this.props.storeFestivals(nextProps.festivalsFetch.value);
+      this.categorizeFestivals(nextProps.festivalsFetch.value);
     }
-  }
+  };
+
+  categorizeFestivals = (allFestivals) => {
+    let draftFestivals = [];
+    let plannedFestivals = [];
+    let ongoingFestivals = [];
+    let completedFestivals = [];
+
+    forEach(allFestivals, fest => {
+      switch (fest.status){
+        case 'planned':
+          plannedFestivals.push(fest);
+          break;
+        case 'ongoing':
+          ongoingFestivals.push(fest);
+          break;
+        case 'completed':
+          completedFestivals.push(fest);
+          break;
+        default: //drafts
+          draftFestivals.push(fest);
+          break;
+      }
+    });
+
+    this.setState({
+      draftFestivals,
+      plannedFestivals,
+      ongoingFestivals,
+      completedFestivals
+    });
+
+    console.log('yo',draftFestivals,
+      plannedFestivals,
+      ongoingFestivals,
+      completedFestivals)
+  };
 
   render(){
-    // NO 'DashboardLayout'! 
-    // This is the Dashboard, and then we have small parts that complete the layout. 
-    // The basic layout-divs are here [*if* needed, remember react v16 renders also arrays], 
-    // and in them the components that should be displayed
-    return <DashboardLayout />;
+    return (
+      <div>
+        <CreateNewCard>
+          <p>Create New Festival</p>
+        </CreateNewCard>
+        <Table bsClass="table" style={{margin: '20px 0'}}>
+          <TableHeader>
+            <tr>
+              <th>DRAFTS</th>
+              <th>PLANNED</th>
+              <th>ONGOING</th>
+              <th>COMPLETED</th>
+            </tr>
+          </TableHeader>
+          <tbody>
+            <tr>
+              <td/>
+              <td/>
+              <td/>
+              <td/>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
+    );
   }
 }
 

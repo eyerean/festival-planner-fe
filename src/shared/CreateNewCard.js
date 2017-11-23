@@ -5,9 +5,9 @@ const CreateNewCard = styled.div`
   border: 3px solid #900000;
   border-radius: 10px;
   color: whitesmoke;
-  height: 100px;
-  width: 250px;
-  padding: 20px;
+  height: 50px;
+  width: 200px;
+  padding: 5px;
   margin: 10px 0;
   text-align: center;
   font-size: 1.3em;
@@ -19,7 +19,7 @@ const CreateNewCard = styled.div`
   }
 
   p {
-    padding-top: 15px;
+    padding: 5px;
   }
 `;
 

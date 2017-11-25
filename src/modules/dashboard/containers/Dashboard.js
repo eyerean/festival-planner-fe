@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
@@ -71,28 +72,84 @@ class Dashboard extends React.Component {
         <CreateNewCard>
           <p>Create New Festival</p>
         </CreateNewCard>
-        <Table bsClass="table" style={{margin: '20px 0'}}>
-          <TableHeader>
-            <tr>
-              <th>DRAFTS</th>
-              <th>PLANNED</th>
-              <th>ONGOING</th>
-              <th>COMPLETED</th>
-            </tr>
-          </TableHeader>
-          <tbody>
-            <tr>
-              <td/>
-              <td/>
-              <td/>
-              <td/>
-            </tr>
-          </tbody>
-        </Table>
+        <TablesWrapper>
+          <SingleTableWrapper>
+            <InlineTable>
+              <TableHeader>
+                <tr>
+                  <th>DRAFTS</th>
+                </tr>
+              </TableHeader>
+              <tbody>
+                <tr>
+                  <td>One Festival</td>
+                </tr>
+              </tbody>
+            </InlineTable>
+          </SingleTableWrapper>
+          
+          <SingleTableWrapper>
+            <InlineTable>
+              <TableHeader>
+                <tr>
+                  <th>PLANNED</th>
+                </tr>
+              </TableHeader>
+              <tbody>
+                <tr><td>Roadburn Festival</td></tr>
+                <tr><td>Desertfest London</td></tr>
+              </tbody>
+            </InlineTable>
+          </SingleTableWrapper>
+
+          <SingleTableWrapper>
+            <InlineTable>
+              <TableHeader>
+                <tr>
+                  <th>ONGOING</th>
+                </tr>
+              </TableHeader>
+              <tbody>
+                <tr>
+                  <td/>
+                </tr>
+              </tbody>
+            </InlineTable>
+          </SingleTableWrapper>
+
+          <SingleTableWrapper>
+            <InlineTable>
+              <TableHeader>
+                <tr>
+                  <th>FINISHED</th>
+                </tr>
+              </TableHeader>
+              <tbody>
+                <tr>
+                  <td>Something for the core</td>
+                </tr>
+              </tbody>
+            </InlineTable>
+          </SingleTableWrapper>
+        </TablesWrapper>
       </div>
     );
   }
-}
+};
+
+const TablesWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const SingleTableWrapper = styled.div`
+  flex: 1;
+`;
+
+const InlineTable = styled(Table)`
+  margin: 20px 0;
+  display: inline-table;
+`;
 
 const mapStateToProps = (state) => ({
   festivals: selectors.getFestivals(state)

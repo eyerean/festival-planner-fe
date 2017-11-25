@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
 import {Col, Table} from 'react-bootstrap';
 import forEach from 'lodash/forEach';
+import map from 'lodash/map';
 import apiRoutes from '../../../api/routes';
 import {CreateNewCard, Label, TableHeader} from '../../../shared';
 import selectors from '../selectors';
@@ -60,18 +61,20 @@ class Dashboard extends React.Component {
       completedFestivals
     });
 
-    console.log('yo',draftFestivals,
+    console.log('festival lists created!',draftFestivals,
       plannedFestivals,
       ongoingFestivals,
       completedFestivals)
   };
 
   render(){
+    const {draftFestivals, plannedFestivals, ongoingFestivals, completedFestivals } = this.state;
     return (
       <div>
         <CreateNewCard>
           <p>Create New Festival</p>
         </CreateNewCard>
+
         <TablesWrapper>
           <SingleTableWrapper>
             <InlineTable>
@@ -81,9 +84,9 @@ class Dashboard extends React.Component {
                 </tr>
               </TableHeader>
               <tbody>
-                <tr>
-                  <td>One Festival</td>
-                </tr>
+              {map(draftFestivals, dFest => <tr key={dFest._id}>
+                <td>{dFest.name}</td>
+                </tr>)}
               </tbody>
             </InlineTable>
           </SingleTableWrapper>
@@ -96,8 +99,9 @@ class Dashboard extends React.Component {
                 </tr>
               </TableHeader>
               <tbody>
-                <tr><td>Roadburn Festival</td></tr>
-                <tr><td>Desertfest London</td></tr>
+              {map(plannedFestivals, pFest => <tr key={pFest._id}>
+                <td>{pFest.name}</td>
+                </tr>)}
               </tbody>
             </InlineTable>
           </SingleTableWrapper>
@@ -110,9 +114,9 @@ class Dashboard extends React.Component {
                 </tr>
               </TableHeader>
               <tbody>
-                <tr>
-                  <td/>
-                </tr>
+              {map(ongoingFestivals, oFest => <tr key={oFest._id}>
+                <td>{oFest.name}</td>
+                </tr>)}
               </tbody>
             </InlineTable>
           </SingleTableWrapper>
@@ -125,9 +129,9 @@ class Dashboard extends React.Component {
                 </tr>
               </TableHeader>
               <tbody>
-                <tr>
-                  <td>Something for the core</td>
-                </tr>
+              {map(completedFestivals, cFest => <tr key={cFest._id}>
+                <td>{cFest.name}</td>
+                </tr>)}
               </tbody>
             </InlineTable>
           </SingleTableWrapper>

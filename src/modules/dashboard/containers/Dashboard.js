@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import {Col, Table} from 'react-bootstrap';
+import {Table, Modal} from 'react-bootstrap';
 import forEach from 'lodash/forEach';
 import map from 'lodash/map';
 import apiRoutes from '../../../api/routes';
-import {CreateNewCard, Label, TableHeader} from '../../../shared';
+import {CreateNewCard, Label, TableHeader, Button} from '../../../shared';
 import selectors from '../selectors';
 import actions from '../actions';
 
@@ -18,6 +18,7 @@ class Dashboard extends React.Component {
     plannedFestivals: [],
     ongoingFestivals: [],
     completedFestivals: [],
+    showCreateModal: false,
   };
 
   componentDidMount(){
@@ -67,11 +68,23 @@ class Dashboard extends React.Component {
       completedFestivals)
   };
 
+  handleCreateNewFest = () => {
+    this.setState({
+      showCreateModal: true
+    });
+  };
+
+  closeCreateModal = () => {
+    this.setState({
+      showCreateModal: false
+    })
+  }
+
   render(){
     const {draftFestivals, plannedFestivals, ongoingFestivals, completedFestivals } = this.state;
     return (
       <div>
-        <CreateNewCard>
+        <CreateNewCard onClick={this.handleCreateNewFest}>
           <p>Create New Festival</p>
         </CreateNewCard>
 
@@ -136,6 +149,32 @@ class Dashboard extends React.Component {
             </InlineTable>
           </SingleTableWrapper>
         </TablesWrapper>
+
+         <Modal show={this.state.showCreateModal} onHide={this.closeCreateModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Create New Festival</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h4>Text in a modal</h4>
+            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+            <hr />
+
+            <h4>Overflowing text to show scroll behavior</h4>
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={this.closeCreateModal} style={{marginRight: 20}}>Close</Button>
+            <Button primary>Create Festival</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

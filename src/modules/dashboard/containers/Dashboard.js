@@ -68,16 +68,10 @@ class Dashboard extends React.Component {
       completedFestivals)
   };
 
-  handleCreateNewFest = () => {
-    this.setState({
-      showCreateModal: true
-    });
-  };
-
-  closeCreateModal = () => {
-    this.setState({
-      showCreateModal: false
-    })
+  toggleCreateModal = () => {
+    this.setState(prevState => ({
+      showCreateModal: !prevState.showCreateModal
+    }))
   };
 
   handleSubmitNewFestival = (formData) => {
@@ -90,7 +84,7 @@ class Dashboard extends React.Component {
 
     return (
       <div>
-        <CreateNewCard onClick={this.handleCreateNewFest}>
+        <CreateNewCard onClick={this.toggleCreateModal}>
           <p>Create New Festival</p>
         </CreateNewCard>
 
@@ -114,7 +108,7 @@ class Dashboard extends React.Component {
 
         <CreateFestModal 
           show={showCreateModal}
-          onClose={this.closeCreateModal}
+          onClose={this.toggleCreateModal}
           onSubmit={handleSubmit(this.handleSubmitNewFestival)}
           error={error}
           submitting={submitting}

@@ -1,22 +1,22 @@
 import React from 'react';
+import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import { Navbar } from 'react-bootstrap';
 import NavBarComponent from './NavBarComponent';
-// import logo from '../../../../../public/assets/logo.jpeg';
 
 const Header = ({isAuthenticated, onLogout}) => {
   return (
-    <NavBarComponent comp='header'>
-      <Navbar.Header>
-        <Navbar.Brand>
-          {/* <img src={logo} alt="header_logo" /> */}
-        </Navbar.Brand>
-        <Navbar.Brand>
-          <Link to='/'>Festival Planner</Link>
-        </Navbar.Brand>
-      </Navbar.Header>
-    </NavBarComponent>
+    <HeaderWraper>
+      Festival Planner
+    </HeaderWraper>
   );
 }
 
 export default Header;
+
+const HeaderWraper = styled.div`
+  font-size: 40px;
+  color: whitesmoke;
+  padding: 30px;
+  margin-left: 20px;
+`;

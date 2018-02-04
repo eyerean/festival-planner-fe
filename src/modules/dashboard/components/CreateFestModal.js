@@ -1,16 +1,18 @@
 import React from 'react';
-import {Modal, FormGroup, ControlLabel} from 'react-bootstrap';
+import {Modal, FormGroup, ControlLabel, FormControl} from 'react-bootstrap';
 import { Field } from 'redux-form';
 import {Button, ErrorText} from '../../../shared';
 
 const validationRequired = value => value ? undefined : 'Required field.';
 
-const Input = ({input, type, step, meta: {touched, error, warning}}) => (
+const Input = ({input, type, step, meta: {touched, error, warning}}) => {
+  console.log('Input!', input, error);
+  return (
   <div>
     <input {...input} type={type} step={step} className="form-control"/>
     {touched && error && <ErrorText>{error}</ErrorText>}
   </div>
-);
+)};
 
 const CreateFestModal = ({show, onClose, onSubmit, error, submitting}) => (
   <Modal show={show} onHide={onClose}>
@@ -20,13 +22,39 @@ const CreateFestModal = ({show, onClose, onSubmit, error, submitting}) => (
     <Modal.Body>
       <form>
         <FormGroup controlId="name" validationState={error && error.name && 'error'}>
-          <ControlLabel>Festival name</ControlLabel>
+          <ControlLabel>Festival Name</ControlLabel>
           <Field
             name="name"
             component={Input}
             type="text"
-            placeholder="Name"
             validate={validationRequired}
+          />
+        </FormGroup>
+        <FormGroup controlId="startDate" validationState={error && error.name && 'error'}>
+          <ControlLabel>Starting Date</ControlLabel>
+          <Field
+            name="startDate"
+            component={Input}
+            type="text"
+            validate={validationRequired}
+          />
+        </FormGroup>
+        <FormGroup controlId="endDate" validationState={error && error.name && 'error'}>
+          <ControlLabel>Ending Date</ControlLabel>
+          <Field
+            name="endDate"
+            component={Input}
+            type="text"
+            validate={validationRequired}
+          />
+        </FormGroup>
+        <FormGroup controlId="desc">
+          <ControlLabel>Description</ControlLabel>
+          <Field
+            name="desc"
+            component="textarea"
+            className="form-control"
+            style={{height: 70, resize: 'none'}}
           />
         </FormGroup>
       </form>

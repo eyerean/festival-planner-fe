@@ -2,14 +2,15 @@ import React from 'react';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import {FormGroup, ControlLabel } from 'react-bootstrap';
+import {FormGroup, ControlLabel, Button } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import apiRoutes from '../../../api/routes';
+import ErrorText from '../../../shared/ErrorText';
+// import Button from '../../../shared/Button';
+import LoginForm from '../components/LoginForm';
+import WhiteBackground from '../components/WhiteBackground';
 import actions from '../actions';
 import selectors from '../selectors';
-import LoginForm from '../components/LoginForm';
-import ErrorText from '../../../shared/ErrorText';
-import Button from '../../../shared/Button';
 
 const validationRequired = value => value ? undefined : 'Required field.';
 
@@ -60,38 +61,43 @@ class Login extends React.Component {
     }
 
     return (
-      <LoginForm onSubmit={handleSubmit(this.handleAuthenticate)}>
-        <h2>Please sign in</h2>
-        {loginFetch.rejected && loginFetch.reason && <ErrorText>{loginFetch.reason.cause.message}</ErrorText>}
-        <FormGroup controlId="username" validationState={error && error.username && 'error'}>
-          <ControlLabel>Username</ControlLabel>
-          <Field
-            name="username"
-            component={Input}
-            type="text"
-            placeholder="Username"
-            validate={validationRequired}
-          />
-        </FormGroup>
+      <div style={{position: 'relative'}}>
+        <WhiteBackground />
+        <LoginForm onSubmit={handleSubmit(this.handleAuthenticate)}>
+          <h2>Please sign in</h2>
+          {loginFetch.rejected && loginFetch.reason && <ErrorText>{loginFetch.reason.cause.message}</ErrorText>}
+          <FormGroup controlId="username" validationState={error && error.username && 'error'}>
+            <ControlLabel>Username</ControlLabel>
+            <Field
+              name="username"
+              component={Input}
+              type="text"
+              placeholder="Username"
+              validate={validationRequired}
+            />
+          </FormGroup>
 
-        <FormGroup controlId="password" validationState={error && error.password && 'error'}>
-          <ControlLabel>Password</ControlLabel>
-          <Field
-            name="password"
-            component={Input}
-            type="password"
-            placeholder="Password"
-            validate={validationRequired}
-          />
-        </FormGroup>
+          <FormGroup controlId="password" validationState={error && error.password && 'error'}>
+            <ControlLabel>Password</ControlLabel>
+            <Field
+              name="password"
+              component={Input}
+              type="password"
+              placeholder="Password"
+              validate={validationRequired}
+            />
+          </FormGroup>
 
-        <Button primary
-          type="submit"
-          disabled={submitting}
-        >
-          {submitting ? <i className="fa fa-spinner fa-pulse fa-3x fa-fw" /> : 'Sign in'}
-        </Button>
-      </LoginForm>
+          <Button 
+            bsStyle="primary"
+            type="submit"
+            disabled={submitting}
+            style={{float: 'right', marginTop: 20}}
+          >
+            {submitting ? <i className="fa fa-spinner fa-pulse fa-3x fa-fw" /> : 'Sign in'}
+          </Button>
+        </LoginForm>
+      </div>
     );
   }
 }

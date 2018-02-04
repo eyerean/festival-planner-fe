@@ -1,13 +1,19 @@
 import styled from 'styled-components';
 
 const LoginForm = styled.form`
-  margin: 5% 20%;
+  width: 500px;
+  height: 340px;
   padding: 20px 40px;
-  border-style: solid;
-  border-radius: 1em;
-  border-width: 1px;
-  border-color: black;
-  // background: linear-gradient(to bottom, #da8b8b 0%, white 100%);
+  border: solid white 1px;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 120px 0 0 -250px;
+
+  > h2 {
+    margin-bottom: 20px;
+  }
 `;
 
 export default LoginForm;

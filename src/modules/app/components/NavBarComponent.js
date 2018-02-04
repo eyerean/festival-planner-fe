@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Navbar } from 'react-bootstrap';
 
 const NavBarComponent = styled(Navbar)`
-  background-color: ${props => props.comp === 'header' ? '#f2f2f2' : (props.comp === 'nav' && '#993333')}!important;
+  background-color: ${props => props.comp === 'header' ? 'transparent' : (props.comp === 'nav' && '#993333')}!important;
   
   .nav > li.active > a{
     background-color: #990000!important;

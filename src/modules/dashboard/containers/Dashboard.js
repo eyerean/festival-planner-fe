@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import {Table, Modal} from 'react-bootstrap';
+import { reduxForm } from 'redux-form';
 import forEach from 'lodash/forEach';
-import map from 'lodash/map';
 import apiRoutes from '../../../api/routes';
-import {CreateNewCard, Label, TableHeader, Button} from '../../../shared';
+import {CreateNewCard } from '../../../shared';
 import selectors from '../selectors';
 import actions from '../actions';
-
+import FestivalTable from '../components/FestivalTable';
+import CreateFestModal from '../components/CreateFestModal';
 
 class Dashboard extends React.Component {
   state = {
@@ -49,7 +49,7 @@ class Dashboard extends React.Component {
         case 'completed':
           completedFestivals.push(fest);
           break;
-        default: //drafts
+        default:
           draftFestivals.push(fest);
           break;
       }
@@ -78,10 +78,16 @@ class Dashboard extends React.Component {
     this.setState({
       showCreateModal: false
     })
-  }
+  };
+
+  handleSubmitNewFestival = (formData) => {
+    console.log('no way!', formData);
+  };
 
   render(){
-    const {draftFestivals, plannedFestivals, ongoingFestivals, completedFestivals } = this.state;
+    const {handleSubmit, error, submitting} = this.props;
+    const {draftFestivals, plannedFestivals, ongoingFestivals, completedFestivals, showCreateModal } = this.state;
+
     return (
       <div>
         <CreateNewCard onClick={this.handleCreateNewFest}>
@@ -90,91 +96,29 @@ class Dashboard extends React.Component {
 
         <TablesWrapper>
           <SingleTableWrapper>
-            <InlineTable>
-              <TableHeader>
-                <tr>
-                  <th>DRAFTS</th>
-                </tr>
-              </TableHeader>
-              <tbody>
-              {map(draftFestivals, dFest => <tr key={dFest._id}>
-                <td>{dFest.name}</td>
-                </tr>)}
-              </tbody>
-            </InlineTable>
+            <FestivalTable title="drafts" festivals={draftFestivals} />
           </SingleTableWrapper>
           
           <SingleTableWrapper>
-            <InlineTable>
-              <TableHeader>
-                <tr>
-                  <th>PLANNED</th>
-                </tr>
-              </TableHeader>
-              <tbody>
-              {map(plannedFestivals, pFest => <tr key={pFest._id}>
-                <td>{pFest.name}</td>
-                </tr>)}
-              </tbody>
-            </InlineTable>
+            <FestivalTable title="planned" festivals={plannedFestivals} />
           </SingleTableWrapper>
 
           <SingleTableWrapper>
-            <InlineTable>
-              <TableHeader>
-                <tr>
-                  <th>ONGOING</th>
-                </tr>
-              </TableHeader>
-              <tbody>
-              {map(ongoingFestivals, oFest => <tr key={oFest._id}>
-                <td>{oFest.name}</td>
-                </tr>)}
-              </tbody>
-            </InlineTable>
+            <FestivalTable title="ongoing" festivals={ongoingFestivals} />
           </SingleTableWrapper>
 
           <SingleTableWrapper>
-            <InlineTable>
-              <TableHeader>
-                <tr>
-                  <th>FINISHED</th>
-                </tr>
-              </TableHeader>
-              <tbody>
-              {map(completedFestivals, cFest => <tr key={cFest._id}>
-                <td>{cFest.name}</td>
-                </tr>)}
-              </tbody>
-            </InlineTable>
+            <FestivalTable title="finished" festivals={completedFestivals} />
           </SingleTableWrapper>
         </TablesWrapper>
 
-         <Modal show={this.state.showCreateModal} onHide={this.closeCreateModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create New Festival</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <h4>Text in a modal</h4>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-            <hr />
-
-            <h4>Overflowing text to show scroll behavior</h4>
-            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.closeCreateModal} style={{marginRight: 20}}>Close</Button>
-            <Button primary>Create Festival</Button>
-          </Modal.Footer>
-        </Modal>
+        <CreateFestModal 
+          show={showCreateModal}
+          onClose={this.closeCreateModal}
+          onSubmit={handleSubmit(this.handleSubmitNewFestival)}
+          error={error}
+          submitting={submitting}
+        />
       </div>
     );
   }
@@ -187,11 +131,6 @@ const TablesWrapper = styled.div`
 
 const SingleTableWrapper = styled.div`
   flex: 1;
-`;
-
-const InlineTable = styled(Table)`
-  margin: 20px 0;
-  display: inline-table;
 `;
 
 const mapStateToProps = (state) => ({
@@ -214,7 +153,12 @@ const mapPropsToDispatchToProps = (props) => [
 
 const enhance = compose(
   reduxFetch(mapPropsToDispatchToProps),
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, mapDispatchToProps),
+  reduxForm({
+    form: 'createFestForm',
+    touchOnChange: true,
+    touchOnBlur: true
+  })
 );
 
 export default enhance(Dashboard);

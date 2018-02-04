@@ -18,7 +18,7 @@ const CreateFestModal = ({show, onClose, onSubmit, error, submitting}) => (
       <Modal.Title>Create New Festival</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <form onSubmit={onSubmit}>
+      <form>
         <FormGroup controlId="name" validationState={error && error.name && 'error'}>
           <ControlLabel>Festival name</ControlLabel>
           <Field
@@ -36,6 +36,7 @@ const CreateFestModal = ({show, onClose, onSubmit, error, submitting}) => (
       <Button 
         primary
         type="submit"
+        onClick={onSubmit}
         disabled={submitting}
       >
         Create Festival

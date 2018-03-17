@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 
 const AppWrapper = styled.div`
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 10;
+  height: ${props => props.height}px;
+  background-color: ${props => props.isAuthenticated ? 'whitesmoke' : ''};
 `;
 
 export default AppWrapper;

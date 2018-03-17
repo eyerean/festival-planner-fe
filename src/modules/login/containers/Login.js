@@ -1,18 +1,22 @@
 import React from 'react';
 import {bindActionCreators, compose} from 'redux';
+import styled from 'styled-components';
+import forEach from 'lodash/forEach';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
 import {FormGroup, ControlLabel, Button } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import apiRoutes from '../../../api/routes';
 import ErrorText from '../../../shared/ErrorText';
-// import Button from '../../../shared/Button';
-import LoginForm from '../components/LoginForm';
+import LoginWrapper from '../components/LoginWrapper';
 import WhiteBackground from '../components/WhiteBackground';
+import LoginForm from '../components/LoginForm';
 import actions from '../actions';
 import selectors from '../selectors';
 
 const validationRequired = value => value ? undefined : 'Required field.';
+
+const HEIGHT = window.innerHeight;
 
 const Input = ({input, type, step, meta: {touched, error, warning}}) => (
   <div>
@@ -61,7 +65,8 @@ class Login extends React.Component {
     }
 
     return (
-      <div style={{position: 'relative'}}>
+      <LoginWrapper>
+        <img src={'./images/hab_mountain.jpeg'} className="bg" />
         <WhiteBackground />
         <LoginForm onSubmit={handleSubmit(this.handleAuthenticate)}>
           <h2>Please sign in</h2>
@@ -97,7 +102,7 @@ class Login extends React.Component {
             {submitting ? <i className="fa fa-spinner fa-pulse fa-3x fa-fw" /> : 'Sign in'}
           </Button>
         </LoginForm>
-      </div>
+      </LoginWrapper>
     );
   }
 }

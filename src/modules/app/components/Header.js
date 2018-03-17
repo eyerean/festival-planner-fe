@@ -14,7 +14,7 @@ export default Header;
 
 const HeaderWraper = styled.div`
   font-size: 3em;
-  color: ${props => props.isAuthenticated ? 'black' : 'whitesmoke'};
+  color: ${props => props.isAuthenticated ? '#373f51' : '#f4f7fc'};
   padding: 30px;
   margin-left: 20px;
 `;

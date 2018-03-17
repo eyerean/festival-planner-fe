@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 const CreateNewCard = styled.div`
-  background-color: #993333;
-  border: 3px solid #900000;
-  border-radius: 10px;
-  color: whitesmoke;
+  background-color: #9d5c63;
+  border: 3px solid #83474e;
+  border-radius: 1px;
+  color: #f4f7fc;
   height: 50px;
   width: 200px;
   padding: 5px;
@@ -13,8 +13,8 @@ const CreateNewCard = styled.div`
   font-size: 1.3em;
 
   :hover {
-    background-color: #900000;
-    color: whitesmoke;
+    background-color: #83474e;
+    color: #f4f7fc;
     cursor: pointer;
   }
 

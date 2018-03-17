@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { Navbar } from 'react-bootstrap';
 
 const NavBarComponent = styled(Navbar)`
-  background-color: ${props => props.comp === 'header' ? 'transparent' : (props.comp === 'nav' && '#993333')}!important;
+  background-color: ${props => props.comp === 'header' ? 'transparent' : (props.comp === 'nav' && '#9d5c63')}!important;
   
   .nav > li.active > a{
-    background-color: #990000!important;
+    background-color: #584b53!important;
   }
   
   .navbar-header > a {
@@ -17,16 +17,16 @@ const NavBarComponent = styled(Navbar)`
   }
 
   .nav > li > a:hover {
-    background-color: #900000!important;
+    background-color: #493e44!important;
     color: whitesmoke!important;
   }
 
   .dropdown.open > a {
-    color: #990000!important;
+    color: #584b53!important;
   }
 
   .dropdown-menu {
-    background-color: #993333!important;
+    background-color: #9d5c63!important;
   }
 
   .dropdown-menu > li > a {
@@ -35,7 +35,7 @@ const NavBarComponent = styled(Navbar)`
 
   .dropdown-menu > li > a:hover {
     background-color: whitesmoke!important;
-    color: #990000!important;
+    color: #584b53!important;
   }
 `;
 

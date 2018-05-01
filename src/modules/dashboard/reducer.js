@@ -8,11 +8,7 @@ const INITIAL_STATE = {
 const festivalReducer = (state = Immutable.from(INITIAL_STATE), action) => {
   switch (action.type) {
     case STORE_FESTIVALS:
-      const festivalsById = action.payload.festivals.map(fest => ({
-          [fest._id]: fest,
-      }));
-      return state
-        .set('festivals', ...festivalsById);
+      return state.set('festivals', action.payload);
     default:
       return state;
   }

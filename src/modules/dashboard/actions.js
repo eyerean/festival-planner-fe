@@ -2,7 +2,7 @@ import {STORE_FESTIVALS} from './actionTypes';
 
 const storeFestivals = (festivals) => ({
   type: STORE_FESTIVALS,
-  payload: {festivals}
+  payload: festivals
 });
 
 export default {

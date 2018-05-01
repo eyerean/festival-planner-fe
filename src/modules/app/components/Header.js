@@ -1,18 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
-import { Navbar } from 'react-bootstrap';
-import NavBarComponent from './NavBarComponent';
 
 const Header = ({isAuthenticated}) => (
-  <HeaderWraper isAuthenticated={isAuthenticated}>
+  <StyledHeader isAuthenticated={isAuthenticated}>
     Festival Planner
-  </HeaderWraper>
+  </StyledHeader>
 );
 
 export default Header;
 
-const HeaderWraper = styled.div`
+const StyledHeader = styled.div`
   font-size: 3em;
   color: ${props => props.isAuthenticated ? '#373f51' : '#f4f7fc'};
   padding: 30px;

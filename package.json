@@ -8,9 +8,11 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "lodash": "^4.17.4",
+    "moment": "^2.22.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-bootstrap": "^0.31.5",
+    "react-datetime": "^2.14.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.1",
     "react-redux-fetch": "^0.11.1",

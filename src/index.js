@@ -6,6 +6,7 @@ import store from './store';
 import App from './modules/app';
 
 import 'bootstrap/dist/css/bootstrap.css';
+import 'react-datetime/css/react-datetime.css';
 import './index.css';
 
 ReactDOM.render(

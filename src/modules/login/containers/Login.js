@@ -1,7 +1,5 @@
 import React from 'react';
 import {bindActionCreators, compose} from 'redux';
-import styled from 'styled-components';
-import forEach from 'lodash/forEach';
 import {connect} from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
 import {FormGroup, ControlLabel, Button } from 'react-bootstrap';
@@ -15,8 +13,6 @@ import actions from '../actions';
 import selectors from '../selectors';
 
 const validationRequired = value => value ? undefined : 'Required field.';
-
-const HEIGHT = window.innerHeight;
 
 const Input = ({input, type, step, meta: {touched, error, warning}}) => (
   <div>
@@ -66,7 +62,7 @@ class Login extends React.Component {
 
     return (
       <LoginWrapper>
-        <img src={'./images/hab_mountain.jpeg'} className="bg" />
+        <img src={'./images/hab_mountain.jpeg'} alt="hab_mountain" className="bg" />
         <WhiteBackground />
         <LoginForm onSubmit={handleSubmit(this.handleAuthenticate)}>
           <h2>Please sign in</h2>

@@ -12,6 +12,20 @@ import actions from '../actions';
 import FestivalTable from '../components/FestivalTable';
 import CreateFestModal from '../components/CreateFestModal';
 
+const formValidation = values => {
+  const errors = {}
+  if (!values.name) {
+    errors.name = 'Required field.'
+  } 
+  if (!values.startDate) {
+    errors.startDate = 'Required field.'
+  }
+  if (!values.endDate) {
+    errors.endDate = 'Required field.'
+  }
+  return errors
+};
+
 class Dashboard extends React.Component {
   state = {
     draftFestivals: [],
@@ -61,11 +75,6 @@ class Dashboard extends React.Component {
       ongoingFestivals,
       completedFestivals
     });
-
-    console.log('festival lists created!',draftFestivals,
-      plannedFestivals,
-      ongoingFestivals,
-      completedFestivals)
   };
 
   toggleCreateModal = () => {
@@ -75,7 +84,7 @@ class Dashboard extends React.Component {
   };
 
   handleSubmitNewFestival = (formData) => {
-    console.log('no way!', formData);
+    this.props.dispatchCreateFestivalPost(formData);
   };
 
   render(){
@@ -142,7 +151,14 @@ const mapPropsToDispatchToProps = (props) => [
     request: () => ({
       url: apiRoutes().festivals()
     })
-  }
+  },{
+    resource: 'createFestival',
+    method: 'POST',
+    request: (body) => ({
+      url: apiRoutes().festivals(),
+      body
+    })
+  },
 ];
 
 const enhance = compose(
@@ -150,6 +166,7 @@ const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
   reduxForm({
     form: 'createFestForm',
+    validate: formValidation,
     touchOnChange: true,
     touchOnBlur: true
   })

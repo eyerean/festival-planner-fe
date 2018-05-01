@@ -6,14 +6,26 @@ import {Button, ErrorText} from '../../../shared';
 
 const Input = ({input, type, step, meta: {touched, error, warning}}) => {
   return (
+    <div>
+      <input {...input} type={type} step={step} className="form-control"/>
+      {touched && error && <ErrorText>{error}</ErrorText>}
+    </div>
+  );
+};
+
+const DatetimeField = ({input: {onChange}, meta: {touched, error}}) => (
   <div>
-    <input {...input} type={type} step={step} className="form-control"/>
+    <Datetime 
+      closeOnSelect
+      dateFormat="DD-MM-YYYY"
+      timeFormat={false}
+      onChange={onChange}
+    />
     {touched && error && <ErrorText>{error}</ErrorText>}
   </div>
 );
-}
 
-const CreateFestModal = ({show, onClose, onSubmit, error, submitting}) => (
+const CreateFestModal = ({show, onClose, onSubmit, error, submitting, startDate, onDateChange}) => (
   <Modal show={show} onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>Create New Festival</Modal.Title>
@@ -28,30 +40,18 @@ const CreateFestModal = ({show, onClose, onSubmit, error, submitting}) => (
             type="text"
           />
         </FormGroup>
-        <FormGroup controlId="startDate" validationState={error && error.name && 'error'}>
+        <FormGroup controlId="startDate" validationState={error && error.startDate && 'error'}>
           <ControlLabel>Starting Date</ControlLabel>
-          {/*<Field
+          <Field
             name="startDate"
-            component={Input}
-            type="text"
-          />*/}
-          <Datetime 
-            closeOnSelect
-            dateFormat="DD-MM-YYYY"
-            timeFormat={false}
-          />
+            component={DatetimeField}
+          />          
         </FormGroup>
-        <FormGroup controlId="endDate" validationState={error && error.name && 'error'}>
+        <FormGroup controlId="endDate" validationState={error && error.endDate && 'error'}>
           <ControlLabel>Ending Date</ControlLabel>
-          {/*<Field
+          <Field
             name="endDate"
-            component={Input}
-            type="text"
-          />*/}
-          <Datetime 
-            closeOnSelect
-            dateFormat="DD-MM-YYYY"
-            timeFormat={false}
+            component={DatetimeField}
           />
         </FormGroup>
         <FormGroup controlId="desc">

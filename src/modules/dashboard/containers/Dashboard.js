@@ -137,7 +137,8 @@ const SingleTableWrapper = styled.div`
 `;
 
 const mapStateToProps = (state) => ({
-  festivals: selectors.getFestivals(state)
+  festivals: selectors.getFestivals(state),
+  errors: state.form.createFestForm && state.form.createFestForm.syncErrors // TODO this
 });
 
 const mapDispatchToProps = (dispatch) => ({

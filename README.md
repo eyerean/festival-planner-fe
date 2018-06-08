@@ -6,7 +6,9 @@ For a fully running app you need to run the BE part as well, and connect to a mo
 For the time being the official mongo database linked with this project is private, but you can run one locally and update the `config.js` file of the BE (details in the BE repo).
 
 ### Setup
-Run `yarn install` to install all dependencies.
+Add a `.env` file with the contents of the `.env.example` you will find in this repo. The `NODE_PATH=src` will enable use of absolute imports.
+
+Run `yarn` or `yarn install` to install all dependencies.
 
 Run `yarn start` to start the FE app.
 

@@ -1,30 +1,23 @@
+// @flow
 import React from 'react';
 import styled from 'styled-components';
-import {bindActionCreators, compose} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
+import { connect } from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import { reduxForm } from 'redux-form';
-import forEach from 'lodash/forEach';
+import _map from 'lodash/map';
+import _forEach from 'lodash/forEach';
+import _cloneDeep from 'lodash/cloneDeep';
+import _find from 'lodash/find';
+import _every from 'lodash/every';
+import _zipObject from 'lodash/zipObject';
+import validateRequiredFields from 'app/lib/validateRequiredFields';
 import apiRoutes from '../../../api/routes';
-import {CreateNewCard } from '../../../shared';
+import { CreateNewCard } from '../../../shared';
 import selectors from '../selectors';
 import actions from '../actions';
 import FestivalTable from '../components/FestivalTable';
 import CreateFestModal from '../components/CreateFestModal';
-
-const formValidation = values => {
-  const errors = {}
-  if (!values.name) {
-    errors.name = 'Required field.'
-  } 
-  if (!values.startDate) {
-    errors.startDate = 'Required field.'
-  }
-  if (!values.endDate) {
-    errors.endDate = 'Required field.'
-  }
-  return errors
-};
+import { festivalFields } from '../lib/fields';
 
 class Dashboard extends React.Component {
   state = {
@@ -33,27 +26,31 @@ class Dashboard extends React.Component {
     ongoingFestivals: [],
     completedFestivals: [],
     showCreateModal: false,
+    fields: festivalFields,
+    invalidFields: [],
+    requiredFields: ['festivalName', 'startDate', 'endDate'],
+    errorText: '',
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.dispatchFestivalsGet();
-  };
+  }
 
   componentWillReceiveProps(nextProps, nextState) {
-    if(this.props.festivalsFetch.pending && nextProps.festivalsFetch.fulfilled){
+    if (this.props.festivalsFetch.pending && nextProps.festivalsFetch.fulfilled) {
       this.props.storeFestivals(nextProps.festivalsFetch.value);
       this.categorizeFestivals(nextProps.festivalsFetch.value);
     }
-  };
+  }
 
-  categorizeFestivals = (allFestivals) => {
+  categorizeFestivals = allFestivals => {
     let draftFestivals = [];
     let plannedFestivals = [];
     let ongoingFestivals = [];
     let completedFestivals = [];
 
-    forEach(allFestivals, fest => {
-      switch (fest.status){
+    _forEach(allFestivals, fest => {
+      switch (fest.status) {
         case 'planned':
           plannedFestivals.push(fest);
           break;
@@ -73,23 +70,61 @@ class Dashboard extends React.Component {
       draftFestivals,
       plannedFestivals,
       ongoingFestivals,
-      completedFestivals
+      completedFestivals,
     });
   };
 
   toggleCreateModal = () => {
     this.setState(prevState => ({
-      showCreateModal: !prevState.showCreateModal
-    }))
+      showCreateModal: !prevState.showCreateModal,
+    }));
   };
 
-  handleSubmitNewFestival = (formData) => {
-    this.props.dispatchCreateFestivalPost(formData);
+  handleSubmitNewFestival = () => {
+    const { fields, invalidFields, requiredFields } = this.state;
+    const invalidFieldsTemp = validateRequiredFields(invalidFields, fields, requiredFields);
+    this.setState({ invalidFields: invalidFieldsTemp, errorText: '' });
+
+    console.log('invalidFieldsTemp', invalidFieldsTemp);
+    if (_every(fields, (value: ?string) => value) && invalidFieldsTemp.length === 0) {
+      this.setState({ invalidFields: [] });
+      const cleanFields = _zipObject(_map(fields, f => f.name), _map(fields, f => f.value));
+      console.log('handleSubmit', cleanFields);
+      // this.props.dispatchCreateFestivalPost(cleanFields);
+    }
   };
 
-  render(){
-    const {handleSubmit, error, submitting} = this.props;
-    const {draftFestivals, plannedFestivals, ongoingFestivals, completedFestivals, showCreateModal } = this.state;
+  handleChange = (key: number) => (field: Field) => {
+    const { fields, invalidFields } = this.state;
+    const invalidFieldsTemp = _cloneDeep(invalidFields);
+    const index = invalidFieldsTemp.indexOf(field.name);
+    if (index > -1) {
+      invalidFieldsTemp.splice(index, 1);
+    }
+    const newFields = _cloneDeep(fields);
+    const foundInFields = _find(newFields, (nf: Field) => nf.name === field.name);
+    if (foundInFields) {
+      newFields[key] = field;
+    }
+
+    this.setState({
+      fields: newFields,
+      invalidFields: invalidFieldsTemp,
+      errorText: '',
+    });
+  };
+
+  render() {
+    const {
+      draftFestivals,
+      plannedFestivals,
+      ongoingFestivals,
+      completedFestivals,
+      showCreateModal,
+      fields,
+      invalidFields,
+      requiredFields,
+    } = this.state;
 
     return (
       <div>
@@ -101,7 +136,7 @@ class Dashboard extends React.Component {
           <SingleTableWrapper>
             <FestivalTable title="drafts" festivals={draftFestivals} />
           </SingleTableWrapper>
-          
+
           <SingleTableWrapper>
             <FestivalTable title="planned" festivals={plannedFestivals} />
           </SingleTableWrapper>
@@ -115,17 +150,20 @@ class Dashboard extends React.Component {
           </SingleTableWrapper>
         </TablesWrapper>
 
-        <CreateFestModal 
+        <CreateFestModal
           show={showCreateModal}
           onClose={this.toggleCreateModal}
-          onSubmit={handleSubmit(this.handleSubmitNewFestival)}
-          error={error}
-          submitting={submitting}
+          onSubmit={this.handleSubmitNewFestival}
+          disabledBtn={false} //@TODO
+          fields={fields}
+          requiredFields={requiredFields}
+          invalidFields={invalidFields}
+          handleChange={this.handleChange}
         />
       </div>
     );
   }
-};
+}
 
 const TablesWrapper = styled.div`
   display: flex;
@@ -136,41 +174,38 @@ const SingleTableWrapper = styled.div`
   flex: 1;
 `;
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   festivals: selectors.getFestivals(state),
-  errors: state.form.createFestForm && state.form.createFestForm.syncErrors // TODO this
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  storeFestivals: bindActionCreators(actions.storeFestivals, dispatch)
+const mapDispatchToProps = dispatch => ({
+  storeFestivals: bindActionCreators(actions.storeFestivals, dispatch),
 });
 
-const mapPropsToDispatchToProps = (props) => [
+const mapPropsToDispatchToProps = props => [
   {
     resource: 'festivals',
     method: 'GET',
     request: () => ({
-      url: apiRoutes().festivals()
-    })
-  },{
+      url: apiRoutes().festivals(),
+    }),
+  },
+  {
     resource: 'createFestival',
     method: 'POST',
-    request: (body) => ({
+    request: body => ({
       url: apiRoutes().festivals(),
-      body
-    })
+      body,
+    }),
   },
 ];
 
 const enhance = compose(
   reduxFetch(mapPropsToDispatchToProps),
-  connect(mapStateToProps, mapDispatchToProps),
-  reduxForm({
-    form: 'createFestForm',
-    validate: formValidation,
-    touchOnChange: true,
-    touchOnBlur: true
-  })
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 );
 
 export default enhance(Dashboard);

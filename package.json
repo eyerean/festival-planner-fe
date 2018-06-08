@@ -2,35 +2,95 @@
   "name": "festival-planner-fe",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
-    "react-scripts": "^1.0.14"
-  },
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.1.1",
     "lodash": "^4.17.4",
     "moment": "^2.22.1",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
-    "react-bootstrap": "^0.31.5",
+    "react-bootstrap": "^0.32.1",
     "react-datetime": "^2.14.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.1",
-    "react-redux-fetch": "^0.11.1",
+    "react-redux-fetch": "^0.12.2",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^4.0.7",
-    "redux": "^3.6.0",
+    "react-select": "^1.2.1",
+    "redux": "^4.0.0",
     "redux-form": "^7.1.2",
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.1.0",
     "seamless-immutable": "^7.0.1",
-    "styled-components": "^2.2.3"
+    "styled-components": "^3.3.2"
+  },
+  "devDependencies": {
+    "eslint": "4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "flow-bin": "^0.74.0",
+    "flow-watch": "^1.1.2",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.0",
+    "prettier": "^1.11.1",
+    "react-scripts": "1.1.4",
+    "teamcity-properties": "^2.0.0"
   },
   "scripts": {
     "start": "BROWSER=firefoxdeveloperedition react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "fix": "eslint --fix src",
+    "lint": "eslint src",
+    "precommit": "lint-staged",
+    "prettify": "prettier --trailing-comma es5 --single-quote --print-width 100 --write \"src/**/*.js\"",
+    "flow": "flow check",
+    "flow:watch": "flow-watch"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "prettier --trailing-comma es5 --single-quote --print-width 100 --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 100
+  },
+  "eslintConfig": {
+    "extends": [
+      "prettier",
+      "prettier/flowtype",
+      "prettier/react",
+      "prettier/standard"
+    ],
+    "rules": {
+      "id-length": 0,
+      "no-magic-numbers": 0,
+      "import/max-dependencies": [
+        1,
+        {
+          "max": 17
+        }
+      ],
+      "import/prefer-default-export": 0,
+      "flowtype/require-return-type": 0,
+      "flowtype/require-variable-type": 0,
+      "flowtype/require-parameter-type": 0,
+      "lodash/prefer-lodash-method": 0,
+      "lodash/matches-prop-shorthand": 0,
+      "lodash/prop-shorthand": 0
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "paths": [
+            "src"
+          ]
+        }
+      }
+    }
   },
   "proxy": "http://localhost:3030"
 }

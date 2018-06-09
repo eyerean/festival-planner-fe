@@ -30,7 +30,7 @@ const DynamicForm = ({ fields, requiredFields, invalidFields, handleChange }: Pr
         return (
           <InputField
             key={key}
-            number
+            isNumber
             field={field}
             onChange={handleChange(key)}
             required={_includes(requiredFields, field.name)}
@@ -51,7 +51,8 @@ const DynamicForm = ({ fields, requiredFields, invalidFields, handleChange }: Pr
         return (
           <InputField
             key={key}
-            textarea={field.type === FIELD_TYPES.TEXTAREA}
+            isTextarea={field.type === FIELD_TYPES.TEXTAREA}
+            isPassword={field.type === FIELD_TYPES.PASSWORD}
             field={field}
             onChange={handleChange(key)}
             required={_includes(requiredFields, field.name)}

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const LoginForm = styled.form`
+const LoginFormWrapper = styled.div`
   width: 500px;
   height: 340px;
   padding: 20px 40px;
@@ -16,4 +16,4 @@ const LoginForm = styled.form`
   }
 `;
 
-export default LoginForm;
+export default LoginFormWrapper;

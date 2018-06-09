@@ -1,44 +1,48 @@
+// @flow
 import React from 'react';
-import {bindActionCreators, compose} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
+import { connect } from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import {FormGroup, ControlLabel, Button } from 'react-bootstrap';
-import { Field, reduxForm } from 'redux-form';
+import { Button } from 'react-bootstrap';
+import _cloneDeep from 'lodash/cloneDeep';
+import _find from 'lodash/find';
+import _every from 'lodash/every';
+import _zipObject from 'lodash/zipObject';
+import _map from 'lodash/map';
+import { DynamicForm } from 'modules/app/components';
+import validateRequiredFields from 'app/lib/validateRequiredFields';
 import apiRoutes from '../../../api/routes';
-import ErrorText from '../../../shared/ErrorText';
+import LoginFormWrapper from '../components/LoginFormWrapper';
 import LoginWrapper from '../components/LoginWrapper';
 import WhiteBackground from '../components/WhiteBackground';
-import LoginForm from '../components/LoginForm';
 import actions from '../actions';
 import selectors from '../selectors';
-
-const validationRequired = value => value ? undefined : 'Required field.';
-
-const Input = ({input, type, step, meta: {touched, error, warning}}) => (
-  <div>
-    <input {...input} type={type} step={step} className="form-control"/>
-    {touched && error && <ErrorText>{error}</ErrorText>}
-  </div>
-);
+import { loginFields } from '../lib/fields';
 
 class Login extends React.Component {
+  state = {
+    fields: loginFields,
+    requiredFields: ['username', 'password'],
+    invalidFields: [],
+  };
+
   componentWillMount() {
     if (this.props.isAuthenticated) {
       setTimeout(() => this.props.history.push('/'), 1500);
     } else {
-      this.props.dispatchAuthenticateGet(localStorage.getItem('token')); 
+      this.props.dispatchAuthenticateGet(localStorage.getItem('token'));
     }
-  };
+  }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.loginFetch.pending && nextProps.loginFetch.fulfilled){
+    if (this.props.loginFetch.pending && nextProps.loginFetch.fulfilled) {
       this.props.storeSession(nextProps.loginFetch.value.token, nextProps.loginFetch.value.user);
       this.props.authenticate();
       localStorage.setItem('token', nextProps.loginFetch.value.token);
       localStorage.setItem('user', nextProps.loginFetch.value.user);
       this.props.history.push('/');
     }
-    if(this.props.authenticateFetch.pending && nextProps.authenticateFetch.fulfilled){
+    if (this.props.authenticateFetch.pending && nextProps.authenticateFetch.fulfilled) {
       //token is correct so user is correct so store them
       this.props.storeSession(localStorage.getItem('token'), localStorage.getItem('user'));
       this.props.authenticate();
@@ -46,101 +50,119 @@ class Login extends React.Component {
     }
   }
 
-  handleAuthenticate = (formData) => {
-    this.props.dispatchLoginPost(formData)
+  handleAuthenticate = formData => {
+    this.props.dispatchLoginPost(formData);
+  };
+
+  handleChange = (key: number) => (field: Field) => {
+    const { fields, invalidFields } = this.state;
+    const invalidFieldsTemp = _cloneDeep(invalidFields);
+    const index = invalidFieldsTemp.indexOf(field.name);
+    if (index > -1) {
+      invalidFieldsTemp.splice(index, 1);
+    }
+    const newFields = _cloneDeep(fields);
+    const foundInFields = _find(newFields, (nf: Field) => nf.name === field.name);
+    if (foundInFields) {
+      newFields[key] = field;
+    }
+
+    this.setState({
+      fields: newFields,
+      invalidFields: invalidFieldsTemp,
+      errorText: '',
+    });
+  };
+
+  handleLoginClick = () => {
+    const { fields, invalidFields, requiredFields } = this.state;
+    const invalidFieldsTemp = validateRequiredFields(invalidFields, fields, requiredFields);
+    this.setState({ invalidFields: invalidFieldsTemp, errorText: '' });
+
+    if (_every(fields, (value: ?string) => value) && invalidFieldsTemp.length === 0) {
+      this.setState({ invalidFields: [] });
+      const cleanFields = _zipObject(_map(fields, f => f.name), _map(fields, f => f.value));
+      this.props.dispatchLoginPost(cleanFields);
+    }
   };
 
   render() {
-    const { handleSubmit, error, submitting, loginFetch } = this.props;
+    const { loginFetch } = this.props;
+    const { fields, requiredFields, invalidFields } = this.state;
 
-    if(loginFetch.rejected && loginFetch.meta.status === 500){
-      return <div>
-        <p>Something went wrong on the server side of the application...</p>
-        <a href='/'>Go back to home page.</a>
-      </div>;
+    if (loginFetch.rejected && loginFetch.meta.status === 500) {
+      return (
+        <div>
+          <p>Something went wrong on the server side of the application...</p>
+          <a href="/">Go back to home page.</a>
+        </div>
+      );
     }
 
     return (
       <LoginWrapper>
         <img src={'./images/hab_mountain.jpeg'} alt="hab_mountain" className="bg" />
         <WhiteBackground />
-        <LoginForm onSubmit={handleSubmit(this.handleAuthenticate)}>
+        <LoginFormWrapper>
           <h2>Please sign in</h2>
-          {loginFetch.rejected && loginFetch.reason && <ErrorText>{loginFetch.reason.cause.message}</ErrorText>}
-          <FormGroup controlId="username" validationState={error && error.username && 'error'}>
-            <ControlLabel>Username</ControlLabel>
-            <Field
-              name="username"
-              component={Input}
-              type="text"
-              placeholder="Username"
-              validate={validationRequired}
-            />
-          </FormGroup>
-
-          <FormGroup controlId="password" validationState={error && error.password && 'error'}>
-            <ControlLabel>Password</ControlLabel>
-            <Field
-              name="password"
-              component={Input}
-              type="password"
-              placeholder="Password"
-              validate={validationRequired}
-            />
-          </FormGroup>
-
-          <Button 
+          <DynamicForm
+            fields={fields}
+            requiredFields={requiredFields}
+            invalidFields={invalidFields}
+            handleChange={this.handleChange}
+          />
+          <Button
             bsStyle="primary"
             type="submit"
-            disabled={submitting}
-            style={{float: 'right', marginTop: 20}}
+            disabled={loginFetch.pending}
+            style={{ float: 'right', marginTop: 20 }}
+            onClick={this.handleLoginClick}
           >
-            {submitting ? <i className="fa fa-spinner fa-pulse fa-3x fa-fw" /> : 'Sign in'}
+            {loginFetch.pending ? <i className="fa fa-spinner fa-pulse fa-3x fa-fw" /> : 'Sign in'}
           </Button>
-        </LoginForm>
+        </LoginFormWrapper>
       </LoginWrapper>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isAuthenticated: selectors.isAuthenticated(state),
-  token: selectors.getToken(state)
+  token: selectors.getToken(state),
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   storeSession: bindActionCreators(actions.storeSession, dispatch),
-  authenticate: bindActionCreators(actions.authenticate, dispatch)
+  authenticate: bindActionCreators(actions.authenticate, dispatch),
 });
 
-const mapPropsToDispatchToProps = (props) => [
+const mapPropsToDispatchToProps = props => [
   {
     resource: 'login',
     method: 'POST',
-    request: ({username, password}) => ({
+    request: ({ username, password }) => ({
       url: apiRoutes().login(),
       body: {
         name: username,
-        password
-      }
-    })
-  },{
+        password,
+      },
+    }),
+  },
+  {
     resource: 'authenticate',
     method: 'GET',
-    request: (token) => ({
-      url: apiRoutes().authenticate(token)
-    })
-  }
+    request: token => ({
+      url: apiRoutes().authenticate(token),
+    }),
+  },
 ];
 
 const enhance = compose(
   reduxFetch(mapPropsToDispatchToProps),
-  connect(mapStateToProps, mapDispatchToProps),
-  reduxForm({
-    form: 'loginForm',
-    touchOnChange: true,
-    touchOnBlur: true
-  })
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
 );
 
 export default enhance(Login);

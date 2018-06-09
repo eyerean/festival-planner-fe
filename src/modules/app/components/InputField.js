@@ -14,8 +14,9 @@ type Props = {
   disabled: boolean,
   required: boolean,
   invalid: boolean,
-  textarea: boolean,
-  number: boolean,
+  isTextarea: boolean,
+  isNumber: boolean,
+  isPassword: boolean,
 };
 
 const handleChange = (field: Field, callback: Field => void) => (e: Event) => {
@@ -25,16 +26,25 @@ const handleChange = (field: Field, callback: Field => void) => (e: Event) => {
   });
 };
 
-const InputField = ({ field, onChange, disabled, required, invalid, textarea, number }: Props) => (
+const InputField = ({
+  field,
+  onChange,
+  disabled,
+  required,
+  invalid,
+  isTextarea,
+  isNumber,
+  isPassword,
+}: Props) => (
   <FormGroup validationState={required && invalid ? 'error' : null}>
     <ControlLabel>
       {field.label || field.name}
       {required && ' *'}
     </ControlLabel>
     <FormControl
-      style={textarea ? { resize: 'vertical', minHeight: 200 } : {}}
-      type={number ? 'number' : 'text'}
-      componentClass={textarea ? 'textarea' : 'input'}
+      style={isTextarea ? { resize: 'vertical', minHeight: 200 } : {}}
+      type={isNumber ? 'number' : isPassword ? 'password' : 'text'}
+      componentClass={isTextarea ? 'textarea' : 'input'}
       value={field.value || ''}
       min="0"
       onChange={handleChange(field, onChange)}

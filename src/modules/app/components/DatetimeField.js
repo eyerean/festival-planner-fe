@@ -43,7 +43,7 @@ const DatetimeField = ({
       {required && ' *'}
     </ControlLabel>
     <Datetime
-      value={field.value || moment()}
+      value={field.value || 'DD-MM-YYYY'}
       closeOnSelect
       dateFormat={dateFormat}
       timeFormat={timeFormat}

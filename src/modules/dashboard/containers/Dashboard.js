@@ -85,7 +85,7 @@ class Dashboard extends React.Component {
     const invalidFieldsTemp = validateRequiredFields(invalidFields, fields, requiredFields);
     this.setState({ invalidFields: invalidFieldsTemp, errorText: '' });
 
-    console.log('invalidFieldsTemp', invalidFieldsTemp);
+    //@TODO Send ISO date to the BE?
     if (_every(fields, (value: ?string) => value) && invalidFieldsTemp.length === 0) {
       this.setState({ invalidFields: [] });
       const cleanFields = _zipObject(_map(fields, f => f.name), _map(fields, f => f.value));

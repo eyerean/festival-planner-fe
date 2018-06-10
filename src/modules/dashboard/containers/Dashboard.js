@@ -54,6 +54,7 @@ class Dashboard extends React.Component {
 
     if (this.props.createFestivalFetch.pending && nextProps.createFestivalFetch.fulfilled) {
       this.setState({ showCreateModal: false });
+      this.props.dispatchFestivalsGet();
     }
   }
 
@@ -106,7 +107,6 @@ class Dashboard extends React.Component {
     if (_every(fields, value => value) && invalidFieldsTemp.length === 0) {
       this.setState({ invalidFields: [] });
       const cleanFields = _zipObject(_map(fields, f => f.name), _map(fields, f => f.value));
-      console.log('handleSubmit', cleanFields);
       this.props.dispatchCreateFestivalPost(cleanFields);
     }
   };

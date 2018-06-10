@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { DynamicForm } from 'modules/app/components';
-import { Button } from 'shared';
+import { Button, ErrorText } from 'shared';
 
 const CreateFestModal = ({
   show,
@@ -12,6 +12,7 @@ const CreateFestModal = ({
   handleChange,
   onSubmit,
   disabledBtn,
+  errorText,
 }) => (
   <Modal show={show} onHide={onClose}>
     <Modal.Header closeButton>
@@ -24,6 +25,7 @@ const CreateFestModal = ({
         invalidFields={invalidFields}
         handleChange={handleChange}
       />
+      {errorText && <ErrorText>{errorText}</ErrorText>}
     </Modal.Body>
     <Modal.Footer>
       <Button onClick={onClose} style={{ marginRight: 20 }}>

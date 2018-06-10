@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Table} from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import map from 'lodash/map';
-import {TableHeader} from '../../../shared';
+import { TableHeader } from '../../../shared';
 
-const FestivalTable = ({title, festivals}) => (
+const FestivalTable = ({ title, festivals }) => (
   <InlineTable>
     <TableHeader>
       <tr>
@@ -12,9 +12,12 @@ const FestivalTable = ({title, festivals}) => (
       </tr>
     </TableHeader>
     <tbody>
-    {map(festivals, fest => <tr key={fest._id}>
-      <td>{fest.name}</td>
-      </tr>)}
+      {map(festivals, fest => (
+        <tr key={fest._id}>
+          {/* @TODO: Keep only festivalName prop. Temporary use both names until db gets cleared */}
+          <td>{fest.name || fest.festivalName}</td>
+        </tr>
+      ))}
     </tbody>
   </InlineTable>
 );

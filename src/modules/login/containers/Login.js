@@ -49,10 +49,6 @@ class Login extends React.Component<Props, State> {
     }
   }
 
-  // handleAuthenticate = formData => {
-  //   this.props.dispatchLoginPost(formData);
-  // };
-
   handleChange = key => field => {
     const { fields, invalidFields } = this.state;
     const invalidFieldsTemp = _cloneDeep(invalidFields);

@@ -1,18 +1,10 @@
-// @flow
 import React from 'react';
 import _map from 'lodash/map';
 import _includes from 'lodash/includes';
 import { FIELD_TYPES } from 'app/config/constants';
 import { InputField, SelectField, DatetimeField } from './';
 
-type Props = {
-  fields: any,
-  requiredFields: any,
-  invalidFields: any,
-  handleChange: any,
-};
-
-const DynamicForm = ({ fields, requiredFields, invalidFields, handleChange }: Props) =>
+const DynamicForm = ({ fields, requiredFields, invalidFields, handleChange }) =>
   _map(fields, (field, key) => {
     switch (field.type) {
       case FIELD_TYPES.SELECT:

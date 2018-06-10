@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
@@ -19,7 +18,7 @@ import actions from '../actions';
 import selectors from '../selectors';
 import { loginFields } from '../lib/fields';
 
-class Login extends React.Component {
+class Login extends React.Component<Props, State> {
   state = {
     fields: loginFields,
     requiredFields: ['username', 'password'],
@@ -50,11 +49,11 @@ class Login extends React.Component {
     }
   }
 
-  handleAuthenticate = formData => {
-    this.props.dispatchLoginPost(formData);
-  };
+  // handleAuthenticate = formData => {
+  //   this.props.dispatchLoginPost(formData);
+  // };
 
-  handleChange = (key: number) => (field: Field) => {
+  handleChange = key => field => {
     const { fields, invalidFields } = this.state;
     const invalidFieldsTemp = _cloneDeep(invalidFields);
     const index = invalidFieldsTemp.indexOf(field.name);
@@ -62,7 +61,7 @@ class Login extends React.Component {
       invalidFieldsTemp.splice(index, 1);
     }
     const newFields = _cloneDeep(fields);
-    const foundInFields = _find(newFields, (nf: Field) => nf.name === field.name);
+    const foundInFields = _find(newFields, nf => nf.name === field.name);
     if (foundInFields) {
       newFields[key] = field;
     }
@@ -79,7 +78,7 @@ class Login extends React.Component {
     const invalidFieldsTemp = validateRequiredFields(invalidFields, fields, requiredFields);
     this.setState({ invalidFields: invalidFieldsTemp, errorText: '' });
 
-    if (_every(fields, (value: ?string) => value) && invalidFieldsTemp.length === 0) {
+    if (_every(fields, value => value) && invalidFieldsTemp.length === 0) {
       this.setState({ invalidFields: [] });
       const cleanFields = _zipObject(_map(fields, f => f.name), _map(fields, f => f.value));
       this.props.dispatchLoginPost(cleanFields);

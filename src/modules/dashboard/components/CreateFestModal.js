@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { DynamicForm } from 'modules/app/components';

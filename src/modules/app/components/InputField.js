@@ -1,25 +1,7 @@
-// @flow
 import React from 'react';
 import { ControlLabel, FormControl, HelpBlock, FormGroup } from 'react-bootstrap';
 
-type Field = {
-  label: string,
-  name: string,
-  value: string,
-};
-
-type Props = {
-  field: Field,
-  onChange: Field => void,
-  disabled: boolean,
-  required: boolean,
-  invalid: boolean,
-  isTextarea: boolean,
-  isNumber: boolean,
-  isPassword: boolean,
-};
-
-const handleChange = (field: Field, callback: Field => void) => (e: Event) => {
+const handleChange = (field, callback) => e => {
   callback({
     ...field,
     value: e.target.value,

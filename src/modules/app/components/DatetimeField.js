@@ -1,27 +1,9 @@
-// @flow
 import React from 'react';
 import Datetime from 'react-datetime';
 import moment from 'moment';
-import type Moment from 'moment';
 import { ControlLabel, HelpBlock, FormGroup } from 'react-bootstrap';
 
-type Field = {
-  label: string,
-  name: string,
-  value: string,
-};
-
-type Props = {
-  field: Field,
-  onChange: Field => void,
-  disabled: boolean,
-  required: boolean,
-  invalid: boolean,
-  dateFormat: string,
-  timeFormat: boolean,
-};
-
-const handleChange = (field: Field, callback: Field => void) => (momentDate: Moment) => {
+const handleChange = (field, callback) => momentDate => {
   callback({
     ...field,
     value: moment(momentDate).format('DD-MM-YYYY'),

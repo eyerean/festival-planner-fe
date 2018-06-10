@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import styled from 'styled-components';
 import { bindActionCreators, compose } from 'redux';
@@ -86,7 +85,7 @@ class Dashboard extends React.Component {
     this.setState({ invalidFields: invalidFieldsTemp, errorText: '' });
 
     //@TODO Send ISO date to the BE?
-    if (_every(fields, (value: ?string) => value) && invalidFieldsTemp.length === 0) {
+    if (_every(fields, value => value) && invalidFieldsTemp.length === 0) {
       this.setState({ invalidFields: [] });
       const cleanFields = _zipObject(_map(fields, f => f.name), _map(fields, f => f.value));
       console.log('handleSubmit', cleanFields);
@@ -94,7 +93,7 @@ class Dashboard extends React.Component {
     }
   };
 
-  handleChange = (key: number) => (field: Field) => {
+  handleChange = key => field => {
     const { fields, invalidFields } = this.state;
     const invalidFieldsTemp = _cloneDeep(invalidFields);
     const index = invalidFieldsTemp.indexOf(field.name);
@@ -102,7 +101,7 @@ class Dashboard extends React.Component {
       invalidFieldsTemp.splice(index, 1);
     }
     const newFields = _cloneDeep(fields);
-    const foundInFields = _find(newFields, (nf: Field) => nf.name === field.name);
+    const foundInFields = _find(newFields, nf => nf.name === field.name);
     if (foundInFields) {
       newFields[key] = field;
     }

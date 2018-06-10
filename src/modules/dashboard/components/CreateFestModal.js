@@ -30,7 +30,7 @@ const CreateFestModal = ({
       <Button onClick={onClose} style={{ marginRight: 20 }}>
         Close
       </Button>
-      <Button primary type="submit" onClick={onSubmit} disabled={disabledBtn}>
+      <Button primary onClick={onSubmit} disabled={disabledBtn}>
         Create Festival
       </Button>
     </Modal.Footer>

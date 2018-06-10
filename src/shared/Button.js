@@ -15,26 +15,38 @@ const Button = styled.button`
     border-color: #83474e;
   }
 
-  ${props => props.primary && css`
-    background: #9d5c63;
-    color: #f4f7fc; 
+  ${props =>
+    props.big &&
+    `
+    font-size: 1.3em;
+    padding: 15px;
+    margin: 10px 0;
+    `}
 
-    :hover {
-      background: #83474e;
-      border-color: #83474e;
-    }
-  `}
-
-  ${props => props.disabled && css`
-    background: #9d5c63;
-    color: #f4f7fc; 
-    cursor: not-allowed!important;
-    :hover {
+  ${props =>
+    props.primary &&
+    css`
       background: #9d5c63;
-      color: white; 
-      border-color: #9d5c63;
-    }
-  `}
+      color: #f4f7fc;
+
+      :hover {
+        background: #83474e;
+        border-color: #83474e;
+      }
+    `}
+
+  ${props =>
+    props.disabled &&
+    css`
+      background: #9d5c63;
+      color: #f4f7fc;
+      cursor: not-allowed !important;
+      :hover {
+        background: #9d5c63;
+        color: white;
+        border-color: #9d5c63;
+      }
+    `}
 `;
 
 export default Button;

@@ -14,7 +14,7 @@ import {
 } from 'lodash';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
-import { CreateNewCard } from 'shared';
+import { Button } from 'shared';
 import { festivalFields } from '../lib/fields';
 import { FestivalTable, CreateFestModal } from '../components';
 import selectors from '../selectors';
@@ -148,9 +148,9 @@ class Dashboard extends React.Component {
 
     return (
       <div>
-        <CreateNewCard onClick={this.toggleCreateModal}>
-          <p>Create New Festival</p>
-        </CreateNewCard>
+        <Button primary big onClick={this.toggleCreateModal}>
+          Create New Festival
+        </Button>
 
         <TablesWrapper>
           <SingleTableWrapper>

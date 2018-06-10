@@ -1,6 +1,5 @@
 import moment from 'moment';
-import _forEach from 'lodash/forEach';
-import _includes from 'lodash/includes';
+import { forEach as _forEach, includes as _includes } from 'lodash';
 import { FIELD_TYPES } from 'app/config/constants';
 
 const validateRequiredFields = (invalidFields, fields, requiredFields) => {

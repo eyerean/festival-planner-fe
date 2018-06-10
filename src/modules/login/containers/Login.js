@@ -3,17 +3,17 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
 import { Button } from 'react-bootstrap';
-import _cloneDeep from 'lodash/cloneDeep';
-import _find from 'lodash/find';
-import _every from 'lodash/every';
-import _zipObject from 'lodash/zipObject';
-import _map from 'lodash/map';
+import {
+  cloneDeep as _cloneDeep,
+  find as _find,
+  every as _every,
+  zipObject as _zipObject,
+  map as _map,
+} from 'lodash';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
-import { DynamicForm } from 'modules/app/components';
-import LoginFormWrapper from '../components/LoginFormWrapper';
-import LoginWrapper from '../components/LoginWrapper';
-import WhiteBackground from '../components/WhiteBackground';
+import { DynamicForm } from 'shared';
+import { LoginFormWrapper, LoginWrapper, WhiteBackground } from '../components';
 import actions from '../actions';
 import selectors from '../selectors';
 import { loginFields } from '../lib/fields';

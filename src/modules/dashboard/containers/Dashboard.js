@@ -3,21 +3,22 @@ import styled from 'styled-components';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import _map from 'lodash/map';
-import _forEach from 'lodash/forEach';
-import _cloneDeep from 'lodash/cloneDeep';
-import _find from 'lodash/find';
-import _every from 'lodash/every';
-import _zipObject from 'lodash/zipObject';
-import _get from 'lodash/get';
+import {
+  cloneDeep as _cloneDeep,
+  find as _find,
+  every as _every,
+  zipObject as _zipObject,
+  map as _map,
+  get as _get,
+  forEach as _forEach,
+} from 'lodash';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
-import { CreateNewCard } from '../../../shared';
+import { CreateNewCard } from 'shared';
+import { festivalFields } from '../lib/fields';
+import { FestivalTable, CreateFestModal } from '../components';
 import selectors from '../selectors';
 import actions from '../actions';
-import FestivalTable from '../components/FestivalTable';
-import CreateFestModal from '../components/CreateFestModal';
-import { festivalFields } from '../lib/fields';
 
 class Dashboard extends React.Component {
   state = {

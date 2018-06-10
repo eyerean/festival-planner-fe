@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
-import { DynamicForm } from 'modules/app/components';
-import { Button, ErrorText } from 'shared';
+import { DynamicForm, Button, ErrorText } from 'shared';
 
 const CreateFestModal = ({
   show,

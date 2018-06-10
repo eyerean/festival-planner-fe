@@ -1,6 +1,6 @@
 const apiRoutes = () => ({
   login: () => `/api/login`,
-  authenticate: (token) => `/api/?token=${token}`,
+  authenticate: token => `/api/?token=${token}`,
   festivals: () => `/api/festivals`,
 });
 

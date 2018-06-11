@@ -1,6 +1,6 @@
 import AppWrapper from './AppWrapper';
 import Header from './Header';
 import MenuBar from './MenuBar';
-import NavBarComponent from './NavBarComponent';
+import StyledNavbar from './StyledNavbar';
 
-export { AppWrapper, Header, MenuBar, NavBarComponent };
+export { AppWrapper, Header, MenuBar, StyledNavbar };

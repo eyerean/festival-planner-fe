@@ -1,11 +1,12 @@
+import React from 'react';
 import styled from 'styled-components';
 import { Navbar } from 'react-bootstrap';
 
-const NavBarComponent = styled(Navbar)`
+const NavBar = ({ className, children }) => <Navbar className={className}>{children}</Navbar>;
+
+const StyledNavbar = styled(NavBar)`
   background-color: ${props =>
-    props.comp === 'header'
-      ? 'transparent'
-      : props.comp === 'nav' && props.theme.colors.roseDust}!important;
+    props.isHeader ? 'transparent' : props.isNavbar && props.theme.colors.roseDust}!important;
   border-radius: 1px !important;
 
   .nav > li.active > a {
@@ -44,4 +45,4 @@ const NavBarComponent = styled(Navbar)`
   }
 `;
 
-export default NavBarComponent;
+export default StyledNavbar;

@@ -5,14 +5,14 @@ const Button = styled.button`
   padding: 0.5em 1em;
   margin: 1em 0;
   background: transparent;
-  color: #9d5c63;
-  border: 1px solid #9d5c63;
+  color: ${props => props.theme.colors.roseDust};
+  border: 1px solid ${props => props.theme.colors.roseDust};
   border-radius: 1px;
 
   :hover {
-    background-color: #83474e;
-    color: #f4f7fc;
-    border-color: #83474e;
+    background-color: ${props => props.theme.colors.tuscanRed};
+    color: ${props => props.theme.colors.ghostWhite};
+    border-color: ${props => props.theme.colors.tuscanRed};
   }
 
   ${props =>
@@ -26,25 +26,26 @@ const Button = styled.button`
   ${props =>
     props.primary &&
     css`
-      background: #9d5c63;
-      color: #f4f7fc;
+      background: ${props => props.theme.colors.roseDust};
+      color: ${props => props.theme.colors.ghostWhite};
 
       :hover {
-        background: #83474e;
-        border-color: #83474e;
+        background: ${props => props.theme.colors.tuscanRed};
+        border-color: ${props => props.theme.colors.tuscanRed};
       }
     `}
 
   ${props =>
     props.disabled &&
     css`
-      background: #9d5c63;
-      color: #f4f7fc;
+      background: ${props => props.theme.colors.roseDust};
+      color: ${props => props.theme.colors.ghostWhite};
       cursor: not-allowed !important;
+
       :hover {
-        background: #9d5c63;
-        color: white;
-        border-color: #9d5c63;
+        background: ${props => props.theme.colors.roseDust};
+        color: ${props => props.theme.colors.ghostWhite};
+        border-color: ${props => props.theme.colors.roseDust};
       }
     `}
 `;

@@ -4,7 +4,7 @@ const LoginFormWrapper = styled.div`
   width: 500px;
   height: 340px;
   padding: 20px 40px;
-  border: solid white 1px;
+  border: solid ${props => props.theme.colors.ghostWhite} 1px;
 
   position: absolute;
   top: 50%;

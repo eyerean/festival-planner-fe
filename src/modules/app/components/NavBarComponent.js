@@ -2,41 +2,45 @@ import styled from 'styled-components';
 import { Navbar } from 'react-bootstrap';
 
 const NavBarComponent = styled(Navbar)`
-  background-color: ${props => props.comp === 'header' ? 'transparent' : (props.comp === 'nav' && '#9d5c63')}!important;
-  border-radius: 1px!important;
-  
-  .nav > li.active > a{
-    background-color: #584b53!important;
+  background-color: ${props =>
+    props.comp === 'header'
+      ? 'transparent'
+      : props.comp === 'nav' && props.theme.colors.roseDust}!important;
+  border-radius: 1px !important;
+
+  .nav > li.active > a {
+    background-color: ${props => props.theme.colors.tuscanRed}!important;
   }
-  
+
   .navbar-header > a {
-    color: black!important;
+    color: ${props => props.theme.colors.black}!important;
   }
 
   .nav > li > a {
-    color: whitesmoke!important;
+    color: ${props => props.theme.colors.ghostWhite}!important;
   }
 
   .nav > li > a:hover {
-    background-color: #493e44!important;
-    color: whitesmoke!important;
+    background-color: ${props => props.theme.colors.catawbaRed}!important;
+    color: ${props => props.theme.colors.ghostWhite}!important;
   }
 
   .dropdown.open > a {
-    color: #584b53!important;
+    background-color: ${props => props.theme.colors.tuscanRed}!important;
+    color: ${props => props.theme.colors.ghostWhite}!important;
   }
 
   .dropdown-menu {
-    background-color: #9d5c63!important;
+    background-color: ${props => props.theme.colors.roseDust}!important;
   }
 
   .dropdown-menu > li > a {
-    color: whitesmoke!important;
+    color: ${props => props.theme.colors.ghostWhite}!important;
   }
 
   .dropdown-menu > li > a:hover {
-    background-color: whitesmoke!important;
-    color: #584b53!important;
+    background-color: ${props => props.theme.colors.catawbaRed}!important;
+    color: ${props => props.theme.colors.ghostWhite}!important;
   }
 `;
 

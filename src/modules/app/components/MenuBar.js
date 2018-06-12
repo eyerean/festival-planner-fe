@@ -8,7 +8,7 @@ const MenuBar = ({ onLogout, user, location }) => {
     <StyledNavbar isNavbar>
       <Nav>
         <NavItem componentClass={Link} href="/" to="/" active={location.pathname === '/'}>
-          Dashboard
+          Overview
         </NavItem>
         <NavItem
           componentClass={Link}

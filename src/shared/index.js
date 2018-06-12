@@ -7,6 +7,7 @@ import DynamicForm from './DynamicForm';
 import InputField from './InputField';
 import SelectField from './SelectField';
 import DatetimeField from './DatetimeField';
+import { VerticalTabs, VerticalTab } from './Tabs';
 
 export {
   Button,
@@ -18,4 +19,6 @@ export {
   InputField,
   SelectField,
   DatetimeField,
+  VerticalTabs,
+  VerticalTab,
 };

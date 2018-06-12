@@ -14,7 +14,7 @@ import {
 } from 'lodash';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
-import { Button } from 'shared';
+import { Button, VerticalTabs, VerticalTab } from 'shared';
 import { festivalFields } from '../lib/fields';
 import { FestivalTable, CreateFestModal } from '../components';
 import selectors from '../selectors';
@@ -152,7 +152,19 @@ class Dashboard extends React.Component {
           Create New Festival
         </Button>
 
-        <TablesWrapper>
+        <VerticalTabs>
+          <VerticalTab title="DRAFTS">
+            <p>yolo</p>
+          </VerticalTab>
+          <VerticalTab title="PLANNED">
+            <div> omg</div>
+          </VerticalTab>
+          <VerticalTab title="ONGOING">
+            <div>lalala</div>
+          </VerticalTab>
+        </VerticalTabs>
+
+        {/*   <TablesWrapper>
           <SingleTableWrapper>
             <FestivalTable title="drafts" festivals={draftFestivals} />
           </SingleTableWrapper>
@@ -169,6 +181,7 @@ class Dashboard extends React.Component {
             <FestivalTable title="finished" festivals={completedFestivals} />
           </SingleTableWrapper>
         </TablesWrapper>
+      */}
 
         <CreateFestModal
           show={showCreateModal}

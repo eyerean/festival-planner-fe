@@ -14,6 +14,7 @@ const theme = {
     // black
     black: '#010101',
     charcoal: '#373f51',
+    gray: '#b6b9bf',
 
     // white
     white: '#FFFFFF',

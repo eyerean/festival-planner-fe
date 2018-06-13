@@ -70,19 +70,20 @@ const StyledTabs = styled.div`
     width: 92%;
     float: right;
     height: 100%;
-    border-right: 1px solid ${props => props.theme.colors.grey};
   }
 
   > ul {
-    width: 54px;
+    width: 60px;
     float: left;
     height: 100%;
     background: transparent;
     list-style-type: none;
     padding: 0;
     margin: 0;
-    border-radius: 3px;
-    border: 2px solid ${props => props.theme.colors.spaceCadetBlue};
+    border: 2px solid ${props => props.theme.colors.tuscanRed};
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-left: none;
   }
 `;
 

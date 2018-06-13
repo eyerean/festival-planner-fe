@@ -20,7 +20,7 @@ const Button = styled.button`
     `
     font-size: 1.3em;
     padding: 15px;
-    margin: 10px 0;
+    margin: 0 20px 20px;
     `}
 
   ${props =>

@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { requireAuthentication } from 'shared/AuthenticatedComponent';
-import { Grid } from 'shared';
 import Login from 'modules/login';
 import Dashboard from 'modules/dashboard';
 import Artists from 'modules/artists';
@@ -45,14 +44,14 @@ class App extends React.Component {
         {isAuthenticated && (
           <MenuBar onLogout={this.handleLogout} user={user} location={location} />
         )}
-        <Grid>
+        <div>
           <Route exact path="/" component={requireAuthentication(Dashboard)} />
           <Route path="/login" component={Login} />
           <Route path="/artists" component={requireAuthentication(Artists)} />
           <Route path="/sound" component={requireAuthentication(Sound)} />
           <Route path="/visual" component={requireAuthentication(Visual)} />
           <Route path="/planner" component={requireAuthentication(Planner)} />
-        </Grid>
+        </div>
       </AppWrapper>
     );
   }

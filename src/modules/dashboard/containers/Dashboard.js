@@ -162,6 +162,9 @@ class Dashboard extends React.Component {
           <VerticalTab title="ONGOING">
             <div>lalala</div>
           </VerticalTab>
+          <VerticalTab title="FINISHED">
+            <div>tis gedaan</div>
+          </VerticalTab>
         </VerticalTabs>
 
         {/*   <TablesWrapper>

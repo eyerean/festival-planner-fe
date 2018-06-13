@@ -21,17 +21,17 @@ const StyledTab = styled.li`
     cursor: pointer;
     outline: none;
     display: block;
-    height: 100px;
-    padding: 40px 0;
+    height: 150px;
+    padding: 70px 0;
     text-decoration: none;
-    border-bottom: 1px solid ${props => props.theme.colors.gray};
+    border-bottom: 1px solid ${props => props.theme.colors.catawbaRed};
     background-color: transparent;
     color: ${props => props.theme.colors.desireRed};
     transition: background 0.2s cubic-bezier(0.16, 0.53, 0.67, 0.68),
       color 0.2s cubic-bezier(0.16, 0.53, 0.67, 0.68);
 
     &:hover {
-      background-color: ${props => props.theme.colors.gray};
+      background-color: ${props => props.theme.colors.roseDust};
     }
 
     &.active {
@@ -52,6 +52,7 @@ const StyledTab = styled.li`
       transform: rotate(-90deg);
 
       text-transform: uppercase;
+      font-size: 20px;
     }
 
     &:hover {
@@ -61,11 +62,19 @@ const StyledTab = styled.li`
   }
 
   &:nth-child(2) > a > span {
-    margin-top: 5px;
+    margin-top: 10px;
   }
 
   &:nth-child(3) > a > span {
-    margin-top: 5px;
+    margin-top: 10px;
+  }
+
+  &:last-child > a {
+    border-bottom: none;
+
+    > span {
+      margin-top: 10px;
+    }
   }
 `;
 

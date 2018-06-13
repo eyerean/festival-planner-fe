@@ -3,15 +3,16 @@ import styled from 'styled-components';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import {
-  cloneDeep as _cloneDeep,
-  find as _find,
-  every as _every,
-  zipObject as _zipObject,
-  map as _map,
-  get as _get,
-  forEach as _forEach,
-} from 'lodash';
+import _cloneDeep from 'lodash/cloneDeep';
+import _find from 'lodash/find';
+import _every from 'lodash/every';
+import _zipObject from 'lodash/zipObject';
+import _map from 'lodash/map';
+import _get from 'lodash/get';
+import _forEach from 'lodash/forEach';
+import _includes from 'lodash/includes';
+import _without from 'lodash/without';
+import { Grid, Row, Col } from 'react-bootstrap';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
 import { Button, VerticalTabs, VerticalTab } from 'shared';
@@ -19,6 +20,11 @@ import { festivalFields } from '../lib/fields';
 import { FestivalTable, CreateFestModal } from '../components';
 import selectors from '../selectors';
 import actions from '../actions';
+
+const isTabActive = (tab, activeTabs) => {
+  console.log('return', _includes(activeTabs, tab));
+  return _includes(activeTabs, tab);
+};
 
 class Dashboard extends React.Component {
   state = {
@@ -31,6 +37,7 @@ class Dashboard extends React.Component {
     invalidFields: [],
     requiredFields: ['festivalName', 'startDate', 'endDate'],
     errorText: '',
+    activeTabs: [0],
   };
 
   componentDidMount() {
@@ -132,6 +139,21 @@ class Dashboard extends React.Component {
     });
   };
 
+  handleTabClick = tabClicked => {
+    const { activeTabs } = this.state;
+    if (_includes(activeTabs, tabClicked)) {
+      console.log('remove it', tabClicked);
+      this.setState(prevState => ({
+        activeTabs: _without(prevState.activeTabs, tabClicked),
+      }));
+    } else {
+      console.log('push it', tabClicked);
+      this.setState(prevState => ({
+        activeTabs: prevState.activeTabs.push(tabClicked),
+      }));
+    }
+  };
+
   render() {
     const {
       draftFestivals,
@@ -145,46 +167,63 @@ class Dashboard extends React.Component {
       errorText,
     } = this.state;
     const { createFestivalFetch } = this.props;
-
+    const { activeTabs } = this.state;
     return (
       <div>
         <Button primary big onClick={this.toggleCreateModal}>
           Create New Festival
         </Button>
 
-        <VerticalTabs>
+        {/*       <VerticalTabs>
           <VerticalTab title="DRAFTS">
-            <p>yolo</p>
+            <TabContent>yolo</TabContent>
           </VerticalTab>
           <VerticalTab title="PLANNED">
-            <div> omg</div>
+            <TabContent className="second-tab"> omg</TabContent>
           </VerticalTab>
           <VerticalTab title="ONGOING">
-            <div>lalala</div>
+            <TabContent className="third-tab">lalala</TabContent>
           </VerticalTab>
           <VerticalTab title="FINISHED">
-            <div>tis gedaan</div>
+            <TabContent className="fourth-tab">tis gedaan</TabContent>
           </VerticalTab>
         </VerticalTabs>
+*/}
 
-        {/*   <TablesWrapper>
-          <SingleTableWrapper>
-            <FestivalTable title="drafts" festivals={draftFestivals} />
-          </SingleTableWrapper>
-
-          <SingleTableWrapper>
-            <FestivalTable title="planned" festivals={plannedFestivals} />
-          </SingleTableWrapper>
-
-          <SingleTableWrapper>
-            <FestivalTable title="ongoing" festivals={ongoingFestivals} />
-          </SingleTableWrapper>
-
-          <SingleTableWrapper>
-            <FestivalTable title="finished" festivals={completedFestivals} />
-          </SingleTableWrapper>
-        </TablesWrapper>
-      */}
+        <TabContainer>
+          <TabTitle onClick={() => this.handleTabClick(0)}>
+            <a className={isTabActive(0, activeTabs) ? 'active' : ''}>
+              <span>DRAFTS</span>
+            </a>
+          </TabTitle>
+          <TabContent className={isTabActive(0, activeTabs) ? 'active' : ''}>
+            that is a very big content with meaning and festivals
+          </TabContent>
+        </TabContainer>
+        <TabContainer>
+          <TabTitle onClick={() => this.handleTabClick(1)}>
+            <a className={isTabActive(1, activeTabs) ? 'active' : ''}>
+              <span>PLANNED</span>
+            </a>
+          </TabTitle>
+          <TabContent>BLACH</TabContent>
+        </TabContainer>
+        <TabContainer>
+          <TabTitle onClick={() => this.handleTabClick(2)}>
+            <a className={isTabActive(2, activeTabs) ? 'active' : ''}>
+              <span>ONGOING</span>
+            </a>
+          </TabTitle>
+          <TabContent>stivals</TabContent>
+        </TabContainer>
+        <TabContainer>
+          <TabTitle onClick={() => this.handleTabClick(3)}>
+            <a className={isTabActive(3, activeTabs) ? 'active' : ''}>
+              <span>FINISHED</span>
+            </a>
+          </TabTitle>
+          <TabContent>that is a very big als</TabContent>
+        </TabContainer>
 
         <CreateFestModal
           show={showCreateModal}
@@ -202,13 +241,72 @@ class Dashboard extends React.Component {
   }
 }
 
-const TablesWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
+const TabContainer = styled.div`
+  width: 100%;
+  margin: 0;
 `;
 
-const SingleTableWrapper = styled.div`
-  flex: 1;
+const TabContent = styled.div`
+  border: 2px solid ${props => props.theme.colors.tuscanRed};
+  background-color: ${props => props.theme.colors.lightBlue};
+  height: 154px;
+  padding: 10px;
+  float: left;
+  width: calc(100% - 60px);
+`;
+
+const TabTitle = styled.div`
+  width: 60px;
+  float: left;
+  height: 100%;
+  background: transparent;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border: 2px solid ${props => props.theme.colors.tuscanRed};
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-left: none;
+
+  > a {
+    cursor: pointer;
+    outline: none;
+    display: block;
+    height: 150px;
+    padding: 70px 0;
+    text-decoration: none;
+    border-bottom: 1px solid ${props => props.theme.colors.catawbaRed};
+    background-color: transparent;
+    color: ${props => props.theme.colors.desireRed};
+    transition: background 0.2s cubic-bezier(0.16, 0.53, 0.67, 0.68),
+      color 0.2s cubic-bezier(0.16, 0.53, 0.67, 0.68);
+
+    &:hover {
+      background-color: ${props => props.theme.colors.roseDust};
+      color: ${props => props.theme.colors.ghostWhite};
+    }
+
+    &.active {
+      background-color: ${props => props.theme.colors.desireRed};
+      color: ${props => props.theme.colors.ghostWhite};
+
+      &:hover {
+        background-color: ${props => props.theme.colors.tuscanRed};
+      }
+    }
+
+    > span {
+      display: block;
+      -webkit-transform: rotate(-90deg);
+      -moz-transform: rotate(-90deg);
+      -ms-transform: rotate(-90deg);
+      -o-transform: rotate(-90deg);
+      transform: rotate(-90deg);
+
+      text-transform: uppercase;
+      font-size: 20px;
+    }
+  }
 `;
 
 const mapStateToProps = state => ({

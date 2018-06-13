@@ -8,6 +8,7 @@ const theme = {
 
     // blue
     lightBlue: '#a8dadc',
+    paleAqua: '#bbcfdb',
     queenBlue: '#457b9d',
     spaceCadetBlue: '#1d3557',
 

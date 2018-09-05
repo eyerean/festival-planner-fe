@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
+import { Row, Col } from 'react-bootstrap';
 import _cloneDeep from 'lodash/cloneDeep';
 import _find from 'lodash/find';
 import _every from 'lodash/every';
@@ -15,9 +16,9 @@ import _without from 'lodash/without';
 import _concat from 'lodash/concat';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
-import { Button /*, VerticalTabs, VerticalTab */ } from 'shared';
+import { Button } from 'shared';
 import { festivalFields } from '../lib/fields';
-import { CreateFestModal } from '../components';
+import { CreateFestModal, FestivalCategory } from '../components';
 import selectors from '../selectors';
 import actions from '../actions';
 
@@ -151,10 +152,10 @@ class Dashboard extends React.Component {
 
   render() {
     const {
-      // draftFestivals,
-      // plannedFestivals,
-      // ongoingFestivals,
-      // completedFestivals,
+      draftFestivals,
+      plannedFestivals,
+      ongoingFestivals,
+      completedFestivals,
       showCreateModal,
       fields,
       invalidFields,
@@ -170,56 +171,12 @@ class Dashboard extends React.Component {
           Create New Festival
         </Button>
 
-        {/*       <VerticalTabs>
-          <VerticalTab title="DRAFTS">
-            <TabContent>yolo</TabContent>
-          </VerticalTab>
-          <VerticalTab title="PLANNED">
-            <TabContent className="second-tab"> omg</TabContent>
-          </VerticalTab>
-          <VerticalTab title="ONGOING">
-            <TabContent className="third-tab">lalala</TabContent>
-          </VerticalTab>
-          <VerticalTab title="FINISHED">
-            <TabContent className="fourth-tab">tis gedaan</TabContent>
-          </VerticalTab>
-        </VerticalTabs>
-*/}
-
-        <TabContainer>
-          <TabTitle onClick={() => this.handleTabClick(0)}>
-            <a className={isTabActive(0, activeTabs) ? 'active' : ''}>
-              <span>DRAFTS</span>
-            </a>
-          </TabTitle>
-          <TabContent className={isTabActive(0, activeTabs) ? 'active' : ''}>
-            that is a very big content with meaning and festivals
-          </TabContent>
-        </TabContainer>
-        <TabContainer>
-          <TabTitle onClick={() => this.handleTabClick(1)}>
-            <a className={isTabActive(1, activeTabs) ? 'active' : ''}>
-              <span>PLANNED</span>
-            </a>
-          </TabTitle>
-          <TabContent>BLACH</TabContent>
-        </TabContainer>
-        <TabContainer>
-          <TabTitle onClick={() => this.handleTabClick(2)}>
-            <a className={isTabActive(2, activeTabs) ? 'active' : ''}>
-              <span>ONGOING</span>
-            </a>
-          </TabTitle>
-          <TabContent>stivals</TabContent>
-        </TabContainer>
-        <TabContainer>
-          <TabTitle onClick={() => this.handleTabClick(3)}>
-            <a className={isTabActive(3, activeTabs) ? 'active' : ''}>
-              <span>FINISHED</span>
-            </a>
-          </TabTitle>
-          <TabContent>that is a very big als</TabContent>
-        </TabContainer>
+        <Row>
+          <FestivalCategory categoryTitle="DRAFTS" festivals={draftFestivals} />
+          <FestivalCategory categoryTitle="PLANNED" festivals={plannedFestivals} />
+          <FestivalCategory categoryTitle="ONGOING" festivals={ongoingFestivals} />
+          <FestivalCategory categoryTitle="COMPLETED" festivals={completedFestivals} />
+        </Row>
 
         <CreateFestModal
           show={showCreateModal}
@@ -236,74 +193,6 @@ class Dashboard extends React.Component {
     );
   }
 }
-
-const TabContainer = styled.div`
-  width: 100%;
-  margin: 0;
-`;
-
-const TabContent = styled.div`
-  border: 2px solid ${props => props.theme.colors.tuscanRed};
-  background-color: ${props => props.theme.colors.lightBlue};
-  height: 154px;
-  padding: 10px;
-  float: left;
-  width: calc(100% - 60px);
-`;
-
-const TabTitle = styled.div`
-  width: 60px;
-  float: left;
-  height: 100%;
-  background: transparent;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  border: 2px solid ${props => props.theme.colors.tuscanRed};
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  border-left: none;
-
-  > a {
-    cursor: pointer;
-    outline: none;
-    display: block;
-    height: 150px;
-    padding: 70px 0;
-    text-decoration: none;
-    border-bottom: 1px solid ${props => props.theme.colors.catawbaRed};
-    background-color: transparent;
-    color: ${props => props.theme.colors.desireRed};
-    transition: background 0.2s cubic-bezier(0.16, 0.53, 0.67, 0.68),
-      color 0.2s cubic-bezier(0.16, 0.53, 0.67, 0.68);
-
-    &:hover {
-      background-color: ${props => props.theme.colors.roseDust};
-      color: ${props => props.theme.colors.ghostWhite};
-    }
-
-    &.active {
-      background-color: ${props => props.theme.colors.desireRed};
-      color: ${props => props.theme.colors.ghostWhite};
-
-      &:hover {
-        background-color: ${props => props.theme.colors.tuscanRed};
-      }
-    }
-
-    > span {
-      display: block;
-      -webkit-transform: rotate(-90deg);
-      -moz-transform: rotate(-90deg);
-      -ms-transform: rotate(-90deg);
-      -o-transform: rotate(-90deg);
-      transform: rotate(-90deg);
-
-      text-transform: uppercase;
-      font-size: 20px;
-    }
-  }
-`;
 
 const mapStateToProps = state => ({
   festivals: selectors.getFestivals(state),

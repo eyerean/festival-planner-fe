@@ -7,7 +7,7 @@ const theme = {
     catawbaRed: '#6c3b40',
 
     // blue
-    lightBlue: '#a8dadc',
+    lightTirquaz: '#a8dadc',
     paleAqua: '#bbcfdb',
     queenBlue: '#457b9d',
     spaceCadetBlue: '#1d3557',

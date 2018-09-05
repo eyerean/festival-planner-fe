@@ -1,5 +1,5 @@
 import CreateFestModal from './CreateFestModal';
-import FestivalItem from './FestivalItem';
+import FestivalCategory from './FestivalCategory';
 import FestivalTable from './FestivalTable';
 
-export { CreateFestModal, FestivalItem, FestivalTable };
+export { CreateFestModal, FestivalCategory, FestivalTable };

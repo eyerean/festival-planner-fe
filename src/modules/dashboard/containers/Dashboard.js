@@ -12,19 +12,16 @@ import _get from 'lodash/get';
 import _forEach from 'lodash/forEach';
 import _includes from 'lodash/includes';
 import _without from 'lodash/without';
-import { Grid, Row, Col } from 'react-bootstrap';
+import _concat from 'lodash/concat';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
-import { Button, VerticalTabs, VerticalTab } from 'shared';
+import { Button /*, VerticalTabs, VerticalTab */ } from 'shared';
 import { festivalFields } from '../lib/fields';
-import { FestivalTable, CreateFestModal } from '../components';
+import { CreateFestModal } from '../components';
 import selectors from '../selectors';
 import actions from '../actions';
 
-const isTabActive = (tab, activeTabs) => {
-  console.log('return', _includes(activeTabs, tab));
-  return _includes(activeTabs, tab);
-};
+const isTabActive = (tab, activeTabs) => _includes(activeTabs, tab);
 
 class Dashboard extends React.Component {
   state = {
@@ -142,32 +139,31 @@ class Dashboard extends React.Component {
   handleTabClick = tabClicked => {
     const { activeTabs } = this.state;
     if (_includes(activeTabs, tabClicked)) {
-      console.log('remove it', tabClicked);
       this.setState(prevState => ({
         activeTabs: _without(prevState.activeTabs, tabClicked),
       }));
     } else {
-      console.log('push it', tabClicked);
       this.setState(prevState => ({
-        activeTabs: prevState.activeTabs.push(tabClicked),
+        activeTabs: _concat(prevState.activeTabs, tabClicked),
       }));
     }
   };
 
   render() {
     const {
-      draftFestivals,
-      plannedFestivals,
-      ongoingFestivals,
-      completedFestivals,
+      // draftFestivals,
+      // plannedFestivals,
+      // ongoingFestivals,
+      // completedFestivals,
       showCreateModal,
       fields,
       invalidFields,
       requiredFields,
       errorText,
+      activeTabs,
     } = this.state;
     const { createFestivalFetch } = this.props;
-    const { activeTabs } = this.state;
+
     return (
       <div>
         <Button primary big onClick={this.toggleCreateModal}>

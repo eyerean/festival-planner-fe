@@ -4,15 +4,19 @@ import { Col } from 'react-bootstrap';
 import _map from 'lodash/map';
 
 const FestivalCategory = ({ categoryTitle, festivals }) => (
-  <Wrapper lg={3} md={6} sm={12}>
-    <h3>{categoryTitle}</h3>
-    <ul>{festivals.length > 0 && _map(festivals, fest => <li key={fest._id}>{fest.name}</li>)}</ul>
-  </Wrapper>
+  <Col lg={3} md={6} sm={12} style={{ padding: 0 }}>
+    <Box>
+      <h3>{categoryTitle}</h3>
+      <ul>
+        {festivals.length > 0 && _map(festivals, fest => <li key={fest._id}>{fest.name}</li>)}
+      </ul>
+    </Box>
+  </Col>
 );
 
 export default FestivalCategory;
 
-const Wrapper = styled(Col)`
+const Box = styled.div`
   > h3 {
     text-align: center;
   }
@@ -21,4 +25,6 @@ const Wrapper = styled(Col)`
   border-radius: 4px;
   border: 4px solid ${props => props.theme.colors.queenBlue};
   padding: 10px 20px;
+  height: 300px;
+  margin: 15px;
 `;

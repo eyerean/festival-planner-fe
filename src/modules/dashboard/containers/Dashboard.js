@@ -1,9 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import { Row, Col } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import _cloneDeep from 'lodash/cloneDeep';
 import _find from 'lodash/find';
 import _every from 'lodash/every';
@@ -11,9 +10,6 @@ import _zipObject from 'lodash/zipObject';
 import _map from 'lodash/map';
 import _get from 'lodash/get';
 import _forEach from 'lodash/forEach';
-import _includes from 'lodash/includes';
-import _without from 'lodash/without';
-import _concat from 'lodash/concat';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
 import { Button } from 'shared';
@@ -21,8 +17,6 @@ import { festivalFields } from '../lib/fields';
 import { CreateFestModal, FestivalCategory } from '../components';
 import selectors from '../selectors';
 import actions from '../actions';
-
-const isTabActive = (tab, activeTabs) => _includes(activeTabs, tab);
 
 class Dashboard extends React.Component {
   state = {
@@ -35,7 +29,6 @@ class Dashboard extends React.Component {
     invalidFields: [],
     requiredFields: ['festivalName', 'startDate', 'endDate'],
     errorText: '',
-    activeTabs: [0],
   };
 
   componentDidMount() {
@@ -137,19 +130,6 @@ class Dashboard extends React.Component {
     });
   };
 
-  handleTabClick = tabClicked => {
-    const { activeTabs } = this.state;
-    if (_includes(activeTabs, tabClicked)) {
-      this.setState(prevState => ({
-        activeTabs: _without(prevState.activeTabs, tabClicked),
-      }));
-    } else {
-      this.setState(prevState => ({
-        activeTabs: _concat(prevState.activeTabs, tabClicked),
-      }));
-    }
-  };
-
   render() {
     const {
       draftFestivals,
@@ -161,7 +141,6 @@ class Dashboard extends React.Component {
       invalidFields,
       requiredFields,
       errorText,
-      activeTabs,
     } = this.state;
     const { createFestivalFetch } = this.props;
 
@@ -171,7 +150,7 @@ class Dashboard extends React.Component {
           Create New Festival
         </Button>
 
-        <Row>
+        <Row style={{ margin: 0 }}>
           <FestivalCategory categoryTitle="DRAFTS" festivals={draftFestivals} />
           <FestivalCategory categoryTitle="PLANNED" festivals={plannedFestivals} />
           <FestivalCategory categoryTitle="ONGOING" festivals={ongoingFestivals} />

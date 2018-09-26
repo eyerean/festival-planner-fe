@@ -9,21 +9,25 @@ import _every from 'lodash/every';
 import _zipObject from 'lodash/zipObject';
 import _map from 'lodash/map';
 import _get from 'lodash/get';
-import _forEach from 'lodash/forEach';
+import _mapValues from 'lodash/mapValues';
+import _filter from 'lodash/filter';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
+import { FEST_STATUS } from 'app/config/constants';
 import { Button } from 'shared';
 import { festivalFields } from '../lib/fields';
 import { CreateFestModal, FestivalCategory } from '../components';
 import selectors from '../selectors';
 import actions from '../actions';
 
+const groupFestivals = allFests =>
+  _mapValues(FEST_STATUS, status => {
+    return _filter(allFests, f => f.status === status);
+  });
+
 class Dashboard extends React.Component {
   state = {
-    draftFestivals: [],
-    plannedFestivals: [],
-    ongoingFestivals: [],
-    completedFestivals: [],
+    groupedFestivals: {},
     showCreateModal: false,
     fields: festivalFields,
     invalidFields: [],
@@ -37,8 +41,8 @@ class Dashboard extends React.Component {
 
   componentWillReceiveProps(nextProps, nextState) {
     if (this.props.festivalsFetch.pending && nextProps.festivalsFetch.fulfilled) {
-      this.props.storeFestivals(nextProps.festivalsFetch.value);
-      this.categorizeFestivals(nextProps.festivalsFetch.value);
+      this.props.storeFestivals(nextProps.festivalsFetch.value); // @TODO remove this and use data from repository
+      this.setState({ groupedFestivals: groupFestivals(nextProps.festivalsFetch.value) });
     }
 
     if (this.props.createFestivalFetch.pending && nextProps.createFestivalFetch.rejected) {
@@ -57,37 +61,6 @@ class Dashboard extends React.Component {
     }
   }
 
-  categorizeFestivals = allFestivals => {
-    let draftFestivals = [];
-    let plannedFestivals = [];
-    let ongoingFestivals = [];
-    let completedFestivals = [];
-
-    _forEach(allFestivals, fest => {
-      switch (fest.status) {
-        case 'planned':
-          plannedFestivals.push(fest);
-          break;
-        case 'ongoing':
-          ongoingFestivals.push(fest);
-          break;
-        case 'completed':
-          completedFestivals.push(fest);
-          break;
-        default:
-          draftFestivals.push(fest);
-          break;
-      }
-    });
-
-    this.setState({
-      draftFestivals,
-      plannedFestivals,
-      ongoingFestivals,
-      completedFestivals,
-    });
-  };
-
   toggleCreateModal = () => {
     this.setState(prevState => ({
       showCreateModal: !prevState.showCreateModal,
@@ -102,7 +75,6 @@ class Dashboard extends React.Component {
     const invalidFieldsTemp = validateRequiredFields(invalidFields, fields, requiredFields);
     this.setState({ invalidFields: invalidFieldsTemp, errorText: '' });
 
-    //@TODO Send ISO date to the BE?
     if (_every(fields, value => value) && invalidFieldsTemp.length === 0) {
       this.setState({ invalidFields: [] });
       const cleanFields = _zipObject(_map(fields, f => f.name), _map(fields, f => f.value));
@@ -130,12 +102,13 @@ class Dashboard extends React.Component {
     });
   };
 
+  handleFestivalNameClick = name => {
+    console.log('clicked iiit', name);
+  };
+
   render() {
     const {
-      draftFestivals,
-      plannedFestivals,
-      ongoingFestivals,
-      completedFestivals,
+      groupedFestivals,
       showCreateModal,
       fields,
       invalidFields,
@@ -151,10 +124,14 @@ class Dashboard extends React.Component {
         </Button>
 
         <Row style={{ margin: 0 }}>
-          <FestivalCategory categoryTitle="DRAFTS" festivals={draftFestivals} />
-          <FestivalCategory categoryTitle="PLANNED" festivals={plannedFestivals} />
-          <FestivalCategory categoryTitle="ONGOING" festivals={ongoingFestivals} />
-          <FestivalCategory categoryTitle="COMPLETED" festivals={completedFestivals} />
+          {_map(groupedFestivals, (list, category) => (
+            <FestivalCategory
+              key={category}
+              categoryTitle={category}
+              festivals={list}
+              onFestivalNameClick={this.handleFestivalNameClick}
+            />
+          ))}
         </Row>
 
         <CreateFestModal

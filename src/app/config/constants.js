@@ -7,4 +7,11 @@ const FIELD_TYPES = {
   DATE: 'date',
 };
 
-export { FIELD_TYPES };
+const FEST_STATUS = {
+  DRAFTS: 'drafts',
+  PLANNED: 'planned',
+  ONGOING: 'ongoing',
+  COMPLETED: 'completed',
+};
+
+export { FIELD_TYPES, FEST_STATUS };

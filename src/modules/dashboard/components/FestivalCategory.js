@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Col } from 'react-bootstrap';
 import _map from 'lodash/map';
 
-const FestivalCategory = ({ categoryTitle, festivals, onFestivalNameClick }) => (
+const FestivalCategory = ({ categoryTitle, festivals, onFestivalClick }) => (
   <Col lg={3} md={6} sm={12} style={{ padding: 0 }}>
     <Box>
       <h3>{categoryTitle}</h3>
@@ -13,7 +13,7 @@ const FestivalCategory = ({ categoryTitle, festivals, onFestivalNameClick }) => 
             <ListItem
               key={fest._id}
               onClick={() => {
-                onFestivalNameClick(fest.name);
+                onFestivalClick(fest);
               }}
             >
               {fest.name}

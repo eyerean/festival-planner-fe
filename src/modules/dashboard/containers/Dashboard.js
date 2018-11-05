@@ -16,7 +16,7 @@ import validateRequiredFields from 'app/lib/validateRequiredFields';
 import { FEST_STATUS } from 'app/config/constants';
 import { Button } from 'shared';
 import { festivalFields } from '../lib/fields';
-import { CreateFestModal, FestivalCategory } from '../components';
+import { CreateFestModal, FestivalCategory, FestivalDetailsModal } from '../components';
 import selectors from '../selectors';
 import actions from '../actions';
 
@@ -33,6 +33,8 @@ class Dashboard extends React.Component {
     invalidFields: [],
     requiredFields: ['festivalName', 'startDate', 'endDate'],
     errorText: '',
+    showFestModal: false,
+    festivalInModal: null,
   };
 
   componentDidMount() {
@@ -102,8 +104,12 @@ class Dashboard extends React.Component {
     });
   };
 
-  handleFestivalNameClick = name => {
-    console.log('clicked iiit', name);
+  handleFestivalClick = fest => {
+    this.setState({ showFestModal: true, festivalInModal: fest });
+  };
+
+  toggleFestDetailsModal = () => {
+    this.setState(prevState => ({ showFestModal: !prevState.showFestModal }));
   };
 
   render() {
@@ -114,6 +120,8 @@ class Dashboard extends React.Component {
       invalidFields,
       requiredFields,
       errorText,
+      showFestModal,
+      festivalInModal,
     } = this.state;
     const { createFestivalFetch } = this.props;
 
@@ -129,7 +137,7 @@ class Dashboard extends React.Component {
               key={category}
               categoryTitle={category}
               festivals={list}
-              onFestivalNameClick={this.handleFestivalNameClick}
+              onFestivalClick={this.handleFestivalClick}
             />
           ))}
         </Row>
@@ -145,6 +153,14 @@ class Dashboard extends React.Component {
           handleChange={this.handleChange}
           errorText={errorText}
         />
+
+        {festivalInModal && (
+          <FestivalDetailsModal
+            show={showFestModal}
+            onClose={this.toggleFestDetailsModal}
+            festival={festivalInModal}
+          />
+        )}
       </div>
     );
   }

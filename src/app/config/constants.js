@@ -11,7 +11,7 @@ const FEST_STATUS = {
   DRAFTS: 'drafts',
   PLANNED: 'planned',
   ONGOING: 'ongoing',
-  COMPLETED: 'completed',
+  PAST: 'past',
 };
 
 export { FIELD_TYPES, FEST_STATUS };

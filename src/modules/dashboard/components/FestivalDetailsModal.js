@@ -27,7 +27,7 @@ const FestivalDetailsModal = ({ show, onClose, festival, onDetailsClick }) => (
     </Modal.Body>
     <Modal.Footer>
       <ButtonWrapper>
-        <Button primary onClick={onDetailsClick}>
+        <Button primary onClick={() => onDetailsClick(festival._id)}>
           Got to festival details
         </Button>
       </ButtonWrapper>

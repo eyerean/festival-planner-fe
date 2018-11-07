@@ -1,5 +1,6 @@
 import React from 'react';
 import { bindActionCreators, compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
 import { Row } from 'react-bootstrap';
@@ -112,6 +113,10 @@ class Dashboard extends React.Component {
     this.setState(prevState => ({ showFestModal: !prevState.showFestModal }));
   };
 
+  handleFestDetailsClick = festId => {
+    this.props.history.push(`/festival/${festId}`);
+  };
+
   render() {
     const {
       groupedFestivals,
@@ -159,6 +164,7 @@ class Dashboard extends React.Component {
             show={showFestModal}
             onClose={this.toggleFestDetailsModal}
             festival={festivalInModal}
+            onDetailsClick={this.handleFestDetailsClick}
           />
         )}
       </div>
@@ -200,4 +206,4 @@ const enhance = compose(
   )
 );
 
-export default enhance(Dashboard);
+export default enhance(withRouter(Dashboard));

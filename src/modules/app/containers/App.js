@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { requireAuthentication } from 'shared/AuthenticatedComponent';
 import Login from 'modules/login';
 import Dashboard from 'modules/dashboard';
+import { FestivalPage } from 'modules/dashboard';
 import Artists from 'modules/artists';
 import Sound from 'modules/sound';
 import Visual from 'modules/visual';
@@ -46,6 +47,7 @@ class App extends React.Component {
         )}
         <div>
           <Route exact path="/" component={requireAuthentication(Dashboard)} />
+          <Route exact path="/festival/:id" component={requireAuthentication(FestivalPage)} />
           <Route path="/login" component={Login} />
           <Route path="/artists" component={requireAuthentication(Artists)} />
           <Route path="/sound" component={requireAuthentication(Sound)} />

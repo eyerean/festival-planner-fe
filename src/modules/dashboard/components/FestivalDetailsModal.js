@@ -9,7 +9,7 @@ import { Button } from 'shared';
 const FestivalDetailsModal = ({ show, onClose, festival, onDetailsClick }) => (
   <Modal show={show} onHide={onClose}>
     <Modal.Header closeButton>
-      <Modal.Title>{festival.name} Overview</Modal.Title>
+      <Modal.Title>{festival.name} Quick Overview</Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <ModalBodyWrapper>

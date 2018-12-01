@@ -19,6 +19,8 @@ const theme = {
 
     // white
     white: '#FFFFFF',
+    babyPowder: '#fdfdfd',
+    snow: '#fafafa',
     ghostWhite: '#f5f7fc',
   },
 };

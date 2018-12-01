@@ -37,6 +37,11 @@ class FestivalPage extends React.Component {
               <td>17:00 - 18:00</td>
               <td>allochiria</td>
             </tr>
+            <tr>
+              <th>
+                <Glyphicon glyph="plus" />
+              </th>
+            </tr>
           </tbody>
         </table>
       </Wrapper>

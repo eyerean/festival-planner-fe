@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Glyphicon } from 'react-bootstrap';
+import { Button } from 'shared';
 
 class FestivalPage extends React.Component {
+  handleAddATimeslot = () => {
+    console.log('adding a row');
+  };
+
   render() {
-    console.log('render fest page props', this.props);
     return (
       <Wrapper>
         <table>
@@ -12,9 +16,11 @@ class FestivalPage extends React.Component {
             <tr>
               <th>hours</th>
               <th colSpan="2">saturday</th>
-              <th>
-                <Glyphicon glyph="plus" />
-              </th>
+              <ButtonCell>
+                <Button primary onClick={undefined}>
+                  <Glyphicon glyph="plus" />
+                </Button>
+              </ButtonCell>
             </tr>
           </thead>
           <tbody>
@@ -38,9 +44,11 @@ class FestivalPage extends React.Component {
               <td>allochiria</td>
             </tr>
             <tr>
-              <th>
-                <Glyphicon glyph="plus" />
-              </th>
+              <ButtonCell>
+                <Button primary onClick={this.handleAddATimeslot}>
+                  <Glyphicon glyph="plus" />
+                </Button>
+              </ButtonCell>
             </tr>
           </tbody>
         </table>
@@ -55,6 +63,7 @@ const Wrapper = styled.div`
   margin: 15px;
 
   table {
+    margin: 30px auto;
     border-spacing: 5px;
     border-collapse: unset;
   }
@@ -64,5 +73,14 @@ const Wrapper = styled.div`
     text-align: center;
     border: 1px solid black;
     padding: 6px;
+  }
+`;
+
+const ButtonCell = styled.th`
+  padding: 0 !important;
+
+  > button {
+    margin: 0;
+    padding: 5px 40px;
   }
 `;

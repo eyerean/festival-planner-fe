@@ -4,75 +4,109 @@ import { Glyphicon } from 'react-bootstrap';
 import _map from 'lodash/map';
 import { Button } from 'shared';
 
-const headData = [
-  {
-    label: 'saturday',
-    dayOrder: 0,
-    stagesCols: [
-      {
-        label: 'awesomesauce',
-        stageOrder: 0,
-      },
-      {
-        label: 'stage abc',
-        stageOrder: 1,
-      },
-    ],
-  },
-];
-
-const bodyData = [
-  {
-    timeslotOrder: 0,
-    timeslotLabel: '15:00 - 16:00',
-    artistsCols: [
-      {
-        label: 'band A',
-        amountOfTimeslots: 1,
-        stageOrder: 0,
-      },
-      {
-        label: '-',
-        amountOfTimeslots: 1,
-        stageOrder: 1,
-      },
-    ],
-  },
-  {
-    timeslotOrder: 1,
-    timeslotLabel: '16:00 - 17:00',
-    artistsCols: [
-      {
-        label: 'band ZZ',
-        amountOfTimeslots: 2,
-        stageOrder: 0,
-      },
-      {
-        label: 'famous band',
-        amountOfTimeslots: 1,
-        stageOrder: 1,
-      },
-    ],
-  },
-  {
-    timeslotOrder: 2,
-    timeslotLabel: '17:00 - 18:00',
-    artistsCols: [
-      {
-        label: 'allochiria',
-        amountOfTimeslots: 1,
-        stageOrder: 1,
-      },
-    ],
-  },
-];
-
 class FestivalPage extends React.Component {
-  handleAddATimeslot = () => {
-    console.log('adding a row');
+  state = {
+    headData: [
+      {
+        label: 'saturday',
+        dayOrder: 0,
+        stagesCols: [
+          {
+            label: 'awesomesauce',
+            stageOrder: 0,
+          },
+          {
+            label: 'stage abc',
+            stageOrder: 1,
+          },
+        ],
+      },
+    ],
+    bodyData: [
+      {
+        timeslotOrder: 0,
+        timeslotLabel: '15:00 - 16:00',
+        artistsCols: [
+          {
+            label: 'band A',
+            amountOfTimeslots: 1,
+            stageOrder: 0,
+          },
+          {
+            label: '-',
+            amountOfTimeslots: 1,
+            stageOrder: 1,
+          },
+        ],
+      },
+      {
+        timeslotOrder: 1,
+        timeslotLabel: '16:00 - 17:00',
+        artistsCols: [
+          {
+            label: 'band ZZ',
+            amountOfTimeslots: 2,
+            stageOrder: 0,
+          },
+          {
+            label: 'famous band',
+            amountOfTimeslots: 1,
+            stageOrder: 1,
+          },
+        ],
+      },
+      {
+        timeslotOrder: 2,
+        timeslotLabel: '17:00 - 18:00',
+        artistsCols: [
+          {
+            label: 'allochiria',
+            amountOfTimeslots: 1,
+            stageOrder: 1,
+          },
+        ],
+      },
+    ],
+  };
+
+  handleAddTimeslot = () => {
+    this.setState(prevState => ({
+      bodyData: [
+        ...prevState.bodyData,
+        {
+          timeslotOrder: prevState.bodyData.length,
+          timeslotLabel: '18:00 - 19:00', // asking in modal
+          artistsCols: [
+            {
+              label: 'metallica', // asking in modal
+              amountOfTimeslots: 2, // by default 1 !
+              stageOrder: 0, // asking in modal
+            },
+            {
+              label: 'deftones',
+              amountOfTimeslots: 1,
+              stageOrder: 1,
+            },
+          ],
+        },
+      ],
+    }));
+  };
+
+  handleAddStage = () => {
+    console.log('adding a stage');
+    // include dropdown to choose day to add the stage
+    // if only 1 day, show only that one in the dropdown
+  };
+
+  handleAddDay = () => {
+    console.log('adding a day');
+    // also include fields to add immediately the stages
   };
 
   render() {
+    const { headData, bodyData } = this.state;
+
     return (
       <Wrapper>
         <table>
@@ -85,14 +119,14 @@ class FestivalPage extends React.Component {
                 </th>
               ))}
               <ButtonCell>
-                <Button primary onClick={undefined}>
+                <Button primary onClick={this.handleAddDay}>
                   <Glyphicon glyph="plus" />
                 </Button>
               </ButtonCell>
             </tr>
             <SecondHeadRow>
               <ButtonCell>
-                <Button primary onClick={this.handleAddATimeslot}>
+                <Button primary onClick={this.handleAddStage}>
                   <Glyphicon glyph="plus" />
                 </Button>
               </ButtonCell>
@@ -114,7 +148,7 @@ class FestivalPage extends React.Component {
             ))}
             <tr>
               <ButtonCell>
-                <Button primary onClick={this.handleAddATimeslot}>
+                <Button primary onClick={this.handleAddTimeslot}>
                   <Glyphicon glyph="plus" />
                 </Button>
               </ButtonCell>

@@ -13,6 +13,7 @@ import {
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
 import { DynamicForm } from 'shared';
+import appSelectors from 'modules/app/selectors';
 import { LoginFormWrapper, LoginWrapper, WhiteBackground } from '../components';
 import actions from '../actions';
 import selectors from '../selectors';
@@ -34,18 +35,21 @@ class Login extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.loginFetch.pending && nextProps.loginFetch.fulfilled) {
-      this.props.storeSession(nextProps.loginFetch.value.token, nextProps.loginFetch.value.user);
+    const { loginFetch: prevLoginFetch, authenticateFetch: prevAuthFetch } = this.props;
+    const { loginFetch, authenticateFetch: authFetch, locationBeforeTransitions } = nextProps;
+
+    if (prevLoginFetch.pending && loginFetch.fulfilled) {
+      this.props.storeSession(loginFetch.value.token, loginFetch.value.user);
       this.props.authenticate();
-      localStorage.setItem('token', nextProps.loginFetch.value.token);
-      localStorage.setItem('user', nextProps.loginFetch.value.user);
+      localStorage.setItem('token', loginFetch.value.token);
+      localStorage.setItem('user', loginFetch.value.user);
       this.props.history.push('/');
     }
-    if (this.props.authenticateFetch.pending && nextProps.authenticateFetch.fulfilled) {
+    if (prevAuthFetch.pending && authFetch.fulfilled) {
       //token is correct so user is correct so store them
       this.props.storeSession(localStorage.getItem('token'), localStorage.getItem('user'));
       this.props.authenticate();
-      this.props.history.push('/');
+      this.props.history.push(locationBeforeTransitions ? locationBeforeTransitions : '/');
     }
   }
 
@@ -124,6 +128,7 @@ class Login extends React.Component<Props, State> {
 const mapStateToProps = state => ({
   isAuthenticated: selectors.isAuthenticated(state),
   token: selectors.getToken(state),
+  locationBeforeTransitions: appSelectors.getLocationBeforeTransitions(state),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
 import { reducer as fetchReducer } from 'react-redux-fetch';
 
 import appReducer from './modules/app/reducer';
@@ -10,6 +9,5 @@ export default combineReducers({
   app: appReducer,
   festival: festivalReducer,
   login: loginReducer,
-  routing: routerReducer,
   repository: fetchReducer,
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { Glyphicon } from 'react-bootstrap';
 import _map from 'lodash/map';
@@ -100,62 +100,87 @@ class FestivalPage extends React.Component {
   };
 
   handleAddDay = () => {
-    console.log('adding a day');
-    // also include fields to add immediately the stages
+    this.setState(prevState => ({
+      headData: [
+        ...prevState.headData,
+        {
+          label: 'sunday', // ask in modal!
+          dayOrder: 1, // ask in modal! by default prevState.headData.length + 1
+          stagesCols: [
+            // default the existing ones (if any)
+            {
+              label: 'awesomesauce',
+              stageOrder: 0,
+            },
+            {
+              label: 'stage abc',
+              stageOrder: 1,
+            },
+          ],
+        },
+      ],
+    }));
   };
 
   render() {
     const { headData, bodyData } = this.state;
 
     return (
-      <Wrapper>
-        <table>
-          <thead>
-            <tr>
-              <th>hours</th>
-              {_map(headData, day => (
-                <th key={day.dayOrder} colSpan={day.stagesCols.length || '1'}>
-                  {day.label}
-                </th>
-              ))}
-              <ButtonCell>
-                <Button primary onClick={this.handleAddDay}>
-                  <Glyphicon glyph="plus" />
-                </Button>
-              </ButtonCell>
-            </tr>
-            <SecondHeadRow>
-              <ButtonCell>
-                <Button primary onClick={this.handleAddStage}>
-                  <Glyphicon glyph="plus" />
-                </Button>
-              </ButtonCell>
-              {_map(headData, day =>
-                _map(day.stagesCols, stage => <td key={stage.stageOrder}>{stage.label}</td>)
-              )}
-            </SecondHeadRow>
-          </thead>
-          <tbody>
-            {_map(bodyData, row => (
-              <tr key={row.timeslotOrder}>
-                <td>{row.timeslotLabel}</td>
-                {_map(row.artistsCols, artist => (
-                  <td key={artist.stageOrder} rowSpan={artist.amountOfTimeslots || '1'}>
-                    {artist.label}
-                  </td>
+      <Fragment>
+        <Wrapper>
+          <table>
+            <thead>
+              <tr>
+                <th>hours</th>
+                {_map(headData, day => (
+                  <th key={day.dayOrder} colSpan={day.stagesCols.length || '1'}>
+                    {day.label}
+                  </th>
                 ))}
+                <ButtonCell>
+                  <Button primary onClick={this.handleAddDay}>
+                    <Glyphicon glyph="plus" />
+                  </Button>
+                </ButtonCell>
               </tr>
-            ))}
-            <tr>
-              <ButtonCell>
-                <Button primary onClick={this.handleAddTimeslot}>
-                  <Glyphicon glyph="plus" />
-                </Button>
-              </ButtonCell>
-            </tr>
-          </tbody>
-        </table>
-      </Wrapper>
+              <SecondHeadRow>
+                <ButtonCell>
+                  <Button primary onClick={this.handleAddStage}>
+                    <Glyphicon glyph="plus" />
+                  </Button>
+                </ButtonCell>
+                {_map(headData, day =>
+                  _map(day.stagesCols, stage => <td key={stage.stageOrder}>{stage.label}</td>)
+                )}
+              </SecondHeadRow>
+            </thead>
+            <tbody>
+              {_map(bodyData, row => (
+                <tr key={row.timeslotOrder}>
+                  <td>{row.timeslotLabel}</td>
+                  {_map(row.artistsCols, artist => (
+                    <td key={artist.stageOrder} rowSpan={artist.amountOfTimeslots || '1'}>
+                      {artist.label}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+              <tr>
+                <ButtonCell>
+                  <Button primary onClick={this.handleAddTimeslot}>
+                    <Glyphicon glyph="plus" />
+                  </Button>
+                </ButtonCell>
+              </tr>
+            </tbody>
+          </table>
+        </Wrapper>
+        {/*
+          <AddDayModal />
+          <AddStageModal />
+          <AddTimeslotModal />
+        */}
+      </Fragment>
     );
   }
 }

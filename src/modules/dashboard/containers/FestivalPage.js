@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { Glyphicon } from 'react-bootstrap';
 import _map from 'lodash/map';
+import _find from 'lodash/find';
+import _reject from 'lodash/reject';
 import { Button } from 'shared';
 
 class FestivalPage extends React.Component {
@@ -97,6 +99,26 @@ class FestivalPage extends React.Component {
     console.log('adding a stage');
     // include dropdown to choose day to add the stage
     // if only 1 day, show only that one in the dropdown
+    const { headData } = this.state;
+    const foundDay = _find(headData, { label: 'saturday' });
+
+    if (foundDay) {
+      // adding a stage to an existing day - only option so far
+      const updatedDay = {
+        ...foundDay,
+        stagesCols: [
+          ...foundDay.stagesCols,
+          {
+            label: 'new_stage', // ask in modal
+            stageOrder: foundDay.stagesCols.length,
+          },
+        ],
+      };
+
+      this.setState(prevState => ({
+        headData: [..._reject(prevState.headData, h => h.label === foundDay.label), updatedDay],
+      }));
+    }
   };
 
   handleAddDay = () => {

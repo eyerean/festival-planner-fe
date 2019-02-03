@@ -5,94 +5,103 @@ import _map from 'lodash/map';
 import _find from 'lodash/find';
 import _reject from 'lodash/reject';
 import { Button } from 'shared';
+import { getTimeslotLabelFromTimeslotStart } from 'app/lib/helpers';
+import { AddTimeslotModal } from '../components';
+
+const headInitialData = [
+  {
+    label: 'saturday',
+    dayOrder: 0,
+    stagesCols: [
+      {
+        label: 'awesomesauce',
+        stageOrder: 0,
+      },
+      {
+        label: 'stage abc',
+        stageOrder: 1,
+      },
+    ],
+  },
+];
+
+const bodyInitialData = [
+  {
+    timeslotOrder: 0,
+    timeslotStart: '15:00',
+    artistsCols: [
+      {
+        label: 'band A',
+        amountOfTimeslots: 1,
+        stageOrder: 0,
+      },
+      {
+        label: '-',
+        amountOfTimeslots: 1,
+        stageOrder: 1,
+      },
+    ],
+  },
+  {
+    timeslotOrder: 1,
+    timeslotStart: '16:00',
+    artistsCols: [
+      {
+        label: 'band ZZ',
+        amountOfTimeslots: 2,
+        stageOrder: 0,
+      },
+      {
+        label: 'famous band',
+        amountOfTimeslots: 1,
+        stageOrder: 1,
+      },
+    ],
+  },
+  {
+    timeslotOrder: 2,
+    timeslotStart: '17:00',
+    artistsCols: [
+      {
+        label: 'allochiria',
+        amountOfTimeslots: 1,
+        stageOrder: 1,
+      },
+    ],
+  },
+];
 
 class FestivalPage extends React.Component {
   state = {
-    headData: [
-      {
-        label: 'saturday',
-        dayOrder: 0,
-        stagesCols: [
-          {
-            label: 'awesomesauce',
-            stageOrder: 0,
-          },
-          {
-            label: 'stage abc',
-            stageOrder: 1,
-          },
-        ],
-      },
-    ],
-    bodyData: [
-      {
-        timeslotOrder: 0,
-        timeslotLabel: '15:00 - 16:00',
-        artistsCols: [
-          {
-            label: 'band A',
-            amountOfTimeslots: 1,
-            stageOrder: 0,
-          },
-          {
-            label: '-',
-            amountOfTimeslots: 1,
-            stageOrder: 1,
-          },
-        ],
-      },
-      {
-        timeslotOrder: 1,
-        timeslotLabel: '16:00 - 17:00',
-        artistsCols: [
-          {
-            label: 'band ZZ',
-            amountOfTimeslots: 2,
-            stageOrder: 0,
-          },
-          {
-            label: 'famous band',
-            amountOfTimeslots: 1,
-            stageOrder: 1,
-          },
-        ],
-      },
-      {
-        timeslotOrder: 2,
-        timeslotLabel: '17:00 - 18:00',
-        artistsCols: [
-          {
-            label: 'allochiria',
-            amountOfTimeslots: 1,
-            stageOrder: 1,
-          },
-        ],
-      },
-    ],
+    timeslot: { amount: 1, unit: 'h' }, // one hour by default
+    showAddTimeslotModal: false,
+    headData: headInitialData,
+    bodyData: bodyInitialData,
   };
 
   handleAddTimeslot = () => {
-    this.setState(prevState => ({
-      bodyData: [
-        ...prevState.bodyData,
-        {
-          timeslotOrder: prevState.bodyData.length,
-          timeslotLabel: '18:00 - 19:00', // asking in modal
-          artistsCols: [
-            {
-              label: 'metallica', // asking in modal
-              amountOfTimeslots: 2, // by default 1 !
-              stageOrder: 0, // asking in modal
-            },
-            {
-              label: 'deftones',
-              amountOfTimeslots: 1,
-              stageOrder: 1,
-            },
-          ],
-        },
-      ],
-    }));
+    this.handleToggleAddTimeslotModal();
+    // this.setState(prevState => ({
+    //   bodyData: [
+    //     ...prevState.bodyData,
+    //     {
+    //       timeslotOrder: prevState.bodyData.length,
+    //       timeslotLabel: '18:00 - 19:00', // asking in modal
+    //       artistsCols: [
+    //         {
+    //           label: 'metallica', // asking in modal
+    //           amountOfTimeslots: 2, // by default 1 !
+    //           stageOrder: 0, // asking in modal
+    //         },
+    //         {
+    //           label: 'deftones',
+    //           amountOfTimeslots: 1,
+    //           stageOrder: 1,
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // }));
   };
 
   handleAddStage = () => {
@@ -144,8 +153,14 @@ class FestivalPage extends React.Component {
     }));
   };
 
+  handleToggleAddTimeslotModal = () => {
+    this.setState(prevState => ({
+      showAddTimeslotModal: !prevState.showAddTimeslotModal,
+    }));
+  };
+
   render() {
-    const { headData, bodyData } = this.state;
+    const { headData, bodyData, showAddTimeslotModal, timeslot } = this.state;
 
     return (
       <Fragment>
@@ -179,7 +194,7 @@ class FestivalPage extends React.Component {
             <tbody>
               {_map(bodyData, row => (
                 <tr key={row.timeslotOrder}>
-                  <td>{row.timeslotLabel}</td>
+                  <td>{getTimeslotLabelFromTimeslotStart(row.timeslotStart, timeslot)}</td>
                   {_map(row.artistsCols, artist => (
                     <td key={artist.stageOrder} rowSpan={artist.amountOfTimeslots || '1'}>
                       {artist.label}
@@ -197,10 +212,16 @@ class FestivalPage extends React.Component {
             </tbody>
           </table>
         </Wrapper>
+        <AddTimeslotModal
+          show={showAddTimeslotModal}
+          onClose={this.handleToggleAddTimeslotModal}
+          bodyData={bodyData}
+          headData={headData}
+          timeslot={timeslot}
+        />
         {/*
           <AddDayModal />
           <AddStageModal />
-          <AddTimeslotModal />
         */}
       </Fragment>
     );

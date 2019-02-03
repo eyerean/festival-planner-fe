@@ -65,12 +65,6 @@
     "rules": {
       "id-length": 0,
       "no-magic-numbers": 0,
-      "import/max-dependencies": [
-        1,
-        {
-          "max": 17
-        }
-      ],
       "import/prefer-default-export": 0,
       "flowtype/require-return-type": 0,
       "flowtype/require-variable-type": 0,

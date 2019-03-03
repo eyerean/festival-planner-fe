@@ -23,6 +23,7 @@ class AddTimeslotModal extends React.Component {
           label: '',
           amountOfTimeslots: 1,
           stageOrder: stage.stageOrder,
+          dayOrder: day.dayOrder,
         });
       })
     );

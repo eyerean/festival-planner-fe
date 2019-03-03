@@ -14,7 +14,7 @@ const headInitialData = [
     dayOrder: 0,
     stagesCols: [
       {
-        label: 'awesomesauce',
+        label: 'main stage',
         stageOrder: 0,
       },
       {
@@ -34,11 +34,13 @@ const bodyInitialData = [
         label: 'band A',
         amountOfTimeslots: 1,
         stageOrder: 0,
+        dayOrder: 0,
       },
       {
         label: '-',
         amountOfTimeslots: 1,
         stageOrder: 1,
+        dayOrder: 0,
       },
     ],
   },
@@ -50,11 +52,13 @@ const bodyInitialData = [
         label: 'band ZZ',
         amountOfTimeslots: 2,
         stageOrder: 0,
+        dayOrder: 0,
       },
       {
         label: 'famous band',
         amountOfTimeslots: 1,
         stageOrder: 1,
+        dayOrder: 0,
       },
     ],
   },
@@ -66,6 +70,7 @@ const bodyInitialData = [
         label: 'allochiria',
         amountOfTimeslots: 1,
         stageOrder: 1,
+        dayOrder: 0,
       },
     ],
   },
@@ -112,7 +117,7 @@ class FestivalPage extends React.Component {
     const foundDay = _find(headData, { label: 'saturday' });
 
     if (foundDay) {
-      // adding a stage to an existing day - only option so far
+      // adding a stage to last existing day - only option so far
       // @TODO fix for more days
       const updatedDay = {
         ...foundDay,
@@ -127,7 +132,7 @@ class FestivalPage extends React.Component {
 
       this.setState(prevState => ({
         headData: [..._reject(prevState.headData, { label: foundDay.label }), updatedDay],
-        // update bodyData as well with empty cells
+        // add empty cells for artists
         bodyData: _map(prevState.bodyData, row => ({
           ...row,
           artistsCols: [
@@ -136,6 +141,7 @@ class FestivalPage extends React.Component {
               label: '',
               amountOfTimeslots: 1,
               stageOrder: foundDay.stagesCols.length,
+              dayOrder: foundDay.dayOrder,
             },
           ],
         })),
@@ -144,25 +150,29 @@ class FestivalPage extends React.Component {
   };
 
   handleAddDay = () => {
+    const { headData } = this.state;
+    const newDay = {
+      label: 'sunday', // ask in modal!
+      dayOrder: 1, // ask in modal! by default prevState.headData.length + 1
+      // default the existing stages (if any)
+      stagesCols: headData[0].stagesCols || [{ label: 'stage 1', stageOrder: 0 }],
+    };
+
     this.setState(prevState => ({
-      headData: [
-        ...prevState.headData,
-        {
-          label: 'sunday', // ask in modal!
-          dayOrder: 1, // ask in modal! by default prevState.headData.length + 1
-          stagesCols: [
-            // default the existing ones (if any)
-            {
-              label: 'awesomesauce',
-              stageOrder: 0,
-            },
-            {
-              label: 'stage abc',
-              stageOrder: 1,
-            },
-          ],
-        },
-      ],
+      headData: [...prevState.headData, newDay],
+      // add empty cells for artists
+      bodyData: _map(prevState.bodyData, row => ({
+        ...row,
+        artistsCols: [
+          ...row.artistsCols,
+          ..._map(newDay.stagesCols, stage => ({
+            label: '',
+            amountOfTimeslots: 1,
+            stageOrder: stage.stageOrder,
+            dayOrder: newDay.dayOrder,
+          })),
+        ],
+      })),
     }));
   };
 
@@ -215,7 +225,10 @@ class FestivalPage extends React.Component {
                 <tr key={row.timeslotOrder}>
                   <td>{getTimeslotLabelFromTimeslotStart(row.timeslotStart, timeslot)}</td>
                   {_map(row.artistsCols, artist => (
-                    <td key={artist.stageOrder} rowSpan={artist.amountOfTimeslots || '1'}>
+                    <td
+                      key={'d' + artist.dayOrder + 's' + artist.stageOrder}
+                      rowSpan={artist.amountOfTimeslots || '1'}
+                    >
                       {artist.label}
                     </td>
                   ))}

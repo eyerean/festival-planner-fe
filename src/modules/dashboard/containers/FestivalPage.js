@@ -110,43 +110,34 @@ class FestivalPage extends React.Component {
   // };
 
   handleAddStage = () => {
-    console.log('adding a stage');
-    // include dropdown to choose day to add the stage
-    // if only 1 day, show only that one in the dropdown
-    const { headData } = this.state;
-    const foundDay = _find(headData, { label: 'saturday' });
-
-    if (foundDay) {
-      // adding a stage to last existing day - only option so far
-      // @TODO fix for more days
-      const updatedDay = {
-        ...foundDay,
-        stagesCols: [
-          ...foundDay.stagesCols,
-          {
-            label: `stage ${foundDay.stagesCols.length + 1}`, // ask in modal -> NO, just add the cells and make the user update in edit
-            stageOrder: foundDay.stagesCols.length,
-          },
-        ],
-      };
-
-      this.setState(prevState => ({
-        headData: [..._reject(prevState.headData, { label: foundDay.label }), updatedDay],
-        // add empty cells for artists
-        bodyData: _map(prevState.bodyData, row => ({
-          ...row,
-          artistsCols: [
-            ...row.artistsCols,
+    // add a stage to each existing day
+    this.setState(prevState => ({
+      headData: [
+        ..._map(prevState.headData, day => ({
+          ...day,
+          stagesCols: [
+            ...day.stagesCols,
             {
-              label: '',
-              amountOfTimeslots: 1,
-              stageOrder: foundDay.stagesCols.length,
-              dayOrder: foundDay.dayOrder,
+              label: `stage ${day.stagesCols.length + 1}`,
+              stageOrder: day.stagesCols.length,
             },
           ],
         })),
-      }));
-    }
+      ],
+      // add empty cells for artists
+      bodyData: _map(prevState.bodyData, row => ({
+        ...row,
+        artistsCols: [
+          ...row.artistsCols,
+          ..._map(prevState.headData, day => ({
+            label: '',
+            amountOfTimeslots: 1,
+            stageOrder: day.stagesCols.length,
+            dayOrder: day.dayOrder,
+          })),
+        ],
+      })),
+    }));
   };
 
   handleAddDay = () => {

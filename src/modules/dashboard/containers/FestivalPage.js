@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { Glyphicon } from 'react-bootstrap';
 import _map from 'lodash/map';
-import _find from 'lodash/find';
-import _reject from 'lodash/reject';
 import { Button } from 'shared';
 import { getTimeslotLabelFromTimeslotStart } from 'app/lib/helpers';
 import { AddTimeslotModal } from '../components';
@@ -143,8 +141,8 @@ class FestivalPage extends React.Component {
   handleAddDay = () => {
     const { headData } = this.state;
     const newDay = {
-      label: 'sunday', // ask in modal!
-      dayOrder: 1, // ask in modal! by default prevState.headData.length + 1
+      label: `day ${headData.length + 1}`,
+      dayOrder: headData.length + 1,
       // default the existing stages (if any)
       stagesCols: headData[0].stagesCols || [{ label: 'stage 1', stageOrder: 0 }],
     };

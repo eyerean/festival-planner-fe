@@ -79,30 +79,30 @@ class FestivalPage extends React.Component {
     bodyData: bodyInitialData,
   };
 
-  handleAddTimeslot = () => {
-    this.handleToggleAddTimeslotModal();
-    // this.setState(prevState => ({
-    //   bodyData: [
-    //     ...prevState.bodyData,
-    //     {
-    //       timeslotOrder: prevState.bodyData.length,
-    //       timeslotLabel: '18:00 - 19:00', // asking in modal
-    //       artistsCols: [
-    //         {
-    //           label: 'metallica', // asking in modal
-    //           amountOfTimeslots: 2, // by default 1 !
-    //           stageOrder: 0, // asking in modal
-    //         },
-    //         {
-    //           label: 'deftones',
-    //           amountOfTimeslots: 1,
-    //           stageOrder: 1,
-    //         },
-    //       ],
-    //     },
-    //   ],
-    // }));
-  };
+  // handleAddTimeslot = () => {
+  // this.handleToggleAddTimeslotModal();
+  // this.setState(prevState => ({
+  //   bodyData: [
+  //     ...prevState.bodyData,
+  //     {
+  //       timeslotOrder: prevState.bodyData.length,
+  //       timeslotLabel: '18:00 - 19:00', // asking in modal
+  //       artistsCols: [
+  //         {
+  //           label: 'metallica', // asking in modal
+  //           amountOfTimeslots: 2, // by default 1 !
+  //           stageOrder: 0, // asking in modal
+  //         },
+  //         {
+  //           label: 'deftones',
+  //           amountOfTimeslots: 1,
+  //           stageOrder: 1,
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // }));
+  // };
 
   handleAddStage = () => {
     console.log('adding a stage');
@@ -159,6 +159,12 @@ class FestivalPage extends React.Component {
     }));
   };
 
+  handleSubmitNewTSEntry = tsEntry => {
+    this.setState(prevState => ({
+      bodyData: [...prevState.bodyData, tsEntry],
+    }));
+  };
+
   render() {
     const { headData, bodyData, showAddTimeslotModal, timeslot } = this.state;
 
@@ -204,7 +210,7 @@ class FestivalPage extends React.Component {
               ))}
               <tr>
                 <ButtonCell>
-                  <Button primary onClick={this.handleAddTimeslot}>
+                  <Button primary onClick={this.handleToggleAddTimeslotModal}>
                     <Glyphicon glyph="plus" />
                   </Button>
                 </ButtonCell>
@@ -212,17 +218,16 @@ class FestivalPage extends React.Component {
             </tbody>
           </table>
         </Wrapper>
-        <AddTimeslotModal
-          show={showAddTimeslotModal}
-          onClose={this.handleToggleAddTimeslotModal}
-          bodyData={bodyData}
-          headData={headData}
-          timeslot={timeslot}
-        />
-        {/*
-          <AddDayModal />
-          <AddStageModal />
-        */}
+        {showAddTimeslotModal && (
+          <AddTimeslotModal
+            show={showAddTimeslotModal}
+            onClose={this.handleToggleAddTimeslotModal}
+            bodyData={bodyData}
+            headData={headData}
+            timeslot={timeslot}
+            onSubmitNewTSEntry={this.handleSubmitNewTSEntry}
+          />
+        )}
       </Fragment>
     );
   }

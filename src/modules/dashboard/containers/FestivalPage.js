@@ -113,19 +113,32 @@ class FestivalPage extends React.Component {
 
     if (foundDay) {
       // adding a stage to an existing day - only option so far
+      // @TODO fix for more days
       const updatedDay = {
         ...foundDay,
         stagesCols: [
           ...foundDay.stagesCols,
           {
-            label: 'new_stage', // ask in modal
+            label: `stage ${foundDay.stagesCols.length + 1}`, // ask in modal -> NO, just add the cells and make the user update in edit
             stageOrder: foundDay.stagesCols.length,
           },
         ],
       };
 
       this.setState(prevState => ({
-        headData: [..._reject(prevState.headData, h => h.label === foundDay.label), updatedDay],
+        headData: [..._reject(prevState.headData, { label: foundDay.label }), updatedDay],
+        // update bodyData as well with empty cells
+        bodyData: _map(prevState.bodyData, row => ({
+          ...row,
+          artistsCols: [
+            ...row.artistsCols,
+            {
+              label: '',
+              amountOfTimeslots: 1,
+              stageOrder: foundDay.stagesCols.length,
+            },
+          ],
+        })),
       }));
     }
   };

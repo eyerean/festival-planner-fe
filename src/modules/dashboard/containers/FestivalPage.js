@@ -7,7 +7,6 @@ import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
 import { Button } from 'shared';
 import { getTimeslotLabelFromTimeslotStart } from 'app/lib/helpers';
-import { AddTimeslotModal } from '../components';
 
 const headInitialData = [
   {
@@ -80,7 +79,6 @@ const bodyInitialData = [
 class FestivalPage extends React.Component {
   state = {
     timeslot: { amount: 1, unit: 'h' }, // one hour by default
-    showAddTimeslotModal: false,
     headData: headInitialData,
     bodyData: bodyInitialData,
   };
@@ -174,14 +172,8 @@ class FestivalPage extends React.Component {
     }));
   };
 
-  handleToggleAddTimeslotModal = () => {
-    this.setState(prevState => ({
-      showAddTimeslotModal: !prevState.showAddTimeslotModal,
-    }));
-  };
-
   render() {
-    const { headData, bodyData, showAddTimeslotModal, timeslot } = this.state;
+    const { headData, bodyData, timeslot } = this.state;
 
     return (
       <Fragment>
@@ -236,16 +228,6 @@ class FestivalPage extends React.Component {
             </tbody>
           </table>
         </Wrapper>
-        {showAddTimeslotModal && ( // will be removed
-          <AddTimeslotModal
-            show={showAddTimeslotModal}
-            onClose={this.handleToggleAddTimeslotModal}
-            bodyData={bodyData}
-            headData={headData}
-            timeslot={timeslot}
-            onSubmitNewTSEntry={this.handleSubmitNewTSEntry}
-          />
-        )}
       </Fragment>
     );
   }

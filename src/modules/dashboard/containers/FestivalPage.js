@@ -1,7 +1,10 @@
 import React, { Fragment } from 'react';
+import moment from 'moment';
 import styled from 'styled-components';
 import { Glyphicon } from 'react-bootstrap';
 import _map from 'lodash/map';
+import _find from 'lodash/find';
+import _flatten from 'lodash/flatten';
 import { Button } from 'shared';
 import { getTimeslotLabelFromTimeslotStart } from 'app/lib/helpers';
 import { AddTimeslotModal } from '../components';
@@ -82,30 +85,36 @@ class FestivalPage extends React.Component {
     bodyData: bodyInitialData,
   };
 
-  // handleAddTimeslot = () => {
-  // this.handleToggleAddTimeslotModal();
-  // this.setState(prevState => ({
-  //   bodyData: [
-  //     ...prevState.bodyData,
-  //     {
-  //       timeslotOrder: prevState.bodyData.length,
-  //       timeslotLabel: '18:00 - 19:00', // asking in modal
-  //       artistsCols: [
-  //         {
-  //           label: 'metallica', // asking in modal
-  //           amountOfTimeslots: 2, // by default 1 !
-  //           stageOrder: 0, // asking in modal
-  //         },
-  //         {
-  //           label: 'deftones',
-  //           amountOfTimeslots: 1,
-  //           stageOrder: 1,
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // }));
-  // };
+  handleAddTimeslot = () => {
+    const { bodyData, timeslot, headData } = this.state;
+
+    const lastTs = _find(bodyData, { timeslotOrder: bodyData.length - 1 });
+
+    const newTsStart = moment(lastTs.timeslotStart, 'HH:mm')
+      .add(timeslot.amount, timeslot.unit)
+      .format('HH:mm');
+
+    // add empty cells for all artists all days all stages
+    this.setState(prevState => ({
+      bodyData: [
+        ...prevState.bodyData,
+        {
+          timeslotOrder: prevState.bodyData.length,
+          timeslotStart: newTsStart,
+          artistsCols: _flatten(
+            _map(prevState.headData, day =>
+              _map(day.stagesCols, stage => ({
+                label: '',
+                amountOfTimeslots: 1,
+                stageOrder: stage.stageOrder,
+                dayOrder: day.dayOrder,
+              }))
+            )
+          ),
+        },
+      ],
+    }));
+  };
 
   handleAddStage = () => {
     // add a stage to each existing day
@@ -171,12 +180,6 @@ class FestivalPage extends React.Component {
     }));
   };
 
-  handleSubmitNewTSEntry = tsEntry => {
-    this.setState(prevState => ({
-      bodyData: [...prevState.bodyData, tsEntry],
-    }));
-  };
-
   render() {
     const { headData, bodyData, showAddTimeslotModal, timeslot } = this.state;
 
@@ -225,7 +228,7 @@ class FestivalPage extends React.Component {
               ))}
               <tr>
                 <ButtonCell>
-                  <Button primary onClick={this.handleToggleAddTimeslotModal}>
+                  <Button primary onClick={this.handleAddTimeslot}>
                     <Glyphicon glyph="plus" />
                   </Button>
                 </ButtonCell>
@@ -233,7 +236,7 @@ class FestivalPage extends React.Component {
             </tbody>
           </table>
         </Wrapper>
-        {showAddTimeslotModal && (
+        {showAddTimeslotModal && ( // will be removed
           <AddTimeslotModal
             show={showAddTimeslotModal}
             onClose={this.handleToggleAddTimeslotModal}

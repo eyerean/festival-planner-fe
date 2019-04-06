@@ -7,6 +7,7 @@ import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
 import { Button } from 'shared';
 import { getTimeslotLabelFromTimeslotStart } from 'app/lib/helpers';
+import { UpdateCellModal } from '../components';
 
 const headInitialData = [
   {
@@ -81,10 +82,11 @@ class FestivalPage extends React.Component {
     timeslot: { amount: 1, unit: 'h' }, // one hour by default
     headData: headInitialData,
     bodyData: bodyInitialData,
+    selectedCell: undefined,
   };
 
   handleAddTimeslot = () => {
-    const { bodyData, timeslot, headData } = this.state;
+    const { bodyData, timeslot } = this.state;
 
     const lastTs = _find(bodyData, { timeslotOrder: bodyData.length - 1 });
 
@@ -172,8 +174,30 @@ class FestivalPage extends React.Component {
     }));
   };
 
+  handleArtistUpdate = artist => () => {
+    console.log('handleArtistUpdate', artist);
+    this.setState({
+      selectedCell: { ...artist, cellType: 'artist' },
+      showUpdateModal: true,
+    });
+  };
+
+  handleCloseUpdateCellModal = () => {
+    this.setState({
+      selectedCell: undefined,
+      showUpdateModal: false,
+    });
+  };
+
+  handleSubmitCellChanges = () => {
+    this.setState({
+      selectedCell: undefined,
+      showUpdateModal: false,
+    });
+  };
+
   render() {
-    const { headData, bodyData, timeslot } = this.state;
+    const { headData, bodyData, timeslot, selectedCell, showUpdateModal } = this.state;
 
     return (
       <Fragment>
@@ -209,12 +233,19 @@ class FestivalPage extends React.Component {
                 <tr key={row.timeslotOrder}>
                   <td>{getTimeslotLabelFromTimeslotStart(row.timeslotStart, timeslot)}</td>
                   {_map(row.artistsCols, artist => (
-                    <td
+                    <HoverCell
+                      selected={
+                        selectedCell &&
+                        selectedCell.dayOrder === artist.dayOrder &&
+                        selectedCell.stageOrder === artist.stageOrder &&
+                        selectedCell.label === artist.label
+                      }
                       key={'d' + artist.dayOrder + 's' + artist.stageOrder}
                       rowSpan={artist.amountOfTimeslots || '1'}
+                      onClick={this.handleArtistUpdate(artist)}
                     >
                       {artist.label}
-                    </td>
+                    </HoverCell>
                   ))}
                 </tr>
               ))}
@@ -228,6 +259,15 @@ class FestivalPage extends React.Component {
             </tbody>
           </table>
         </Wrapper>
+
+        {showUpdateModal && (
+          <UpdateCellModal
+            show={showUpdateModal}
+            onClose={this.handleCloseUpdateCellModal}
+            cell={selectedCell}
+            onSubmitChanges={this.handleSubmitCellChanges}
+          />
+        )}
       </Fragment>
     );
   }
@@ -250,6 +290,25 @@ const Wrapper = styled.div`
     border: 1px solid black;
     padding: 6px;
   }
+`;
+
+const HoverCell = styled.td`
+  &:hover {
+    cursor: pointer;
+    background-color: ${props => props.theme.colors.roseDust};
+    color: ${props => props.theme.colors.white};
+  }
+
+  ${props =>
+    props.selected &&
+    `
+      background-color: ${props => props.theme.colors.roseDust};
+      color: ${props => props.theme.colors.white}; 
+  
+      &:hover {
+        background-color: ${props => props.theme.colors.tuscanRed};
+      }
+    `};
 `;
 
 const ButtonCell = styled.th`

@@ -187,6 +187,14 @@ class FestivalPage extends React.Component {
     });
   };
 
+  handleDayUpdate = day => () => {
+    this.setState({
+      selectedCell: { ...day, cellType: 'day' },
+      showUpdateModal: true,
+      cellFields: _map(updateCellFields.day, f => ({ ...f, value: day.label })),
+    });
+  };
+
   handleCloseUpdateCellModal = () => {
     this.setState({
       selectedCell: undefined,
@@ -221,9 +229,13 @@ class FestivalPage extends React.Component {
               <tr>
                 <th>hours</th>
                 {_map(headData, day => (
-                  <th key={day.dayOrder} colSpan={day.stagesCols.length || '1'}>
+                  <HoverHeadCell
+                    key={day.dayOrder}
+                    colSpan={day.stagesCols.length || '1'}
+                    onClick={this.handleDayUpdate(day)}
+                  >
                     {day.label}
-                  </th>
+                  </HoverHeadCell>
                 ))}
 
                 <OverlayTrigger
@@ -325,6 +337,25 @@ const Wrapper = styled.div`
 `;
 
 const HoverCell = styled.td`
+  &:hover {
+    cursor: pointer;
+    background-color: ${props => props.theme.colors.roseDust};
+    color: ${props => props.theme.colors.white};
+  }
+
+  ${props =>
+    props.selected &&
+    `
+      background-color: ${props => props.theme.colors.roseDust};
+      color: ${props => props.theme.colors.white}; 
+  
+      &:hover {
+        background-color: ${props => props.theme.colors.tuscanRed};
+      }
+    `};
+`;
+
+const HoverHeadCell = styled.th`
   &:hover {
     cursor: pointer;
     background-color: ${props => props.theme.colors.roseDust};

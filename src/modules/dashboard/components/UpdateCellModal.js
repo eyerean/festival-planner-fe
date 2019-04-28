@@ -1,19 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Modal } from 'react-bootstrap';
-import { Button } from 'shared';
+import { Button, DynamicForm } from 'shared';
+import { updateCellFields } from '../lib/fields';
 
-const UpdateCellModal = ({ show, onClose, cell, onSubmitChanges }) => (
+const UpdateCellModal = ({ show, onClose, cell, fields, onSubmitChanges, onCellChange }) => (
   <Modal show={show} onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>Update {cell.cellType}</Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <ModalBodyWrapper>
-        <p>{cell.label}</p>
-        {/*
-          @TODO: make fields for dynamic form according to cell
-        */}
+        <DynamicForm
+          fields={fields}
+          requiredFields={[]}
+          invalidFields={[]}
+          handleChange={onCellChange}
+        />
       </ModalBodyWrapper>
     </Modal.Body>
     <Modal.Footer>

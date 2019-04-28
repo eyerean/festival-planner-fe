@@ -5,8 +5,11 @@ import { Glyphicon } from 'react-bootstrap';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
+import _includes from 'lodash/includes';
+import _without from 'lodash/without';
 import { Button } from 'shared';
-import { getTimeslotLabelFromTimeslotStart } from 'app/lib/helpers';
+import { getTimeslotLabelFromTimeslotStart, handleDynamicFieldChange } from 'app/lib/helpers';
+import { updateCellFields } from '../lib/fields';
 import { UpdateCellModal } from '../components';
 
 const headInitialData = [
@@ -83,6 +86,8 @@ class FestivalPage extends React.Component {
     headData: headInitialData,
     bodyData: bodyInitialData,
     selectedCell: undefined,
+    cellFields: [],
+    invalidCellFields: [],
   };
 
   handleAddTimeslot = () => {
@@ -175,10 +180,10 @@ class FestivalPage extends React.Component {
   };
 
   handleArtistUpdate = artist => () => {
-    console.log('handleArtistUpdate', artist);
     this.setState({
       selectedCell: { ...artist, cellType: 'artist' },
       showUpdateModal: true,
+      cellFields: _map(updateCellFields.artist, f => ({ ...f, value: artist.label })),
     });
   };
 
@@ -196,8 +201,17 @@ class FestivalPage extends React.Component {
     });
   };
 
+  handleCellUpdate = key => field => {
+    console.log('handleCellUpdate', key, field);
+    this.setState((prevState: State) => ({
+      cellFields: handleDynamicFieldChange(field, prevState.cellFields, key),
+      invalidCellFields: _includes(prevState.invalidCellFields, field.name)
+        ? _without(prevState.invalidCellFields, field.name)
+        : prevState.invalidCellFields,
+    }));
+  };
   render() {
-    const { headData, bodyData, timeslot, selectedCell, showUpdateModal } = this.state;
+    const { headData, bodyData, timeslot, selectedCell, showUpdateModal, cellFields } = this.state;
 
     return (
       <Fragment>
@@ -265,7 +279,9 @@ class FestivalPage extends React.Component {
             show={showUpdateModal}
             onClose={this.handleCloseUpdateCellModal}
             cell={selectedCell}
+            fields={cellFields}
             onSubmitChanges={this.handleSubmitCellChanges}
+            onCellChange={this.handleCellUpdate}
           />
         )}
       </Fragment>

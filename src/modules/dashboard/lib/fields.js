@@ -25,4 +25,31 @@ const festivalFields = [
   },
 ];
 
-export { festivalFields };
+const updateCellFields = {
+  artist: [
+    {
+      label: 'Artist name',
+      name: 'artistName',
+      value: '',
+      type: 'text',
+    },
+  ],
+  stage: [
+    {
+      label: 'Stage name',
+      name: 'stageName',
+      value: '',
+      type: 'text',
+    },
+  ],
+  day: [
+    {
+      label: 'Day',
+      name: 'dayName',
+      value: '',
+      type: 'text',
+    },
+  ],
+};
+
+export { festivalFields, updateCellFields };

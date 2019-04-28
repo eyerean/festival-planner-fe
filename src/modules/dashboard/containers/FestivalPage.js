@@ -195,6 +195,14 @@ class FestivalPage extends React.Component {
     });
   };
 
+  handleStageUpdate = stage => () => {
+    this.setState({
+      selectedCell: { ...stage, cellType: 'stage' },
+      showUpdateModal: true,
+      cellFields: _map(updateCellFields.stage, f => ({ ...f, value: stage.label })),
+    });
+  };
+
   handleCloseUpdateCellModal = () => {
     this.setState({
       selectedCell: undefined,
@@ -261,7 +269,11 @@ class FestivalPage extends React.Component {
                   </ButtonCell>
                 </OverlayTrigger>
                 {_map(headData, day =>
-                  _map(day.stagesCols, stage => <td key={stage.stageOrder}>{stage.label}</td>)
+                  _map(day.stagesCols, stage => (
+                    <HoverCell key={stage.stageOrder} onClick={this.handleStageUpdate(stage)}>
+                      {stage.label}
+                    </HoverCell>
+                  ))
                 )}
               </SecondHeadRow>
             </thead>

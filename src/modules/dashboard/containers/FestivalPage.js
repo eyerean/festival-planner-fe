@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
-import { Glyphicon } from 'react-bootstrap';
+import { Glyphicon, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
@@ -225,18 +225,29 @@ class FestivalPage extends React.Component {
                     {day.label}
                   </th>
                 ))}
-                <ButtonCell>
-                  <Button primary onClick={this.handleAddDay}>
-                    <Glyphicon glyph="plus" />
-                  </Button>
-                </ButtonCell>
+
+                <OverlayTrigger
+                  overlay={<Tooltip id="add-day-tooltip">Add a day</Tooltip>}
+                  placement="top"
+                >
+                  <ButtonCell>
+                    <Button primary onClick={this.handleAddDay}>
+                      <Glyphicon glyph="plus" />
+                    </Button>
+                  </ButtonCell>
+                </OverlayTrigger>
               </tr>
               <SecondHeadRow>
-                <ButtonCell>
-                  <Button primary onClick={this.handleAddStage}>
-                    <Glyphicon glyph="plus" />
-                  </Button>
-                </ButtonCell>
+                <OverlayTrigger
+                  overlay={<Tooltip id="add-stage-tooltip">Add new stage per day</Tooltip>}
+                  placement="left"
+                >
+                  <ButtonCell>
+                    <Button primary onClick={this.handleAddStage}>
+                      <Glyphicon glyph="plus" />
+                    </Button>
+                  </ButtonCell>
+                </OverlayTrigger>
                 {_map(headData, day =>
                   _map(day.stagesCols, stage => <td key={stage.stageOrder}>{stage.label}</td>)
                 )}
@@ -264,11 +275,16 @@ class FestivalPage extends React.Component {
                 </tr>
               ))}
               <tr>
-                <ButtonCell>
-                  <Button primary onClick={this.handleAddTimeslot}>
-                    <Glyphicon glyph="plus" />
-                  </Button>
-                </ButtonCell>
+                <OverlayTrigger
+                  overlay={<Tooltip id="add-timeslot-tooltip">Add timeslot</Tooltip>}
+                  placement="left"
+                >
+                  <ButtonCell>
+                    <Button primary onClick={this.handleAddTimeslot}>
+                      <Glyphicon glyph="plus" />
+                    </Button>
+                  </ButtonCell>
+                </OverlayTrigger>
               </tr>
             </tbody>
           </table>

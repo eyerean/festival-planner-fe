@@ -8,6 +8,7 @@ import InputField from './InputField';
 import SelectField from './SelectField';
 import DatetimeField from './DatetimeField';
 import { VerticalTabs, VerticalTab } from './Tabs';
+import SpinningGlyphicon from './SpinningGlyphicon';
 
 export {
   Button,
@@ -21,4 +22,5 @@ export {
   DatetimeField,
   VerticalTabs,
   VerticalTab,
+  SpinningGlyphicon,
 };

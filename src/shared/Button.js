@@ -8,6 +8,7 @@ const Button = styled.button`
   color: ${props => props.theme.colors.roseDust};
   border: 1px solid ${props => props.theme.colors.roseDust};
   border-radius: 1px;
+  min-width: 100px;
 
   :hover {
     background-color: ${props => props.theme.colors.tuscanRed};

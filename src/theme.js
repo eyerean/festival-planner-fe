@@ -16,6 +16,7 @@ const theme = {
     black: '#010101',
     charcoal: '#373f51',
     gray: '#b6b9bf',
+    darkSpaceSparkle: '#475b63',
 
     // white
     white: '#FFFFFF',

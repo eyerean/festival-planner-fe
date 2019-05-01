@@ -2,7 +2,6 @@ import React from 'react';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import reduxFetch from 'react-redux-fetch';
-import { Button } from 'react-bootstrap';
 import {
   cloneDeep as _cloneDeep,
   find as _find,
@@ -12,9 +11,9 @@ import {
 } from 'lodash';
 import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
-import { DynamicForm } from 'shared';
+import { DynamicForm, Button, SpinningGlyphicon } from 'shared';
 import appSelectors from 'modules/app/selectors';
-import { LoginFormWrapper, LoginWrapper, WhiteBackground } from '../components';
+import { LoginFormWrapper } from '../components';
 import actions from '../actions';
 import selectors from '../selectors';
 import { loginFields } from '../lib/fields';
@@ -99,28 +98,24 @@ class Login extends React.Component<Props, State> {
     }
 
     return (
-      <LoginWrapper>
-        <img src={'./images/hab_mountain.jpeg'} alt="hab_mountain" className="bg" />
-        <WhiteBackground />
-        <LoginFormWrapper>
-          <h2>Please sign in</h2>
-          <DynamicForm
-            fields={fields}
-            requiredFields={requiredFields}
-            invalidFields={invalidFields}
-            handleChange={this.handleChange}
-          />
+      <LoginFormWrapper>
+        <DynamicForm
+          fields={fields}
+          requiredFields={requiredFields}
+          invalidFields={invalidFields}
+          handleChange={this.handleChange}
+        />
+        <div style={{ display: 'inlineBlock' }}>
           <Button
-            bsStyle="primary"
+            primary
             type="submit"
             disabled={loginFetch.pending}
-            style={{ float: 'right', marginTop: 20 }}
             onClick={this.handleLoginClick}
           >
-            {loginFetch.pending ? <i className="fa fa-spinner fa-pulse fa-3x fa-fw" /> : 'Sign in'}
+            {loginFetch.pending ? <SpinningGlyphicon glyph="refresh" spin /> : 'Sign in'}
           </Button>
-        </LoginFormWrapper>
-      </LoginWrapper>
+        </div>
+      </LoginFormWrapper>
     );
   }
 }

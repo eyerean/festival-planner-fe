@@ -2,14 +2,14 @@ import styled from 'styled-components';
 
 const LoginFormWrapper = styled.div`
   width: 500px;
-  height: 340px;
-  padding: 20px 40px;
-  border: solid ${props => props.theme.colors.ghostWhite} 1px;
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: 120px 0 0 -250px;
+  // height: 250px;
+  margin: 200px auto;
+  display: block;
+  padding: 40px;
+  background-color: ${props => props.theme.colors.ghostWhite};
+  color: ${props => props.theme.colors.charcoal};
+  border: solid 2px ${props => props.theme.colors.tuscanRed};
+  border-radius: 2px;
 
   > h2 {
     margin-bottom: 20px;

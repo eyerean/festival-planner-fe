@@ -232,7 +232,7 @@ class FestivalPage extends React.Component {
     return (
       <Fragment>
         <Wrapper>
-          <table>
+          <Table>
             <thead>
               <tr>
                 <th>hours</th>
@@ -311,7 +311,7 @@ class FestivalPage extends React.Component {
                 </OverlayTrigger>
               </tr>
             </tbody>
-          </table>
+          </Table>
         </Wrapper>
 
         {showUpdateModal && (
@@ -334,18 +334,19 @@ export default FestivalPage;
 const Wrapper = styled.div`
   margin: 15px;
 
-  table {
-    margin: 30px auto;
-    border-spacing: 5px;
-    border-collapse: unset;
-  }
-
   td,
   th {
     text-align: center;
     border: 1px solid black;
     padding: 6px;
   }
+`;
+
+const Table = styled.table`
+  margin: 30px auto;
+  border-spacing: 5px;
+  border-collapse: unset;
+  background-color: ${props => props.theme.colors.ghostWhite};
 `;
 
 const HoverCell = styled.td`

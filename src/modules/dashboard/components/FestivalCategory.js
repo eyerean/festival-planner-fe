@@ -35,7 +35,7 @@ const Box = styled.div`
 
   background-color: ${props => props.theme.colors.paleAqua};
   border-radius: 4px;
-  border: 4px solid ${props => props.theme.colors.queenBlue};
+  border: 4px solid ${props => props.theme.colors.ghostWhite};
   padding: 10px 20px;
   height: 300px;
   margin: 15px;

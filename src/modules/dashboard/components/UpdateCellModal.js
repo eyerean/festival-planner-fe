@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Modal } from 'react-bootstrap';
 import { Button, DynamicForm } from 'shared';
-import { updateCellFields } from '../lib/fields';
 
 const UpdateCellModal = ({ show, onClose, cell, fields, onSubmitChanges, onCellChange }) => (
   <Modal show={show} onHide={onClose}>

@@ -10,20 +10,21 @@ import _without from 'lodash/without';
 import { Button } from 'shared';
 import { getTimeslotLabelFromTimeslotStart, handleDynamicFieldChange } from 'app/lib/helpers';
 import { updateCellFields } from '../lib/fields';
+import { mapObjectToFields } from '../lib/helpers';
 import { UpdateCellModal } from '../components';
 
 const headInitialData = [
   {
     label: 'saturday',
-    dayOrder: 0,
+    dayOrder: 1,
     stagesCols: [
       {
         label: 'main stage',
-        stageOrder: 0,
+        stageOrder: 1,
       },
       {
         label: 'stage abc',
-        stageOrder: 1,
+        stageOrder: 2,
       },
     ],
   },
@@ -37,14 +38,14 @@ const bodyInitialData = [
       {
         label: 'band A',
         amountOfTimeslots: 1,
-        stageOrder: 0,
-        dayOrder: 0,
+        stageOrder: 1,
+        dayOrder: 1,
       },
       {
         label: '-',
         amountOfTimeslots: 1,
-        stageOrder: 1,
-        dayOrder: 0,
+        stageOrder: 2,
+        dayOrder: 1,
       },
     ],
   },
@@ -55,14 +56,14 @@ const bodyInitialData = [
       {
         label: 'band ZZ',
         amountOfTimeslots: 2,
-        stageOrder: 0,
-        dayOrder: 0,
+        stageOrder: 1,
+        dayOrder: 1,
       },
       {
         label: 'famous band',
         amountOfTimeslots: 1,
-        stageOrder: 1,
-        dayOrder: 0,
+        stageOrder: 2,
+        dayOrder: 1,
       },
     ],
   },
@@ -73,8 +74,8 @@ const bodyInitialData = [
       {
         label: 'allochiria',
         amountOfTimeslots: 1,
-        stageOrder: 1,
-        dayOrder: 0,
+        stageOrder: 2,
+        dayOrder: 1,
       },
     ],
   },
@@ -183,7 +184,7 @@ class FestivalPage extends React.Component {
     this.setState({
       selectedCell: { ...artist, cellType: 'artist' },
       showUpdateModal: true,
-      cellFields: _map(updateCellFields.artist, f => ({ ...f, value: artist.label })),
+      cellFields: mapObjectToFields(updateCellFields.artist, artist),
     });
   };
 
@@ -191,7 +192,7 @@ class FestivalPage extends React.Component {
     this.setState({
       selectedCell: { ...day, cellType: 'day' },
       showUpdateModal: true,
-      cellFields: _map(updateCellFields.day, f => ({ ...f, value: day.label })),
+      cellFields: mapObjectToFields(updateCellFields.day, day),
     });
   };
 
@@ -199,7 +200,7 @@ class FestivalPage extends React.Component {
     this.setState({
       selectedCell: { ...stage, cellType: 'stage' },
       showUpdateModal: true,
-      cellFields: _map(updateCellFields.stage, f => ({ ...f, value: stage.label })),
+      cellFields: mapObjectToFields(updateCellFields.stage, stage),
     });
   };
 
@@ -218,7 +219,6 @@ class FestivalPage extends React.Component {
   };
 
   handleCellUpdate = key => field => {
-    console.log('handleCellUpdate', key, field);
     this.setState((prevState: State) => ({
       cellFields: handleDynamicFieldChange(field, prevState.cellFields, key),
       invalidCellFields: _includes(prevState.invalidCellFields, field.name)

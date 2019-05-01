@@ -41,6 +41,12 @@ const updateCellFields = {
       value: '',
       type: 'text',
     },
+    {
+      label: 'Stage order',
+      name: 'stageOrder',
+      value: '',
+      type: 'number',
+    },
   ],
   day: [
     {
@@ -48,6 +54,12 @@ const updateCellFields = {
       name: 'dayName',
       value: '',
       type: 'text',
+    },
+    {
+      label: 'Day order',
+      name: 'dayOrder',
+      value: '',
+      type: 'number',
     },
   ],
 };

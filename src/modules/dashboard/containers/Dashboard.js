@@ -32,7 +32,7 @@ class Dashboard extends React.Component {
     showCreateModal: false,
     fields: festivalFields,
     invalidFields: [],
-    requiredFields: ['festivalName', 'startDate', 'endDate'],
+    requiredFields: ['name', 'startDate', 'endDate'],
     errorText: '',
     showFestModal: false,
     festivalInModal: null,
@@ -81,7 +81,7 @@ class Dashboard extends React.Component {
     if (_every(fields, value => value) && invalidFieldsTemp.length === 0) {
       this.setState({ invalidFields: [] });
       const cleanFields = _zipObject(_map(fields, f => f.name), _map(fields, f => f.value));
-      this.props.dispatchCreateFestivalPost(cleanFields);
+      this.props.dispatchCreateFestivalPost({ ...cleanFields, status: 'drafts' });
     }
   };
 

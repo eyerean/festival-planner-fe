@@ -14,8 +14,7 @@ const FestivalTable = ({ title, festivals }) => (
     <tbody>
       {_map(festivals, fest => (
         <tr key={fest._id}>
-          {/* @TODO: Keep only festivalName prop. Temporary use both names until db gets cleared */}
-          <td>{fest.name || fest.festivalName}</td>
+          <td>{fest.name}</td>
         </tr>
       ))}
     </tbody>

@@ -1,7 +1,7 @@
 const festivalFields = [
   {
     label: 'Festival Name',
-    name: 'festivalName',
+    name: 'name',
     value: '',
     type: 'text',
   },

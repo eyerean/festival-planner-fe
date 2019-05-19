@@ -180,9 +180,9 @@ class FestivalPage extends React.Component {
     }));
   };
 
-  handleArtistUpdate = artist => () => {
+  handleArtistUpdate = (artist, tsOrder) => () => {
     this.setState({
-      selectedCell: { ...artist, cellType: 'artist' },
+      selectedCell: { ...artist, cellType: 'artist', tsOrder },
       showUpdateModal: true,
       cellFields: mapObjectToFields(updateCellFields.artist, artist),
     });
@@ -212,10 +212,32 @@ class FestivalPage extends React.Component {
   };
 
   handleSubmitCellChanges = () => {
-    this.setState({
+    const { cellFields } = this.state;
+    const field = _find(cellFields, { name: 'artistName' });
+    this.setState(prevState => ({
       selectedCell: undefined,
       showUpdateModal: false,
-    });
+      bodyData: _map(
+        prevState.bodyData,
+        row =>
+          row.timeslotOrder === prevState.selectedCell.tsOrder
+            ? {
+                ...row,
+                artistsCols: _map(
+                  row.artistsCols,
+                  ar =>
+                    ar.dayOrder === prevState.selectedCell.dayOrder &&
+                    ar.stageOrder === prevState.selectedCell.stageOrder
+                      ? {
+                          ...ar,
+                          label: field.value,
+                        }
+                      : ar
+                ),
+              }
+            : row
+      ),
+    }));
   };
 
   handleCellUpdate = key => field => {
@@ -291,7 +313,7 @@ class FestivalPage extends React.Component {
                       }
                       key={'d' + artist.dayOrder + 's' + artist.stageOrder}
                       rowSpan={artist.amountOfTimeslots || '1'}
-                      onClick={this.handleArtistUpdate(artist)}
+                      onClick={this.handleArtistUpdate(artist, row.timeslotOrder)}
                     >
                       {artist.label}
                     </HoverCell>

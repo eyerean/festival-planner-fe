@@ -47,6 +47,12 @@ const updateCellFields = {
       value: '',
       type: 'number',
     },
+    {
+      label: 'Update stage name for all days?',
+      name: 'updateAll',
+      value: true,
+      type: 'boolean',
+    },
   ],
   day: [
     {

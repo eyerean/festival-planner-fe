@@ -5,6 +5,7 @@ const FIELD_TYPES = {
   TEXT: 'text',
   TEXTAREA: 'textarea',
   DATE: 'date',
+  BOOLEAN: 'boolean',
 };
 
 const FEST_STATUS = {

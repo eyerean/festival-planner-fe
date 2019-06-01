@@ -200,7 +200,7 @@ class FestivalPage extends React.Component {
     this.setState({
       selectedCell: { ...stage, cellType: 'stage', dayOrder },
       showUpdateModal: true,
-      cellFields: mapObjectToFields(updateCellFields.stage, stage),
+      cellFields: mapObjectToFields(updateCellFields.stage, { ...stage, updateAll: true }),
     });
   };
 
@@ -267,8 +267,10 @@ class FestivalPage extends React.Component {
             stagesCols: _map(
               day.stagesCols,
               stage =>
-                day.dayOrder === prevState.selectedCell.dayOrder &&
-                stage.label === prevState.selectedCell.label
+                stage.label === prevState.selectedCell.label &&
+                (_find(prevState.cellFields, { name: 'updateAll' }).value ||
+                  (!_find(prevState.cellFields, { name: 'updateAll' }).value &&
+                    day.dayOrder === prevState.selectedCell.dayOrder))
                   ? {
                       ...stage,
                       label: _find(prevState.cellFields, { name: 'stageName' }).value,

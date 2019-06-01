@@ -2,7 +2,7 @@ import React from 'react';
 import _map from 'lodash/map';
 import _includes from 'lodash/includes';
 import { FIELD_TYPES } from 'app/config/constants';
-import { InputField, SelectField, DatetimeField } from './';
+import { InputField, SelectField, DatetimeField, CheckboxField } from './';
 
 const DynamicForm = ({ fields, requiredFields, invalidFields, handleChange }) =>
   _map(fields, (field, key) => {
@@ -32,6 +32,16 @@ const DynamicForm = ({ fields, requiredFields, invalidFields, handleChange }) =>
       case FIELD_TYPES.DATE:
         return (
           <DatetimeField
+            key={key}
+            field={field}
+            onChange={handleChange(key)}
+            required={_includes(requiredFields, field.name)}
+            invalid={_includes(invalidFields, field.name)}
+          />
+        );
+      case FIELD_TYPES.BOOLEAN:
+        return (
+          <CheckboxField
             key={key}
             field={field}
             onChange={handleChange(key)}

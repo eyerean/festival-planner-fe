@@ -7,6 +7,7 @@ import DynamicForm from './DynamicForm';
 import InputField from './InputField';
 import SelectField from './SelectField';
 import DatetimeField from './DatetimeField';
+import CheckboxField from './CheckboxField';
 import { VerticalTabs, VerticalTab } from './Tabs';
 import SpinningGlyphicon from './SpinningGlyphicon';
 
@@ -23,4 +24,5 @@ export {
   VerticalTabs,
   VerticalTab,
   SpinningGlyphicon,
+  CheckboxField,
 };

@@ -196,9 +196,9 @@ class FestivalPage extends React.Component {
     });
   };
 
-  handleStageUpdate = stage => () => {
+  handleStageUpdate = (stage, dayOrder) => () => {
     this.setState({
-      selectedCell: { ...stage, cellType: 'stage' },
+      selectedCell: { ...stage, cellType: 'stage', dayOrder },
       showUpdateModal: true,
       cellFields: mapObjectToFields(updateCellFields.stage, stage),
     });
@@ -212,7 +212,8 @@ class FestivalPage extends React.Component {
   };
 
   handleSubmitCellChanges = () => {
-    const { selectedCell, cellFields } = this.state;
+    const { selectedCell } = this.state;
+
     switch (selectedCell.cellType) {
       case 'artist': //@TODO constants
         this.setState(prevState => ({
@@ -231,7 +232,7 @@ class FestivalPage extends React.Component {
                         ar.stageOrder === prevState.selectedCell.stageOrder
                           ? {
                               ...ar,
-                              label: _find(cellFields, { name: 'artistName' }).value,
+                              label: _find(prevState.cellFields, { name: 'artistName' }).value,
                             }
                           : ar
                     ),
@@ -239,9 +240,8 @@ class FestivalPage extends React.Component {
                 : row
           ),
         }));
+        break;
       case 'day':
-        console.log('handleSubmitCellChanges DAY', this.state);
-
         this.setState(prevState => ({
           selectedCell: undefined,
           showUpdateModal: false,
@@ -251,16 +251,33 @@ class FestivalPage extends React.Component {
               day.dayOrder === prevState.selectedCell.dayOrder
                 ? {
                     ...day,
-                    dayOrder: _find(cellFields, { name: 'dayOrder' }).value,
-                    label: _find(cellFields, { name: 'dayName' }).value,
+                    dayOrder: _find(prevState.cellFields, { name: 'dayOrder' }).value,
+                    label: _find(prevState.cellFields, { name: 'dayName' }).value,
                   }
                 : day
           ),
         }));
         break;
       case 'stage':
-        console.log('handleSubmitCellChanges STAGE', this.state);
-
+        this.setState(prevState => ({
+          selectedCell: undefined,
+          showUpdateModal: false,
+          headData: _map(prevState.headData, day => ({
+            ...day,
+            stagesCols: _map(
+              day.stagesCols,
+              stage =>
+                day.dayOrder === prevState.selectedCell.dayOrder &&
+                stage.label === prevState.selectedCell.label
+                  ? {
+                      ...stage,
+                      label: _find(prevState.cellFields, { name: 'stageName' }).value,
+                      stageOrder: _find(prevState.cellFields, { name: 'stageOrder' }).value,
+                    }
+                  : stage
+            ),
+          })),
+        }));
         break;
       default:
         break;
@@ -320,7 +337,10 @@ class FestivalPage extends React.Component {
                 </OverlayTrigger>
                 {_map(headData, day =>
                   _map(day.stagesCols, stage => (
-                    <HoverCell key={stage.stageOrder} onClick={this.handleStageUpdate(stage)}>
+                    <HoverCell
+                      key={stage.stageOrder}
+                      onClick={this.handleStageUpdate(stage, day.dayOrder)}
+                    >
                       {stage.label}
                     </HoverCell>
                   ))

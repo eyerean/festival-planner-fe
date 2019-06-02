@@ -7,6 +7,8 @@ import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
 import _includes from 'lodash/includes';
 import _without from 'lodash/without';
+import _cloneDeep from 'lodash/cloneDeep';
+import _sortBy from 'lodash/sortBy';
 import { Button } from 'shared';
 import { getTimeslotLabelFromTimeslotStart, handleDynamicFieldChange } from 'app/lib/helpers';
 import { updateCellFields } from '../lib/fields';
@@ -39,12 +41,14 @@ const bodyInitialData = [
         label: 'band A',
         amountOfTimeslots: 1,
         stageOrder: 1,
+        stage: 'main stage',
         dayOrder: 1,
       },
       {
         label: '-',
         amountOfTimeslots: 1,
         stageOrder: 2,
+        stage: 'stage abc',
         dayOrder: 1,
       },
     ],
@@ -57,12 +61,14 @@ const bodyInitialData = [
         label: 'band ZZ',
         amountOfTimeslots: 2,
         stageOrder: 1,
+        stage: 'main stage',
         dayOrder: 1,
       },
       {
         label: 'famous band',
         amountOfTimeslots: 1,
         stageOrder: 2,
+        stage: 'stage abc',
         dayOrder: 1,
       },
     ],
@@ -75,20 +81,24 @@ const bodyInitialData = [
         label: 'allochiria',
         amountOfTimeslots: 1,
         stageOrder: 2,
+        stage: 'stage abc',
         dayOrder: 1,
       },
     ],
   },
 ];
 
+const mapStagesToOrderedList = stages => _map(_sortBy(stages, 'stageOrder'), stg => stg.label);
+
 class FestivalPage extends React.Component {
   state = {
     timeslot: { amount: 1, unit: 'h' }, // one hour by default
-    headData: headInitialData,
+    headData: headInitialData, //@TODO already here sort by stageOrder
     bodyData: bodyInitialData,
     selectedCell: undefined,
     cellFields: [],
     invalidCellFields: [],
+    orderedStagesPerDay: mapStagesToOrderedList(headInitialData[0].stagesCols),
   };
 
   handleAddTimeslot = () => {
@@ -159,7 +169,7 @@ class FestivalPage extends React.Component {
       label: `day ${headData.length + 1}`,
       dayOrder: headData.length + 1,
       // default the existing stages (if any)
-      stagesCols: headData[0].stagesCols || [{ label: 'stage 1', stageOrder: 0 }],
+      stagesCols: headData[0].stagesCols || [{ label: 'stage 1', stageOrder: 1 }],
     };
 
     this.setState(prevState => ({
@@ -215,7 +225,7 @@ class FestivalPage extends React.Component {
     const { selectedCell } = this.state;
 
     switch (selectedCell.cellType) {
-      case 'artist': //@TODO constants
+      case 'artist': //@TODO constants?
         this.setState(prevState => ({
           selectedCell: undefined,
           showUpdateModal: false,
@@ -259,27 +269,77 @@ class FestivalPage extends React.Component {
         }));
         break;
       case 'stage':
-        this.setState(prevState => ({
-          selectedCell: undefined,
-          showUpdateModal: false,
-          headData: _map(prevState.headData, day => ({
-            ...day,
-            stagesCols: _map(
-              day.stagesCols,
-              stage =>
-                stage.label === prevState.selectedCell.label &&
-                (_find(prevState.cellFields, { name: 'updateAll' }).value ||
-                  (!_find(prevState.cellFields, { name: 'updateAll' }).value &&
-                    day.dayOrder === prevState.selectedCell.dayOrder))
-                  ? {
-                      ...stage,
-                      label: _find(prevState.cellFields, { name: 'stageName' }).value,
-                      stageOrder: _find(prevState.cellFields, { name: 'stageOrder' }).value,
-                    }
-                  : stage
-            ),
-          })),
-        }));
+        this.setState(
+          prevState => {
+            const newName = _find(prevState.cellFields, { name: 'stageName' }).value;
+            const newOrder = parseInt(
+              _find(prevState.cellFields, { name: 'stageOrder' }).value,
+              10
+            );
+            const shouldUpdateAll = _find(prevState.cellFields, { name: 'updateAll' }).value;
+
+            let newOrderedStagesPerDay = _cloneDeep(
+              _without(prevState.orderedStagesPerDay, newName)
+            );
+            newOrderedStagesPerDay.splice(newOrder - 1, 0, newName);
+
+            return {
+              selectedCell: undefined,
+              showUpdateModal: false,
+              orderedStagesPerDay: newOrderedStagesPerDay,
+              headData: _map(prevState.headData, day => ({
+                ...day,
+                stagesCols: _map(
+                  day.stagesCols,
+                  stage =>
+                    stage.label === prevState.selectedCell.label &&
+                    (shouldUpdateAll ||
+                      (!shouldUpdateAll && day.dayOrder === prevState.selectedCell.dayOrder))
+                      ? {
+                          ...stage,
+                          label: newName,
+                          stageOrder: newOrderedStagesPerDay.indexOf(newName) + 1,
+                        }
+                      : {
+                          ...stage,
+                          // always update order because otherwise it's getting way too messy
+                          stageOrder: newOrderedStagesPerDay.indexOf(stage.label) + 1,
+                        }
+                ),
+              })),
+              bodyData: _map(prevState.bodyData, ts => ({
+                ...ts,
+                artistsCols: _map(
+                  ts.artistsCols,
+                  artist =>
+                    artist.stage === prevState.selectedCell.label
+                      ? {
+                          ...artist,
+                          stage: newName,
+                          stageOrder: newOrderedStagesPerDay.indexOf(artist.stage) + 1,
+                        }
+                      : {
+                          ...artist,
+                          stageOrder: newOrderedStagesPerDay.indexOf(artist.stage) + 1,
+                        }
+                ),
+              })),
+            };
+          },
+          () => {
+            // update order of stages according to newly changed stages order
+            this.setState(prevState => ({
+              headData: _map(prevState.headData, day => ({
+                ...day,
+                stagesCols: _sortBy(day.stagesCols, 'stageOrder'),
+              })),
+              bodyData: _map(prevState.bodyData, ts => ({
+                ...ts,
+                artistsCols: _sortBy(ts.artistsCols, 'stageOrder'),
+              })),
+            }));
+          }
+        );
         break;
       default:
         break;

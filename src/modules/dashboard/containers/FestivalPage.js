@@ -7,7 +7,6 @@ import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
 import _includes from 'lodash/includes';
 import _without from 'lodash/without';
-import _cloneDeep from 'lodash/cloneDeep';
 import _sortBy from 'lodash/sortBy';
 import { Button } from 'shared';
 import { getTimeslotLabelFromTimeslotStart, handleDynamicFieldChange } from 'app/lib/helpers';
@@ -98,7 +97,6 @@ class FestivalPage extends React.Component {
     selectedCell: undefined,
     cellFields: [],
     invalidCellFields: [],
-    orderedStagesPerDay: mapStagesToOrderedList(headInitialData[0].stagesCols),
   };
 
   handleAddTimeslot = () => {
@@ -277,16 +275,15 @@ class FestivalPage extends React.Component {
               10
             );
             const shouldUpdateAll = _find(prevState.cellFields, { name: 'updateAll' }).value;
-
-            let newOrderedStagesPerDay = _cloneDeep(
-              _without(prevState.orderedStagesPerDay, newName)
+            const prevOrderedStagesPerDay = mapStagesToOrderedList(
+              prevState.headData[0].stagesCols
             );
+            let newOrderedStagesPerDay = _without(prevOrderedStagesPerDay, newName);
             newOrderedStagesPerDay.splice(newOrder - 1, 0, newName);
 
             return {
               selectedCell: undefined,
               showUpdateModal: false,
-              orderedStagesPerDay: newOrderedStagesPerDay,
               headData: _map(prevState.headData, day => ({
                 ...day,
                 stagesCols: _map(

@@ -42,6 +42,7 @@ const bodyInitialData = [
         stageOrder: 1,
         stage: 'main stage',
         dayOrder: 1,
+        day: 'saturday',
       },
       {
         label: '-',
@@ -49,6 +50,7 @@ const bodyInitialData = [
         stageOrder: 2,
         stage: 'stage abc',
         dayOrder: 1,
+        day: 'saturday',
       },
     ],
   },
@@ -62,6 +64,7 @@ const bodyInitialData = [
         stageOrder: 1,
         stage: 'main stage',
         dayOrder: 1,
+        day: 'saturday',
       },
       {
         label: 'famous band',
@@ -69,6 +72,7 @@ const bodyInitialData = [
         stageOrder: 2,
         stage: 'stage abc',
         dayOrder: 1,
+        day: 'saturday',
       },
     ],
   },
@@ -82,6 +86,7 @@ const bodyInitialData = [
         stageOrder: 2,
         stage: 'stage abc',
         dayOrder: 1,
+        day: 'saturday',
       },
     ],
   },
@@ -220,6 +225,7 @@ class FestivalPage extends React.Component {
   };
 
   handleSubmitCellChanges = () => {
+    // @TODO: clean this up
     const { selectedCell } = this.state;
 
     switch (selectedCell.cellType) {
@@ -250,21 +256,61 @@ class FestivalPage extends React.Component {
         }));
         break;
       case 'day':
-        this.setState(prevState => ({
-          selectedCell: undefined,
-          showUpdateModal: false,
-          headData: _map(
-            prevState.headData,
-            day =>
-              day.dayOrder === prevState.selectedCell.dayOrder
-                ? {
-                    ...day,
-                    dayOrder: _find(prevState.cellFields, { name: 'dayOrder' }).value,
-                    label: _find(prevState.cellFields, { name: 'dayName' }).value,
-                  }
-                : day
-          ),
-        }));
+        this.setState(
+          prevState => {
+            const newName = _find(prevState.cellFields, { name: 'dayName' }).value;
+            const newOrder = parseInt(_find(prevState.cellFields, { name: 'dayOrder' }).value, 10);
+            const prevOrderedDays = _map(_sortBy(prevState.headData, 'dayOrder'), 'label');
+
+            let newOrderedDays = _without(prevOrderedDays, newName);
+            newOrderedDays.splice(newOrder - 1, 0, newName);
+
+            return {
+              selectedCell: undefined,
+              showUpdateModal: false,
+              headData: _map(
+                prevState.headData,
+                day =>
+                  day.dayOrder === prevState.selectedCell.dayOrder
+                    ? {
+                        ...day,
+                        dayOrder: newOrderedDays.indexOf(newName) + 1,
+                        label: newName,
+                      }
+                    : {
+                        ...day,
+                        dayOrder: newOrderedDays.indexOf(day.label) + 1,
+                      }
+              ),
+              bodyData: _map(prevState.bodyData, ts => ({
+                ...ts,
+                artistsCols: _map(
+                  ts.artistsCols,
+                  artist =>
+                    artist.day === prevState.selectedCell.label
+                      ? {
+                          ...artist,
+                          day: newName,
+                          dayOrder: newOrderedDays.indexOf(artist.day) + 1,
+                        }
+                      : {
+                          ...artist,
+                          dayOrder: newOrderedDays.indexOf(artist.day) + 1,
+                        }
+                ),
+              })),
+            };
+          },
+          () => {
+            this.setState(prevState => ({
+              headData: _sortBy(prevState.headData, 'dayOrder'),
+              bodyData: _map(prevState.bodyData, ts => ({
+                ...ts,
+                artistsCols: _sortBy(ts.artistsCols, 'dayOrder'),
+              })),
+            }));
+          }
+        );
         break;
       case 'stage':
         this.setState(

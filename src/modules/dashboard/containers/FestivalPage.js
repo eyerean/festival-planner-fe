@@ -102,6 +102,7 @@ const bodyInitialData = [
 const mapStagesToOrderedList = stages => _map(_sortBy(stages, 'stageOrder'), stg => stg.label);
 const orderArtistsByStageOrder = artistsCols => _sortBy(artistsCols, ['dayOrder', 'stageOrder']);
 const sortDaysByDayOrder = days => _sortBy(days, ['dayOrder']);
+const sortStagesByStageOrder = stages => _sortBy(stages, ['stageOrder']);
 
 class FestivalPage extends React.Component {
   // TODO in a construcotr
@@ -328,12 +329,14 @@ class FestivalPage extends React.Component {
               _find(prevState.cellFields, { name: 'stageOrder' }).value,
               10
             );
-            const shouldUpdateAll = _find(prevState.cellFields, { name: 'updateAll' }).value;
             const prevOrderedStagesPerDay = mapStagesToOrderedList(
               prevState.headData[0].stagesCols
             );
-            // this is wrong if name has changed
-            let newOrderedStagesPerDay = _without(prevOrderedStagesPerDay, newName);
+            let newOrderedStagesPerDay = _without(
+              prevOrderedStagesPerDay,
+              newName,
+              selectedCell.label
+            );
             newOrderedStagesPerDay.splice(newOrder - 1, 0, newName);
 
             return {
@@ -341,22 +344,23 @@ class FestivalPage extends React.Component {
               showUpdateModal: false,
               headData: _map(prevState.headData, day => ({
                 ...day,
-                stagesCols: _map(
-                  day.stagesCols,
-                  stage =>
-                    stage.label === prevState.selectedCell.label &&
-                    (shouldUpdateAll ||
-                      (!shouldUpdateAll && day.dayOrder === prevState.selectedCell.dayOrder))
-                      ? {
-                          ...stage,
-                          label: newName,
-                          stageOrder: newOrderedStagesPerDay.indexOf(newName) + 1,
-                        }
-                      : {
-                          ...stage,
-                          // always update order because otherwise it's getting way too messy
-                          stageOrder: newOrderedStagesPerDay.indexOf(stage.label) + 1,
-                        }
+                stagesCols: sortStagesByStageOrder(
+                  _map(
+                    day.stagesCols,
+                    stage =>
+                      stage.label === prevState.selectedCell.label &&
+                      stage.stageOrder === prevState.selectedCell.stageOrder
+                        ? {
+                            ...stage,
+                            label: newName,
+                            stageOrder: newOrderedStagesPerDay.indexOf(newName) + 1,
+                          }
+                        : {
+                            ...stage,
+                            // always update order because otherwise it's getting way too messy
+                            stageOrder: newOrderedStagesPerDay.indexOf(stage.label) + 1,
+                          }
+                  )
                 ),
               })),
               bodyData: _map(prevState.bodyData, ts => ({
@@ -369,7 +373,7 @@ class FestivalPage extends React.Component {
                         ? {
                             ...artist,
                             stage: newName,
-                            stageOrder: newOrderedStagesPerDay.indexOf(artist.stage) + 1,
+                            stageOrder: newOrderedStagesPerDay.indexOf(newName) + 1,
                           }
                         : {
                             ...artist,
@@ -385,7 +389,7 @@ class FestivalPage extends React.Component {
             this.setState(prevState => ({
               headData: _map(prevState.headData, day => ({
                 ...day,
-                stagesCols: _sortBy(day.stagesCols, 'stageOrder'),
+                stagesCols: sortStagesByStageOrder(day.stagesCols),
               })),
               bodyData: _map(prevState.bodyData, ts => ({
                 ...ts,

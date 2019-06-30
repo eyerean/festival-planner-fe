@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import moment from 'moment';
-import styled from 'styled-components';
 import { Glyphicon, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
@@ -12,7 +11,15 @@ import { Button } from 'shared';
 import { getTimeslotLabelFromTimeslotStart, handleDynamicFieldChange } from 'app/lib/helpers';
 import { updateCellFields } from '../lib/fields';
 import { mapObjectToFields } from '../lib/helpers';
-import { UpdateCellModal } from '../components';
+import {
+  UpdateCellModal,
+  Wrapper,
+  Table,
+  HoverCell,
+  HoverHeadCell,
+  ButtonCell,
+  SecondHeadRow,
+} from '../components';
 
 const headInitialData = [
   {
@@ -507,72 +514,3 @@ class FestivalPage extends React.Component {
 }
 
 export default FestivalPage;
-
-const Wrapper = styled.div`
-  margin: 15px;
-
-  td,
-  th {
-    text-align: center;
-    border: 1px solid black;
-    padding: 6px;
-  }
-`;
-
-const Table = styled.table`
-  margin: 30px auto;
-  border-spacing: 5px;
-  border-collapse: unset;
-  background-color: ${props => props.theme.colors.ghostWhite};
-`;
-
-const HoverCell = styled.td`
-  &:hover {
-    cursor: pointer;
-    background-color: ${props => props.theme.colors.roseDust};
-    color: ${props => props.theme.colors.white};
-  }
-
-  ${props =>
-    props.selected &&
-    `
-      background-color: ${props => props.theme.colors.roseDust};
-      color: ${props => props.theme.colors.white}; 
-  
-      &:hover {
-        background-color: ${props => props.theme.colors.tuscanRed};
-      }
-    `};
-`;
-
-const HoverHeadCell = styled.th`
-  &:hover {
-    cursor: pointer;
-    background-color: ${props => props.theme.colors.roseDust};
-    color: ${props => props.theme.colors.white};
-  }
-
-  ${props =>
-    props.selected &&
-    `
-      background-color: ${props => props.theme.colors.roseDust};
-      color: ${props => props.theme.colors.white}; 
-  
-      &:hover {
-        background-color: ${props => props.theme.colors.tuscanRed};
-      }
-    `};
-`;
-
-const ButtonCell = styled.th`
-  padding: 0 !important;
-
-  > button {
-    margin: 0;
-    padding: 5px 40px;
-  }
-`;
-
-const SecondHeadRow = styled.tr`
-  font-weight: bold;
-`;

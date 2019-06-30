@@ -251,16 +251,18 @@ class FestivalPage extends React.Component {
               row.timeslotOrder === prevState.selectedCell.tsOrder
                 ? {
                     ...row,
-                    artistsCols: _map(
-                      row.artistsCols,
-                      ar =>
-                        ar.dayOrder === prevState.selectedCell.dayOrder &&
-                        ar.stageOrder === prevState.selectedCell.stageOrder
-                          ? {
-                              ...ar,
-                              label: _find(prevState.cellFields, { name: 'artistName' }).value,
-                            }
-                          : ar
+                    artistsCols: orderArtistsByStageOrder(
+                      _map(
+                        row.artistsCols,
+                        ar =>
+                          ar.dayOrder === prevState.selectedCell.dayOrder &&
+                          ar.stageOrder === prevState.selectedCell.stageOrder
+                            ? {
+                                ...ar,
+                                label: _find(prevState.cellFields, { name: 'artistName' }).value,
+                              }
+                            : ar
+                      )
                     ),
                   }
                 : row
@@ -272,8 +274,9 @@ class FestivalPage extends React.Component {
           const newName = _find(prevState.cellFields, { name: 'dayName' }).value;
           const newOrder = parseInt(_find(prevState.cellFields, { name: 'dayOrder' }).value, 10);
           const prevOrderedDays = _map(sortDaysByDayOrder(prevState.headData), 'label');
-
-          let newOrderedDays = _without(prevOrderedDays, newName, selectedCell.label); // without newName and selectedCell.label
+          // remove from list newName and selectedCell.label
+          let newOrderedDays = _without(prevOrderedDays, newName, selectedCell.label);
+          // and add newName to correct order
           newOrderedDays.splice(newOrder - 1, 0, newName);
 
           return {
@@ -283,11 +286,10 @@ class FestivalPage extends React.Component {
               _map(
                 prevState.headData,
                 day =>
-                  day.dayOrder === prevState.selectedCell.dayOrder && // this condition is wrong
-                  day.label === prevState.selectedCell.label //hmmmm isos includes?
+                  day.label === prevState.selectedCell.label
                     ? {
                         ...day,
-                        dayOrder: newOrderedDays.indexOf(newName) + 1,
+                        dayOrder: newOrderedDays.indexOf(newName) + 1, //newOrder?
                         label: newName,
                       }
                     : {
@@ -306,7 +308,7 @@ class FestivalPage extends React.Component {
                       ? {
                           ...artist,
                           day: newName,
-                          dayOrder: newOrderedDays.indexOf(artist.day) + 1,
+                          dayOrder: newOrderedDays.indexOf(newName) + 1, //newOrder?
                         }
                       : {
                           ...artist,

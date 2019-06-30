@@ -93,8 +93,11 @@ const bodyInitialData = [
 ];
 
 const mapStagesToOrderedList = stages => _map(_sortBy(stages, 'stageOrder'), stg => stg.label);
+const orderArtistsByStageOrder = artistsCols => _sortBy(artistsCols, ['dayOrder', 'stageOrder']);
+const sortDaysByDayOrder = days => _sortBy(days, ['dayOrder']);
 
 class FestivalPage extends React.Component {
+  // TODO in a construcotr
   state = {
     timeslot: { amount: 1, unit: 'h' }, // one hour by default
     headData: headInitialData, //@TODO already here sort by stageOrder
@@ -145,7 +148,7 @@ class FestivalPage extends React.Component {
             ...day.stagesCols,
             {
               label: `stage ${day.stagesCols.length + 1}`,
-              stageOrder: day.stagesCols.length,
+              stageOrder: day.stagesCols.length + 1,
             },
           ],
         })),
@@ -153,15 +156,15 @@ class FestivalPage extends React.Component {
       // add empty cells for artists
       bodyData: _map(prevState.bodyData, row => ({
         ...row,
-        artistsCols: [
+        artistsCols: orderArtistsByStageOrder([
           ...row.artistsCols,
           ..._map(prevState.headData, day => ({
             label: '',
             amountOfTimeslots: 1,
-            stageOrder: day.stagesCols.length,
+            stageOrder: day.stagesCols.length + 1,
             dayOrder: day.dayOrder,
           })),
-        ],
+        ]),
       })),
     }));
   };
@@ -180,15 +183,17 @@ class FestivalPage extends React.Component {
       // add empty cells for artists
       bodyData: _map(prevState.bodyData, row => ({
         ...row,
-        artistsCols: [
+        artistsCols: orderArtistsByStageOrder([
           ...row.artistsCols,
           ..._map(newDay.stagesCols, stage => ({
             label: '',
             amountOfTimeslots: 1,
             stageOrder: stage.stageOrder,
             dayOrder: newDay.dayOrder,
+            day: newDay.label,
+            stage: stage.label,
           })),
-        ],
+        ]),
       })),
     }));
   };
@@ -256,22 +261,23 @@ class FestivalPage extends React.Component {
         }));
         break;
       case 'day':
-        this.setState(
-          prevState => {
-            const newName = _find(prevState.cellFields, { name: 'dayName' }).value;
-            const newOrder = parseInt(_find(prevState.cellFields, { name: 'dayOrder' }).value, 10);
-            const prevOrderedDays = _map(_sortBy(prevState.headData, 'dayOrder'), 'label');
+        this.setState(prevState => {
+          const newName = _find(prevState.cellFields, { name: 'dayName' }).value;
+          const newOrder = parseInt(_find(prevState.cellFields, { name: 'dayOrder' }).value, 10);
+          const prevOrderedDays = _map(sortDaysByDayOrder(prevState.headData), 'label');
 
-            let newOrderedDays = _without(prevOrderedDays, newName);
-            newOrderedDays.splice(newOrder - 1, 0, newName);
+          let newOrderedDays = _without(prevOrderedDays, newName, selectedCell.label); // without newName and selectedCell.label
+          newOrderedDays.splice(newOrder - 1, 0, newName);
 
-            return {
-              selectedCell: undefined,
-              showUpdateModal: false,
-              headData: _map(
+          return {
+            selectedCell: undefined,
+            showUpdateModal: false,
+            headData: sortDaysByDayOrder(
+              _map(
                 prevState.headData,
                 day =>
-                  day.dayOrder === prevState.selectedCell.dayOrder
+                  day.dayOrder === prevState.selectedCell.dayOrder && // this condition is wrong
+                  day.label === prevState.selectedCell.label //hmmmm isos includes?
                     ? {
                         ...day,
                         dayOrder: newOrderedDays.indexOf(newName) + 1,
@@ -281,10 +287,12 @@ class FestivalPage extends React.Component {
                         ...day,
                         dayOrder: newOrderedDays.indexOf(day.label) + 1,
                       }
-              ),
-              bodyData: _map(prevState.bodyData, ts => ({
-                ...ts,
-                artistsCols: _map(
+              )
+            ),
+            bodyData: _map(prevState.bodyData, ts => ({
+              ...ts,
+              artistsCols: orderArtistsByStageOrder(
+                _map(
                   ts.artistsCols,
                   artist =>
                     artist.day === prevState.selectedCell.label
@@ -297,20 +305,11 @@ class FestivalPage extends React.Component {
                           ...artist,
                           dayOrder: newOrderedDays.indexOf(artist.day) + 1,
                         }
-                ),
-              })),
-            };
-          },
-          () => {
-            this.setState(prevState => ({
-              headData: _sortBy(prevState.headData, 'dayOrder'),
-              bodyData: _map(prevState.bodyData, ts => ({
-                ...ts,
-                artistsCols: _sortBy(ts.artistsCols, 'dayOrder'),
-              })),
-            }));
-          }
-        );
+                )
+              ),
+            })),
+          };
+        });
         break;
       case 'stage':
         this.setState(
@@ -324,6 +323,7 @@ class FestivalPage extends React.Component {
             const prevOrderedStagesPerDay = mapStagesToOrderedList(
               prevState.headData[0].stagesCols
             );
+            // this is wrong if name has changed
             let newOrderedStagesPerDay = _without(prevOrderedStagesPerDay, newName);
             newOrderedStagesPerDay.splice(newOrder - 1, 0, newName);
 
@@ -352,19 +352,21 @@ class FestivalPage extends React.Component {
               })),
               bodyData: _map(prevState.bodyData, ts => ({
                 ...ts,
-                artistsCols: _map(
-                  ts.artistsCols,
-                  artist =>
-                    artist.stage === prevState.selectedCell.label
-                      ? {
-                          ...artist,
-                          stage: newName,
-                          stageOrder: newOrderedStagesPerDay.indexOf(artist.stage) + 1,
-                        }
-                      : {
-                          ...artist,
-                          stageOrder: newOrderedStagesPerDay.indexOf(artist.stage) + 1,
-                        }
+                artistsCols: orderArtistsByStageOrder(
+                  _map(
+                    ts.artistsCols,
+                    artist =>
+                      artist.stage === prevState.selectedCell.label
+                        ? {
+                            ...artist,
+                            stage: newName,
+                            stageOrder: newOrderedStagesPerDay.indexOf(artist.stage) + 1,
+                          }
+                        : {
+                            ...artist,
+                            stageOrder: newOrderedStagesPerDay.indexOf(artist.stage) + 1,
+                          }
+                  )
                 ),
               })),
             };
@@ -378,7 +380,7 @@ class FestivalPage extends React.Component {
               })),
               bodyData: _map(prevState.bodyData, ts => ({
                 ...ts,
-                artistsCols: _sortBy(ts.artistsCols, 'stageOrder'),
+                artistsCols: orderArtistsByStageOrder(ts.artistsCols),
               })),
             }));
           }

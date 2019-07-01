@@ -23,6 +23,15 @@ const theme = {
     babyPowder: '#fdfdfd',
     snow: '#fafafa',
     ghostWhite: '#f5f7fc',
+    isabelline: '#f3e8ee',
+    antiFlashWhite: '#f2f5f0',
+
+    // green
+    ashGreenGrey: '#bacdb0',
+    lightGreenGray: '#d3dfcc',
+    xanadu: '#729b79',
+    russianGreen: '#5e7f64',
+    charlestonGreen: '#2e2c2f',
   },
 };
 

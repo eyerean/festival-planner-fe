@@ -6,9 +6,9 @@ const LoginFormWrapper = styled.div`
   margin: 200px auto;
   display: block;
   padding: 40px;
-  background-color: ${props => props.theme.colors.ghostWhite};
+  background-color: ${props => props.theme.colors.lightGreenGray};
   color: ${props => props.theme.colors.charcoal};
-  border: solid 2px ${props => props.theme.colors.tuscanRed};
+  border: solid 2px ${props => props.theme.colors.xanadu};
   border-radius: 2px;
 
   > h2 {

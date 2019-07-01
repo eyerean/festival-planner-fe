@@ -33,7 +33,7 @@ const Box = styled.div`
     margin-top: 8px;
   }
 
-  background-color: ${props => props.theme.colors.paleAqua};
+  background-color: ${props => props.theme.colors.lightGreenGray};
   border-radius: 4px;
   border: 4px solid ${props => props.theme.colors.ghostWhite};
   padding: 10px 20px;

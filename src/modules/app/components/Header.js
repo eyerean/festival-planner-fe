@@ -15,5 +15,5 @@ export default Header;
 const StyledHeader = styled.div`
   font-size: 3em;
   padding: 18px;
-  color: ${props => props.theme.colors.ghostWhite};
+  color: ${props => props.theme.colors.darkSpaceSparkle};
 `;

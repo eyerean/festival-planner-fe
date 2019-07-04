@@ -1,4 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import reduxFetch, { selectors } from 'react-redux-fetch';
 import moment from 'moment';
 import { Glyphicon, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import _map from 'lodash/map';
@@ -6,8 +9,9 @@ import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
 import _includes from 'lodash/includes';
 import _without from 'lodash/without';
-import { Button } from 'shared';
+import apiRoutes from 'app/api/routes';
 import { getTimeslotLabelFromTimeslotStart, handleDynamicFieldChange } from 'app/lib/helpers';
+import { Button, Grid } from 'shared';
 import { updateCellFields } from '../lib/fields';
 import {
   mapObjectToFields,
@@ -116,6 +120,13 @@ class FestivalPage extends React.Component {
       cellFields: [],
       invalidCellFields: [],
     };
+  }
+
+  componentDidMount() {
+    const {
+      match: { params },
+    } = this.props;
+    this.props.dispatchFestivalDetailsGet(params.id);
   }
 
   handleAddTimeslot = () => {
@@ -423,9 +434,11 @@ class FestivalPage extends React.Component {
 
   render() {
     const { headData, bodyData, timeslot, selectedCell, showUpdateModal, cellFields } = this.state;
+    const { festivalDetails } = this.props;
 
     return (
-      <Fragment>
+      <Grid>
+        <h2>{festivalDetails && festivalDetails.name}</h2>
         <Wrapper>
           <Table>
             <thead>
@@ -522,9 +535,31 @@ class FestivalPage extends React.Component {
             onCellChange={this.handleCellUpdate}
           />
         )}
-      </Fragment>
+      </Grid>
     );
   }
 }
 
-export default FestivalPage;
+const mapStateToProps = state => ({
+  festivalDetails: selectors.getRepository('festivalDetails')(state),
+});
+
+const mapPropsToDispatchToProps = props => [
+  {
+    resource: 'festivalDetails',
+    method: 'GET',
+    request: id => ({
+      url: apiRoutes().festivalDetails(id),
+    }),
+  },
+];
+
+const enhance = compose(
+  reduxFetch(mapPropsToDispatchToProps),
+  connect(
+    mapStateToProps,
+    null
+  )
+);
+
+export default enhance(FestivalPage);

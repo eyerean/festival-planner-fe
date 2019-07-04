@@ -21,18 +21,18 @@ const Table = styled.table`
 const HoverCell = styled.td`
   &:hover {
     cursor: pointer;
-    background-color: ${props => props.theme.colors.roseDust};
+    background-color: ${props => props.theme.colors.xanadu};
     color: ${props => props.theme.colors.white};
   }
 
   ${props =>
     props.selected &&
     `
-      background-color: ${props => props.theme.colors.roseDust};
+      background-color: ${props => props.theme.colors.xanadu};
       color: ${props => props.theme.colors.white}; 
   
       &:hover {
-        background-color: ${props => props.theme.colors.tuscanRed};
+        background-color: ${props => props.theme.colors.russianGreen};
       }
     `};
 `;
@@ -40,18 +40,18 @@ const HoverCell = styled.td`
 const HoverHeadCell = styled.th`
   &:hover {
     cursor: pointer;
-    background-color: ${props => props.theme.colors.roseDust};
+    background-color: ${props => props.theme.colors.xanadu};
     color: ${props => props.theme.colors.white};
   }
 
   ${props =>
     props.selected &&
     `
-      background-color: ${props => props.theme.colors.roseDust};
+      background-color: ${props => props.theme.colors.xanadu};
       color: ${props => props.theme.colors.white}; 
   
       &:hover {
-        background-color: ${props => props.theme.colors.tuscanRed};
+        background-color: ${props => props.theme.colors.russianGreen};
       }
     `};
 `;

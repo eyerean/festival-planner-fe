@@ -6,11 +6,16 @@ import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
 import _includes from 'lodash/includes';
 import _without from 'lodash/without';
-import _sortBy from 'lodash/sortBy';
 import { Button } from 'shared';
 import { getTimeslotLabelFromTimeslotStart, handleDynamicFieldChange } from 'app/lib/helpers';
 import { updateCellFields } from '../lib/fields';
-import { mapObjectToFields } from '../lib/helpers';
+import {
+  mapObjectToFields,
+  mapStagesToOrderedList,
+  orderArtistsByStageOrder,
+  sortDaysByDayOrder,
+  sortStagesByStageOrder,
+} from '../lib/helpers';
 import {
   UpdateCellModal,
   Wrapper,
@@ -98,11 +103,6 @@ const bodyInitialData = [
     ],
   },
 ];
-
-const mapStagesToOrderedList = stages => _map(_sortBy(stages, 'stageOrder'), stg => stg.label);
-const orderArtistsByStageOrder = artistsCols => _sortBy(artistsCols, ['dayOrder', 'stageOrder']);
-const sortDaysByDayOrder = days => _sortBy(days, ['dayOrder']);
-const sortStagesByStageOrder = stages => _sortBy(stages, ['stageOrder']);
 
 class FestivalPage extends React.Component {
   constructor(props) {

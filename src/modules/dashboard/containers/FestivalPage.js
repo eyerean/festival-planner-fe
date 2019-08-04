@@ -9,6 +9,7 @@ import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
 import _includes from 'lodash/includes';
 import _without from 'lodash/without';
+import _isEmpty from 'lodash/isEmpty';
 import apiRoutes from 'app/api/routes';
 import { getTimeslotLabelFromTimeslotStart, handleDynamicFieldChange } from 'app/lib/helpers';
 import { Button, Grid } from 'shared';
@@ -114,8 +115,8 @@ class FestivalPage extends React.Component {
 
     this.state = {
       timeslot: { amount: 1, unit: 'h' }, // one hour by default
-      headData: sortDaysByDayOrder(headInitialData),
-      bodyData: bodyInitialData,
+      headData: [],
+      bodyData: [],
       selectedCell: undefined,
       cellFields: [],
       invalidCellFields: [],
@@ -127,6 +128,18 @@ class FestivalPage extends React.Component {
       match: { params },
     } = this.props;
     this.props.dispatchFestivalDetailsGet(params.id);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { festivalDetails } = this.props;
+    if (prevProps.festivalDetails !== festivalDetails && !_isEmpty(festivalDetails)) {
+      this.setState({
+        headData: sortDaysByDayOrder(
+          festivalDetails.details ? festivalDetails.details.days : headInitialData
+        ),
+        bodyData: festivalDetails.details ? festivalDetails.details.timeslots : bodyInitialData,
+      });
+    }
   }
 
   handleAddTimeslot = () => {

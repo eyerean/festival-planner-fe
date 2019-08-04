@@ -13,7 +13,7 @@ const FestivalDetailsModal = ({ show, onClose, festival, onDetailsClick }) => (
     </Modal.Header>
     <Modal.Body>
       <ModalBodyWrapper>
-        {_map(_omit(festival, ['_id', '__v']), (value, key) => (
+        {_map(_omit(festival, ['_id', '__v', 'details']), (value, key) => (
           <Row key={key}>
             <Col md={4}>
               {`${_upperFirst(key)

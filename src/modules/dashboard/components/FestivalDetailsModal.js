@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Modal, Row, Col } from 'react-bootstrap';
+import { Modal, Row, Col, Glyphicon } from 'react-bootstrap';
 import _map from 'lodash/map';
 import _omit from 'lodash/omit';
 import _upperFirst from 'lodash/upperFirst';
 import { Button } from 'shared';
 
-const FestivalDetailsModal = ({ show, onClose, festival, onDetailsClick }) => (
+const FestivalDetailsModal = ({ show, onClose, festival, onDetailsClick, onDeleteClick }) => (
   <Modal show={show} onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>{festival.name} Quick Overview</Modal.Title>
@@ -30,6 +30,9 @@ const FestivalDetailsModal = ({ show, onClose, festival, onDetailsClick }) => (
         <Button primary onClick={() => onDetailsClick(festival._id)}>
           Got to festival details
         </Button>
+        <GlyphiconButton error onClick={() => onDeleteClick(festival._id)}>
+          <Glyphicon glyph="trash" />
+        </GlyphiconButton>
       </ButtonWrapper>
     </Modal.Footer>
   </Modal>
@@ -43,4 +46,12 @@ const ModalBodyWrapper = styled.div`
 
 const ButtonWrapper = styled.div`
   text-align: center;
+`;
+
+const GlyphiconButton = styled(Button)`
+  background: transparent;
+  padding: 8px;
+  min-width: 36px;
+  height: 36px;
+  float: right;
 `;

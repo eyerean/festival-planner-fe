@@ -12,10 +12,22 @@ const festivalFields = [
     type: 'date',
   },
   {
+    label: 'Start Time First Artist',
+    name: 'startTime',
+    value: 'HH:mm',
+    type: 'text',
+  },
+  {
     label: 'End Date',
     name: 'endDate',
     value: '',
     type: 'date',
+  },
+  {
+    label: 'End Time Last Artist',
+    name: 'endTime',
+    value: 'HH:mm',
+    type: 'text',
   },
   {
     label: 'Description',

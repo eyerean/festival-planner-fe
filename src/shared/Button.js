@@ -37,6 +37,19 @@ const Button = styled.button`
     `}
 
   ${props =>
+    props.error &&
+    css`
+      border-color: ${props => props.theme.colors.roseDust};
+      color: ${props => props.theme.colors.roseDust};
+
+      :hover {
+        background: ${props => props.theme.colors.roseDust};
+        border-color: ${props => props.theme.colors.roseDust};
+        color: ${props => props.theme.colors.ghostWhite};
+      }
+    `}
+
+  ${props =>
     props.disabled &&
     css`
       background: ${props => props.theme.colors.xanadu};

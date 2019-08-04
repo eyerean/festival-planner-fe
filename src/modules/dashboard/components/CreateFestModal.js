@@ -18,12 +18,14 @@ const CreateFestModal = ({
       <Modal.Title>Create New Festival</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <DynamicForm
-        fields={fields}
-        requiredFields={requiredFields}
-        invalidFields={invalidFields}
-        handleChange={handleChange}
-      />
+      {fields.length > 0 && (
+        <DynamicForm
+          fields={fields}
+          requiredFields={requiredFields}
+          invalidFields={invalidFields}
+          handleChange={handleChange}
+        />
+      )}
       {errorText && <ErrorText>{errorText}</ErrorText>}
     </Modal.Body>
     <Modal.Footer>

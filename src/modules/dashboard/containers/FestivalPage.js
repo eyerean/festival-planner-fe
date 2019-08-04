@@ -144,10 +144,8 @@ class FestivalPage extends React.Component {
 
   handleAddTimeslot = () => {
     const { bodyData, timeslot } = this.state;
-
     const lastTs = _find(bodyData, { timeslotOrder: bodyData.length - 1 });
-
-    const newTsStart = moment(lastTs.timeslotStart, 'HH:mm')
+    const newTsStart = moment(lastTs ? lastTs.timeslotStart : '11:00', 'HH:mm')
       .add(timeslot.amount, timeslot.unit)
       .format('HH:mm');
 
@@ -451,7 +449,17 @@ class FestivalPage extends React.Component {
 
     return (
       <Grid>
-        <h2>{festivalDetails && festivalDetails.name}</h2>
+        {festivalDetails && (
+          <div>
+            <h2>{festivalDetails.name}</h2>
+            <p>Status: {festivalDetails.status}</p> {/* TODO: update status here */}
+            <p>
+              Starts: {moment(festivalDetails.startDate, 'DD-MM-YYYY').format('ddd DD MMMM YYYY')}
+            </p>
+            <p>Ends: {moment(festivalDetails.endDate, 'DD-MM-YYYY').format('ddd DD MMMM YYYY')}</p>
+            {festivalDetails.description && <p>Description: {festivalDetails.description}</p>}
+          </div>
+        )}
         <Wrapper>
           <Table>
             <thead>

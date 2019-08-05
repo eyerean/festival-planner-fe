@@ -11,6 +11,7 @@ import {
   ButtonCell,
   SecondHeadRow,
 } from './FestivalPageStyles';
+import StyledDropdown from './StyledDropdown';
 
 export {
   CreateFestModal,
@@ -24,4 +25,5 @@ export {
   HoverHeadCell,
   ButtonCell,
   SecondHeadRow,
+  StyledDropdown,
 };

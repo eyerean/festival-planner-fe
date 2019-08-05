@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import reduxFetch, { selectors } from 'react-redux-fetch';
 import moment from 'moment';
-import { Glyphicon, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Glyphicon, OverlayTrigger, Tooltip, DropdownButton, MenuItem } from 'react-bootstrap';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
 import _flatten from 'lodash/flatten';
@@ -29,6 +29,7 @@ import {
   HoverHeadCell,
   ButtonCell,
   SecondHeadRow,
+  StyledDropdown,
 } from '../components';
 
 const headInitialData = [
@@ -453,6 +454,25 @@ class FestivalPage extends React.Component {
           <div>
             <h2>{festivalDetails.name}</h2>
             <p>Status: {festivalDetails.status}</p> {/* TODO: update status here */}
+            <p>
+              Status:
+              <StyledDropdown>
+                <DropdownButton title={festivalDetails.status} id="status-dd">
+                  <MenuItem eventKey="drafts" active={festivalDetails.status === 'drafts'}>
+                    drafts
+                  </MenuItem>
+                  <MenuItem eventKey="planned" active={festivalDetails.status === 'planned'}>
+                    planned
+                  </MenuItem>
+                  <MenuItem eventKey="ongoing" active={festivalDetails.status === 'ongoing'}>
+                    ongoing
+                  </MenuItem>
+                  <MenuItem eventKey="past" active={festivalDetails.status === 'past'}>
+                    past
+                  </MenuItem>
+                </DropdownButton>
+              </StyledDropdown>
+            </p>
             <p>
               Starts: {moment(festivalDetails.startDate, 'DD-MM-YYYY').format('ddd DD MMMM YYYY')}
             </p>

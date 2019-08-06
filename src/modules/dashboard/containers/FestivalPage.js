@@ -30,6 +30,7 @@ import {
   ButtonCell,
   SecondHeadRow,
   StyledDropdown,
+  DropdownDetailsWrapper,
 } from '../components';
 
 const headInitialData = [
@@ -121,6 +122,7 @@ class FestivalPage extends React.Component {
       selectedCell: undefined,
       cellFields: [],
       invalidCellFields: [],
+      selectedStatus: '',
     };
   }
 
@@ -135,6 +137,7 @@ class FestivalPage extends React.Component {
     const { festivalDetails } = this.props;
     if (prevProps.festivalDetails !== festivalDetails && !_isEmpty(festivalDetails)) {
       this.setState({
+        selectedStatus: festivalDetails.status,
         headData: sortDaysByDayOrder(
           festivalDetails.details ? festivalDetails.details.days : headInitialData
         ),
@@ -142,6 +145,12 @@ class FestivalPage extends React.Component {
       });
     }
   }
+
+  handleChangeStatus = newStatus => {
+    this.setState({
+      selectedStatus: newStatus,
+    });
+  };
 
   handleAddTimeslot = () => {
     const { bodyData, timeslot } = this.state;
@@ -445,7 +454,15 @@ class FestivalPage extends React.Component {
   };
 
   render() {
-    const { headData, bodyData, timeslot, selectedCell, showUpdateModal, cellFields } = this.state;
+    const {
+      headData,
+      bodyData,
+      timeslot,
+      selectedCell,
+      showUpdateModal,
+      cellFields,
+      selectedStatus,
+    } = this.state;
     const { festivalDetails } = this.props;
 
     return (
@@ -453,11 +470,14 @@ class FestivalPage extends React.Component {
         {festivalDetails && (
           <div>
             <h2>{festivalDetails.name}</h2>
-            <p>Status: {festivalDetails.status}</p> {/* TODO: update status here */}
-            <p>
-              Status:
+            <DropdownDetailsWrapper>
+              <span>Status:</span>
               <StyledDropdown>
-                <DropdownButton title={festivalDetails.status} id="status-dd">
+                <DropdownButton
+                  title={selectedStatus}
+                  id="status-dd"
+                  onSelect={this.handleChangeStatus}
+                >
                   <MenuItem eventKey="drafts" active={festivalDetails.status === 'drafts'}>
                     drafts
                   </MenuItem>
@@ -472,7 +492,7 @@ class FestivalPage extends React.Component {
                   </MenuItem>
                 </DropdownButton>
               </StyledDropdown>
-            </p>
+            </DropdownDetailsWrapper>
             <p>
               Starts: {moment(festivalDetails.startDate, 'DD-MM-YYYY').format('ddd DD MMMM YYYY')}
             </p>

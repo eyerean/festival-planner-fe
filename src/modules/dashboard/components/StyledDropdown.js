@@ -4,13 +4,14 @@ const StyledDropdown = styled.span`
   .dropdown-toggle {
     background-color: transparent !important;
     border-radius: 1px;
-    // margin-left: 10px !important;
+    margin-left: 10px !important;
     padding: 3px 10px;
-    border: none;
-  }
+    border: 1px solid ${props => props.theme.colors.ashGreenGrey};
+    box-shadow: none !important;
 
-  &:hover {
-    background-color: ${props => props.theme.colors.ashGreenGrey};
+    &:hover {
+      background-color: ${props => props.theme.colors.ashGreenGrey}!important;
+    }
   }
 
   .caret {
@@ -28,16 +29,23 @@ const StyledDropdown = styled.span`
     > li.active > a {
       background-color: ${props => props.theme.colors.russianGreen}!important;
     }
-  }
 
-  .dropdown-menu > li > a {
-    color: ${props => props.theme.colors.ghostWhite}!important;
-  }
+    > li > a:hover {
+      background-color: ${props => props.theme.colors.ashGreenGrey}!important;
+      color: ${props => props.theme.colors.ghostWhite}!important;
+    }
 
-  .dropdown-menu > li > a:hover {
-    background-color: ${props => props.theme.colors.ashGreenGrey}!important;
-    color: ${props => props.theme.colors.ghostWhite}!important;
+    > li > a {
+      color: ${props => props.theme.colors.ghostWhite}!important;
+    }
   }
 `;
 
+const DropdownDetailsWrapper = styled.span`
+  display: inline-block;
+  margin-bottom: 10px;
+  height: 20px;
+`;
+
 export default StyledDropdown;
+export { DropdownDetailsWrapper };

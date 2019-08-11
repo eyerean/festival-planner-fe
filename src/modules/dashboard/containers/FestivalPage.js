@@ -18,7 +18,7 @@ import {
   sortDaysByDayOrder,
   sortStagesByStageOrder,
 } from '../lib/helpers';
-import { UpdateCellModal, FestivalPlannerComponent } from '../components';
+import { UpdateCellModal, FestivalPlannerComponent, FestivalDetails } from '../components';
 
 const headInitialData = [
   {
@@ -477,17 +477,19 @@ class FestivalPage extends React.Component {
 
     return (
       <React.Fragment>
-        <FestivalPlannerComponent
+        <FestivalDetails
           festivalDetails={festivalDetails}
+          onSaveChanges={this.handleSaveChanges}
+          selectedStatus={selectedStatus}
+          onChangeStatus={this.handleChangeStatus}
+        />
+        <FestivalPlannerComponent
           headData={headData}
           bodyData={bodyData}
           timeslot={timeslot}
           selectedCell={selectedCell}
           showUpdateModal={showUpdateModal}
           cellFields={cellFields}
-          selectedStatus={selectedStatus}
-          onSaveChanges={this.handleSaveChanges}
-          onChangeStatus={this.handleChangeStatus}
           onDayUpdate={this.handleDayUpdate}
           onAddStage={this.handleAddStage}
           onStageUpdate={this.handleStageUpdate}

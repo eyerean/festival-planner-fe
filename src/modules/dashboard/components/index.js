@@ -13,6 +13,7 @@ import {
 } from './FestivalPageStyles';
 import StyledDropdown, { DropdownDetailsWrapper } from './StyledDropdown';
 import FestivalPlannerComponent from './FestivalPlannerComponent';
+import FestivalDetails from './FestivalDetails';
 
 export {
   CreateFestModal,
@@ -29,4 +30,5 @@ export {
   StyledDropdown,
   DropdownDetailsWrapper,
   FestivalPlannerComponent,
+  FestivalDetails,
 };

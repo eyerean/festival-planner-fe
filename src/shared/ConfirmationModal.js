@@ -18,7 +18,9 @@ const ConfirmationModal = ({ show, onClose, text, onConfirmClick }) => (
         <Button primary onClick={onConfirmClick}>
           Confirm
         </Button>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button error onClick={onClose}>
+          Cancel
+        </Button>
       </ButtonWrapper>
     </Modal.Footer>
   </Modal>

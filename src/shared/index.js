@@ -10,6 +10,7 @@ import DatetimeField from './DatetimeField';
 import CheckboxField from './CheckboxField';
 import { VerticalTabs, VerticalTab } from './Tabs';
 import SpinningGlyphicon from './SpinningGlyphicon';
+import ConfirmationModal from './ConfirmationModal';
 
 export {
   Button,
@@ -25,4 +26,5 @@ export {
   VerticalTab,
   SpinningGlyphicon,
   CheckboxField,
+  ConfirmationModal,
 };

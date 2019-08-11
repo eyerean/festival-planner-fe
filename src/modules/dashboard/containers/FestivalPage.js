@@ -518,14 +518,14 @@ const mapPropsToDispatchToProps = props => [
     resource: 'festivalDetails',
     method: 'GET',
     request: id => ({
-      url: apiRoutes().festivalDetails(id),
+      url: apiRoutes().festival(id),
     }),
   },
   {
     resource: 'updateFestival',
     method: 'PUT',
     request: (id, festivalUpdates) => ({
-      url: apiRoutes().festivalDetails(id),
+      url: apiRoutes().festival(id),
       body: festivalUpdates,
     }),
   },

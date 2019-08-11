@@ -16,7 +16,7 @@ import apiRoutes from 'app/api/routes';
 import validateRequiredFields from 'app/lib/validateRequiredFields';
 import { FEST_STATUS } from 'app/config/constants';
 import { handleDynamicFieldChange } from 'app/lib/helpers';
-import { Button } from 'shared';
+import { Button, ConfirmationModal } from 'shared';
 import { festivalFields } from '../lib/fields';
 import { CreateFestModal, FestivalCategory, FestivalDetailsModal } from '../components';
 import selectors from '../selectors';
@@ -31,6 +31,7 @@ class Dashboard extends React.Component {
   state = {
     groupedFestivals: {},
     showCreateModal: false,
+    showConfirmationModal: false,
     fields: festivalFields,
     invalidFields: [],
     requiredFields: ['name', 'startDate', 'endDate'],
@@ -74,6 +75,17 @@ class Dashboard extends React.Component {
     }));
   };
 
+  toggleFestDetailsModal = () => {
+    this.setState(prevState => ({ showFestModal: !prevState.showFestModal }));
+  };
+
+  toggleConfirmationModal = () => {
+    this.setState(prevState => ({
+      showConfirmationModal: !prevState.showConfirmationModal,
+      errorText: '',
+    }));
+  };
+
   handleSubmitNewFestival = () => {
     const { fields, invalidFields, requiredFields } = this.state;
     const invalidFieldsTemp = validateRequiredFields(invalidFields, fields, requiredFields);
@@ -100,20 +112,27 @@ class Dashboard extends React.Component {
     }));
   };
 
-  handleFestivalClick = fest => {
+  handleFestivalClick = fest => () => {
     this.setState({ showFestModal: true, festivalInModal: fest });
   };
 
-  toggleFestDetailsModal = () => {
-    this.setState(prevState => ({ showFestModal: !prevState.showFestModal }));
+  handleFestDetailsClick = () => {
+    const { festivalInModal } = this.state;
+    this.props.history.push(`/festival/${festivalInModal._id}`);
   };
 
-  handleFestDetailsClick = festId => {
-    this.props.history.push(`/festival/${festId}`);
+  handleDeleteFestClick = () => {
+    this.setState({
+      showConfirmationModal: true,
+    });
   };
 
-  handleDeleteFestClick = festId => {
-    // confirmation modal
+  handleDeleteFestival = () => {
+    const { festivalInModal } = this.state;
+    this.props.dispatchFestivalDelete(festivalInModal._id);
+    this.toggleConfirmationModal();
+    this.toggleFestDetailsModal();
+    this.props.dispatchFestivalsGet();
   };
 
   render() {
@@ -126,6 +145,7 @@ class Dashboard extends React.Component {
       errorText,
       showFestModal,
       festivalInModal,
+      showConfirmationModal,
     } = this.state;
     const { createFestivalFetch } = this.props;
 
@@ -161,16 +181,24 @@ class Dashboard extends React.Component {
           />
         )}
 
-        {festivalInModal &&
-          showFestModal && (
-            <FestivalDetailsModal
-              show={showFestModal}
-              onClose={this.toggleFestDetailsModal}
-              festival={festivalInModal}
-              onDetailsClick={this.handleFestDetailsClick}
-              onDeleteClick={this.handleDeleteFestClick}
-            />
-          )}
+        {showFestModal && (
+          <FestivalDetailsModal
+            show={showFestModal}
+            onClose={this.toggleFestDetailsModal}
+            festival={festivalInModal}
+            onDetailsClick={this.handleFestDetailsClick}
+            onDeleteClick={this.handleDeleteFestClick}
+          />
+        )}
+
+        {showConfirmationModal && (
+          <ConfirmationModal
+            show={showConfirmationModal}
+            text={'Are you sure you want to delete this festival?'}
+            onClose={this.toggleConfirmationModal}
+            onConfirmClick={this.handleDeleteFestival}
+          />
+        )}
       </React.Fragment>
     );
   }
@@ -198,6 +226,13 @@ const mapPropsToDispatchToProps = props => [
     request: body => ({
       url: apiRoutes().festivals(),
       body,
+    }),
+  },
+  {
+    resource: 'festival',
+    method: 'DELETE',
+    request: id => ({
+      url: apiRoutes().festival(id),
     }),
   },
 ];

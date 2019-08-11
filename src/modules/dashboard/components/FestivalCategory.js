@@ -10,12 +10,7 @@ const FestivalCategory = ({ categoryTitle, festivals, onFestivalClick }) => (
       <List>
         {festivals.length > 0 &&
           _map(festivals, fest => (
-            <ListItem
-              key={fest._id}
-              onClick={() => {
-                onFestivalClick(fest);
-              }}
-            >
+            <ListItem key={fest._id} onClick={onFestivalClick(fest)}>
               {fest.name}
             </ListItem>
           ))}

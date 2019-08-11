@@ -27,10 +27,10 @@ const FestivalDetailsModal = ({ show, onClose, festival, onDetailsClick, onDelet
     </Modal.Body>
     <Modal.Footer>
       <ButtonWrapper>
-        <Button primary onClick={() => onDetailsClick(festival._id)}>
-          Got to festival details
+        <Button primary onClick={onDetailsClick}>
+          Go to festival details
         </Button>
-        <GlyphiconButton error onClick={() => onDeleteClick(festival._id)}>
+        <GlyphiconButton error onClick={onDeleteClick}>
           <Glyphicon glyph="trash" />
         </GlyphiconButton>
       </ButtonWrapper>
@@ -50,8 +50,9 @@ const ButtonWrapper = styled.div`
 
 const GlyphiconButton = styled(Button)`
   background: transparent;
-  padding: 8px;
+  padding: 10px;
   min-width: 36px;
   height: 36px;
   float: right;
+  border: none;
 `;

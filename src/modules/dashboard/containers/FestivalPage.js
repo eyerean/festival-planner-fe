@@ -524,9 +524,17 @@ class FestivalPage extends React.Component {
               </StyledDropdown>
             </DropdownDetailsWrapper>
             <p>
-              Starts: {moment(festivalDetails.startDate, 'DD-MM-YYYY').format('ddd DD MMMM YYYY')}
+              Starts:{' '}
+              {`${moment(festivalDetails.startDate, 'DD-MM-YYYY').format(
+                'ddd DD MMMM YYYY'
+              )}, ${moment(festivalDetails.startTime, 'HH:mm').format('HH:mm')}`}
             </p>
-            <p>Ends: {moment(festivalDetails.endDate, 'DD-MM-YYYY').format('ddd DD MMMM YYYY')}</p>
+            <p>
+              Ends:{' '}
+              {`${moment(festivalDetails.endDate, 'DD-MM-YYYY').format(
+                'ddd DD MMMM YYYY'
+              )}, ${moment(festivalDetails.endTime, 'HH:mm').format('HH:mm')}`}
+            </p>
             {festivalDetails.description && <p>Description: {festivalDetails.description}</p>}
           </div>
         )}
@@ -545,7 +553,7 @@ class FestivalPage extends React.Component {
                   </HoverHeadCell>
                 ))}
 
-                <OverlayTrigger
+                {/*<OverlayTrigger
                   overlay={<Tooltip id="add-day-tooltip">Add a day</Tooltip>}
                   placement="top"
                 >
@@ -554,7 +562,7 @@ class FestivalPage extends React.Component {
                       <Glyphicon glyph="plus" />
                     </Button>
                   </ButtonCell>
-                </OverlayTrigger>
+                </OverlayTrigger>*/}
               </tr>
               <SecondHeadRow>
                 <OverlayTrigger
@@ -600,7 +608,7 @@ class FestivalPage extends React.Component {
                   ))}
                 </tr>
               ))}
-              <tr>
+              {/*<tr>
                 <OverlayTrigger
                   overlay={<Tooltip id="add-timeslot-tooltip">Add timeslot</Tooltip>}
                   placement="left"
@@ -611,7 +619,7 @@ class FestivalPage extends React.Component {
                     </Button>
                   </ButtonCell>
                 </OverlayTrigger>
-              </tr>
+              </tr>*/}
             </tbody>
           </Table>
         </Wrapper>

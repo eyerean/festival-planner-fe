@@ -453,6 +453,27 @@ class FestivalPage extends React.Component {
     }));
   };
 
+  handleSaveChanges = () => {
+    const {
+      match: { params },
+      festivalDetails,
+    } = this.props;
+    const { selectedStatus, headData, bodyData } = this.state;
+
+    const festivalUpdates = {
+      details: {
+        days: headData,
+        timeslots: bodyData,
+      },
+    };
+
+    if (selectedStatus !== festivalDetails.status) {
+      festivalUpdates.status = selectedStatus;
+    }
+
+    this.props.dispatchUpdateFestivalPut(params.id, festivalUpdates);
+  };
+
   render() {
     const {
       headData,
@@ -469,7 +490,16 @@ class FestivalPage extends React.Component {
       <Grid>
         {festivalDetails && (
           <div>
-            <h2>{festivalDetails.name}</h2>
+            <h2>
+              {festivalDetails.name}
+              <Button
+                primary
+                onClick={this.handleSaveChanges}
+                style={{ fontSize: 18, margin: 0, float: 'right' }}
+              >
+                Save Changes
+              </Button>
+            </h2>
             <DropdownDetailsWrapper>
               <span>Status:</span>
               <StyledDropdown>
@@ -611,6 +641,14 @@ const mapPropsToDispatchToProps = props => [
     method: 'GET',
     request: id => ({
       url: apiRoutes().festivalDetails(id),
+    }),
+  },
+  {
+    resource: 'updateFestival',
+    method: 'PUT',
+    request: (id, festivalUpdates) => ({
+      url: apiRoutes().festivalDetails(id),
+      body: festivalUpdates,
     }),
   },
 ];

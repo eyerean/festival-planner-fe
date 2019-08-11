@@ -12,6 +12,7 @@ import {
   SecondHeadRow,
 } from './FestivalPageStyles';
 import StyledDropdown, { DropdownDetailsWrapper } from './StyledDropdown';
+import FestivalPlannerComponent from './FestivalPlannerComponent';
 
 export {
   CreateFestModal,
@@ -27,4 +28,5 @@ export {
   SecondHeadRow,
   StyledDropdown,
   DropdownDetailsWrapper,
+  FestivalPlannerComponent,
 };

@@ -2,17 +2,14 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import reduxFetch, { selectors } from 'react-redux-fetch';
-import moment from 'moment';
-import { Glyphicon, OverlayTrigger, Tooltip, DropdownButton, MenuItem } from 'react-bootstrap';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
-import _flatten from 'lodash/flatten';
+// import _flatten from 'lodash/flatten';
 import _includes from 'lodash/includes';
 import _without from 'lodash/without';
 import _isEmpty from 'lodash/isEmpty';
 import apiRoutes from 'app/api/routes';
-import { getTimeslotLabelFromTimeslotStart, handleDynamicFieldChange } from 'app/lib/helpers';
-import { Button, Grid } from 'shared';
+import { handleDynamicFieldChange } from 'app/lib/helpers';
 import { updateCellFields } from '../lib/fields';
 import {
   mapObjectToFields,
@@ -21,17 +18,7 @@ import {
   sortDaysByDayOrder,
   sortStagesByStageOrder,
 } from '../lib/helpers';
-import {
-  UpdateCellModal,
-  Wrapper,
-  Table,
-  HoverCell,
-  HoverHeadCell,
-  ButtonCell,
-  SecondHeadRow,
-  StyledDropdown,
-  DropdownDetailsWrapper,
-} from '../components';
+import { UpdateCellModal, FestivalPlannerComponent } from '../components';
 
 const headInitialData = [
   {
@@ -152,34 +139,35 @@ class FestivalPage extends React.Component {
     });
   };
 
-  handleAddTimeslot = () => {
-    const { bodyData, timeslot } = this.state;
-    const lastTs = _find(bodyData, { timeslotOrder: bodyData.length - 1 });
-    const newTsStart = moment(lastTs ? lastTs.timeslotStart : '11:00', 'HH:mm')
-      .add(timeslot.amount, timeslot.unit)
-      .format('HH:mm');
+  // currently not used
+  // handleAddTimeslot = () => {
+  //   const { bodyData, timeslot } = this.state;
+  //   const lastTs = _find(bodyData, { timeslotOrder: bodyData.length - 1 });
+  //   const newTsStart = moment(lastTs ? lastTs.timeslotStart : '11:00', 'HH:mm')
+  //     .add(timeslot.amount, timeslot.unit)
+  //     .format('HH:mm');
 
-    // add empty cells for all artists all days all stages
-    this.setState(prevState => ({
-      bodyData: [
-        ...prevState.bodyData,
-        {
-          timeslotOrder: prevState.bodyData.length,
-          timeslotStart: newTsStart,
-          artistsCols: _flatten(
-            _map(prevState.headData, day =>
-              _map(day.stagesCols, stage => ({
-                label: '',
-                amountOfTimeslots: 1,
-                stageOrder: stage.stageOrder,
-                dayOrder: day.dayOrder,
-              }))
-            )
-          ),
-        },
-      ],
-    }));
-  };
+  //   // add empty cells for all artists all days all stages
+  //   this.setState(prevState => ({
+  //     bodyData: [
+  //       ...prevState.bodyData,
+  //       {
+  //         timeslotOrder: prevState.bodyData.length,
+  //         timeslotStart: newTsStart,
+  //         artistsCols: _flatten(
+  //           _map(prevState.headData, day =>
+  //             _map(day.stagesCols, stage => ({
+  //               label: '',
+  //               amountOfTimeslots: 1,
+  //               stageOrder: stage.stageOrder,
+  //               dayOrder: day.dayOrder,
+  //             }))
+  //           )
+  //         ),
+  //       },
+  //     ],
+  //   }));
+  // };
 
   handleAddStage = () => {
     // add a stage to each existing day
@@ -212,34 +200,35 @@ class FestivalPage extends React.Component {
     }));
   };
 
-  handleAddDay = () => {
-    const { headData } = this.state;
-    const newDay = {
-      label: `day ${headData.length + 1}`,
-      dayOrder: headData.length + 1,
-      // default the existing stages (if any)
-      stagesCols: headData[0].stagesCols || [{ label: 'stage 1', stageOrder: 1 }],
-    };
+  // currently not used
+  // handleAddDay = () => {
+  //   const { headData } = this.state;
+  //   const newDay = {
+  //     label: `day ${headData.length + 1}`,
+  //     dayOrder: headData.length + 1,
+  //     // default the existing stages (if any)
+  //     stagesCols: headData[0].stagesCols || [{ label: 'stage 1', stageOrder: 1 }],
+  //   };
 
-    this.setState(prevState => ({
-      headData: [...prevState.headData, newDay],
-      // add empty cells for artists
-      bodyData: _map(prevState.bodyData, row => ({
-        ...row,
-        artistsCols: orderArtistsByStageOrder([
-          ...row.artistsCols,
-          ..._map(newDay.stagesCols, stage => ({
-            label: '',
-            amountOfTimeslots: 1,
-            stageOrder: stage.stageOrder,
-            dayOrder: newDay.dayOrder,
-            day: newDay.label,
-            stage: stage.label,
-          })),
-        ]),
-      })),
-    }));
-  };
+  //   this.setState(prevState => ({
+  //     headData: [...prevState.headData, newDay],
+  //     // add empty cells for artists
+  //     bodyData: _map(prevState.bodyData, row => ({
+  //       ...row,
+  //       artistsCols: orderArtistsByStageOrder([
+  //         ...row.artistsCols,
+  //         ..._map(newDay.stagesCols, stage => ({
+  //           label: '',
+  //           amountOfTimeslots: 1,
+  //           stageOrder: stage.stageOrder,
+  //           dayOrder: newDay.dayOrder,
+  //           day: newDay.label,
+  //           stage: stage.label,
+  //         })),
+  //       ]),
+  //     })),
+  //   }));
+  // };
 
   handleArtistUpdate = (artist, tsOrder) => () => {
     this.setState({
@@ -487,142 +476,23 @@ class FestivalPage extends React.Component {
     const { festivalDetails } = this.props;
 
     return (
-      <Grid>
-        {festivalDetails && (
-          <div>
-            <h2>
-              {festivalDetails.name}
-              <Button
-                primary
-                onClick={this.handleSaveChanges}
-                style={{ fontSize: 18, margin: 0, float: 'right' }}
-              >
-                Save Changes
-              </Button>
-            </h2>
-            <DropdownDetailsWrapper>
-              <span>Status:</span>
-              <StyledDropdown>
-                <DropdownButton
-                  title={selectedStatus}
-                  id="status-dd"
-                  onSelect={this.handleChangeStatus}
-                >
-                  <MenuItem eventKey="drafts" active={festivalDetails.status === 'drafts'}>
-                    drafts
-                  </MenuItem>
-                  <MenuItem eventKey="planned" active={festivalDetails.status === 'planned'}>
-                    planned
-                  </MenuItem>
-                  <MenuItem eventKey="ongoing" active={festivalDetails.status === 'ongoing'}>
-                    ongoing
-                  </MenuItem>
-                  <MenuItem eventKey="past" active={festivalDetails.status === 'past'}>
-                    past
-                  </MenuItem>
-                </DropdownButton>
-              </StyledDropdown>
-            </DropdownDetailsWrapper>
-            <p>
-              Starts:{' '}
-              {`${moment(festivalDetails.startDate, 'DD-MM-YYYY').format(
-                'ddd DD MMMM YYYY'
-              )}, ${moment(festivalDetails.startTime, 'HH:mm').format('HH:mm')}`}
-            </p>
-            <p>
-              Ends:{' '}
-              {`${moment(festivalDetails.endDate, 'DD-MM-YYYY').format(
-                'ddd DD MMMM YYYY'
-              )}, ${moment(festivalDetails.endTime, 'HH:mm').format('HH:mm')}`}
-            </p>
-            {festivalDetails.description && <p>Description: {festivalDetails.description}</p>}
-          </div>
-        )}
-        <Wrapper>
-          <Table>
-            <thead>
-              <tr>
-                <th>hours</th>
-                {_map(headData, day => (
-                  <HoverHeadCell
-                    key={day.dayOrder}
-                    colSpan={day.stagesCols.length || '1'}
-                    onClick={this.handleDayUpdate(day)}
-                  >
-                    {day.label}
-                  </HoverHeadCell>
-                ))}
-
-                {/*<OverlayTrigger
-                  overlay={<Tooltip id="add-day-tooltip">Add a day</Tooltip>}
-                  placement="top"
-                >
-                  <ButtonCell>
-                    <Button primary onClick={this.handleAddDay}>
-                      <Glyphicon glyph="plus" />
-                    </Button>
-                  </ButtonCell>
-                </OverlayTrigger>*/}
-              </tr>
-              <SecondHeadRow>
-                <OverlayTrigger
-                  overlay={<Tooltip id="add-stage-tooltip">Add new stage per day</Tooltip>}
-                  placement="left"
-                >
-                  <ButtonCell>
-                    <Button primary onClick={this.handleAddStage}>
-                      <Glyphicon glyph="plus" />
-                    </Button>
-                  </ButtonCell>
-                </OverlayTrigger>
-                {_map(headData, day =>
-                  _map(day.stagesCols, stage => (
-                    <HoverCell
-                      key={stage.stageOrder}
-                      onClick={this.handleStageUpdate(stage, day.dayOrder)}
-                    >
-                      {stage.label}
-                    </HoverCell>
-                  ))
-                )}
-              </SecondHeadRow>
-            </thead>
-            <tbody>
-              {_map(bodyData, row => (
-                <tr key={row.timeslotOrder}>
-                  <td>{getTimeslotLabelFromTimeslotStart(row.timeslotStart, timeslot)}</td>
-                  {_map(row.artistsCols, artist => (
-                    <HoverCell
-                      selected={
-                        selectedCell &&
-                        selectedCell.dayOrder === artist.dayOrder &&
-                        selectedCell.stageOrder === artist.stageOrder &&
-                        selectedCell.label === artist.label
-                      }
-                      key={'d' + artist.dayOrder + 's' + artist.stageOrder}
-                      rowSpan={artist.amountOfTimeslots || '1'}
-                      onClick={this.handleArtistUpdate(artist, row.timeslotOrder)}
-                    >
-                      {artist.label}
-                    </HoverCell>
-                  ))}
-                </tr>
-              ))}
-              {/*<tr>
-                <OverlayTrigger
-                  overlay={<Tooltip id="add-timeslot-tooltip">Add timeslot</Tooltip>}
-                  placement="left"
-                >
-                  <ButtonCell>
-                    <Button primary onClick={this.handleAddTimeslot}>
-                      <Glyphicon glyph="plus" />
-                    </Button>
-                  </ButtonCell>
-                </OverlayTrigger>
-              </tr>*/}
-            </tbody>
-          </Table>
-        </Wrapper>
+      <React.Fragment>
+        <FestivalPlannerComponent
+          festivalDetails={festivalDetails}
+          headData={headData}
+          bodyData={bodyData}
+          timeslot={timeslot}
+          selectedCell={selectedCell}
+          showUpdateModal={showUpdateModal}
+          cellFields={cellFields}
+          selectedStatus={selectedStatus}
+          onSaveChanges={this.handleSaveChanges}
+          onChangeStatus={this.handleChangeStatus}
+          onDayUpdate={this.handleDayUpdate}
+          onAddStage={this.handleAddStage}
+          onStageUpdate={this.handleStageUpdate}
+          onArtistUpdate={this.handleArtistUpdate}
+        />
 
         {showUpdateModal && (
           <UpdateCellModal
@@ -634,7 +504,7 @@ class FestivalPage extends React.Component {
             onCellChange={this.handleCellUpdate}
           />
         )}
-      </Grid>
+      </React.Fragment>
     );
   }
 }
@@ -663,10 +533,7 @@ const mapPropsToDispatchToProps = props => [
 
 const enhance = compose(
   reduxFetch(mapPropsToDispatchToProps),
-  connect(
-    mapStateToProps,
-    null
-  )
+  connect(mapStateToProps)
 );
 
 export default enhance(FestivalPage);

@@ -2,9 +2,10 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import reduxFetch, { selectors } from 'react-redux-fetch';
+import moment from 'moment';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
-// import _flatten from 'lodash/flatten';
+import _flatten from 'lodash/flatten';
 import _includes from 'lodash/includes';
 import _without from 'lodash/without';
 import _isEmpty from 'lodash/isEmpty';
@@ -139,35 +140,34 @@ class FestivalPage extends React.Component {
     });
   };
 
-  // currently not used
-  // handleAddTimeslot = () => {
-  //   const { bodyData, timeslot } = this.state;
-  //   const lastTs = _find(bodyData, { timeslotOrder: bodyData.length - 1 });
-  //   const newTsStart = moment(lastTs ? lastTs.timeslotStart : '11:00', 'HH:mm')
-  //     .add(timeslot.amount, timeslot.unit)
-  //     .format('HH:mm');
+  handleAddTimeslot = () => {
+    const { bodyData, timeslot } = this.state;
+    const lastTs = _find(bodyData, { timeslotOrder: bodyData.length - 1 });
+    const newTsStart = moment(lastTs ? lastTs.timeslotStart : '11:00', 'HH:mm')
+      .add(timeslot.amount, timeslot.unit)
+      .format('HH:mm');
 
-  //   // add empty cells for all artists all days all stages
-  //   this.setState(prevState => ({
-  //     bodyData: [
-  //       ...prevState.bodyData,
-  //       {
-  //         timeslotOrder: prevState.bodyData.length,
-  //         timeslotStart: newTsStart,
-  //         artistsCols: _flatten(
-  //           _map(prevState.headData, day =>
-  //             _map(day.stagesCols, stage => ({
-  //               label: '',
-  //               amountOfTimeslots: 1,
-  //               stageOrder: stage.stageOrder,
-  //               dayOrder: day.dayOrder,
-  //             }))
-  //           )
-  //         ),
-  //       },
-  //     ],
-  //   }));
-  // };
+    // add empty cells for all artists all days all stages
+    this.setState(prevState => ({
+      bodyData: [
+        ...prevState.bodyData,
+        {
+          timeslotOrder: prevState.bodyData.length,
+          timeslotStart: newTsStart,
+          artistsCols: _flatten(
+            _map(prevState.headData, day =>
+              _map(day.stagesCols, stage => ({
+                label: '',
+                amountOfTimeslots: 1,
+                stageOrder: stage.stageOrder,
+                dayOrder: day.dayOrder,
+              }))
+            )
+          ),
+        },
+      ],
+    }));
+  };
 
   handleAddStage = () => {
     // add a stage to each existing day
@@ -494,6 +494,8 @@ class FestivalPage extends React.Component {
           onAddStage={this.handleAddStage}
           onStageUpdate={this.handleStageUpdate}
           onArtistUpdate={this.handleArtistUpdate}
+          onAddTimeslot={this.handleAddTimeslot}
+          hasValidTimeslot={festivalDetails && moment(festivalDetails.endTime, 'HH:mm').isValid()}
         />
 
         {showUpdateModal && (

@@ -19,6 +19,8 @@ const FestivalPlannerComponent = ({
   onAddStage,
   onStageUpdate,
   onArtistUpdate,
+  onAddTimeslot,
+  hasValidTimeslot,
 }) => (
   <Wrapper>
     <Table>
@@ -35,17 +37,17 @@ const FestivalPlannerComponent = ({
             </HoverHeadCell>
           ))}
           {/* 
-                <OverlayTrigger
-                  overlay={<Tooltip id="add-day-tooltip">Add a day</Tooltip>}
-                  placement="top"
-                >
-                  <ButtonCell>
-                    <Button primary onClick={this.handleAddDay}>
-                      <Glyphicon glyph="plus" />
-                    </Button>
-                  </ButtonCell>
-                </OverlayTrigger>
-              */}
+              <OverlayTrigger
+                overlay={<Tooltip id="add-day-tooltip">Add a day</Tooltip>}
+                placement="top"
+              >
+                <ButtonCell>
+                  <Button primary onClick={this.handleAddDay}>
+                    <Glyphicon glyph="plus" />
+                  </Button>
+                </ButtonCell>
+              </OverlayTrigger>
+            */}
         </tr>
         <SecondHeadRow>
           <OverlayTrigger
@@ -60,7 +62,10 @@ const FestivalPlannerComponent = ({
           </OverlayTrigger>
           {_map(headData, day =>
             _map(day.stagesCols, stage => (
-              <HoverCell key={stage._id} onClick={onStageUpdate(stage, day.dayOrder)}>
+              <HoverCell
+                key={stage._id || Math.random()}
+                onClick={onStageUpdate(stage, day.dayOrder)}
+              >
                 {stage.label}
               </HoverCell>
             ))
@@ -88,20 +93,20 @@ const FestivalPlannerComponent = ({
             ))}
           </tr>
         ))}
-        {/*
-                <tr>
-                  <OverlayTrigger
-                    overlay={<Tooltip id="add-timeslot-tooltip">Add timeslot</Tooltip>}
-                    placement="left"
-                  >
-                    <ButtonCell>
-                      <Button primary onClick={this.handleAddTimeslot}>
-                        <Glyphicon glyph="plus" />
-                      </Button>
-                    </ButtonCell>
-                  </OverlayTrigger>
-                </tr>
-              */}
+        {!hasValidTimeslot && (
+          <tr>
+            <OverlayTrigger
+              overlay={<Tooltip id="add-timeslot-tooltip">Add timeslot</Tooltip>}
+              placement="left"
+            >
+              <ButtonCell>
+                <Button primary onClick={onAddTimeslot}>
+                  <Glyphicon glyph="plus" />
+                </Button>
+              </ButtonCell>
+            </OverlayTrigger>
+          </tr>
+        )}
       </tbody>
     </Table>
   </Wrapper>

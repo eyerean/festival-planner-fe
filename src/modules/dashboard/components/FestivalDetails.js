@@ -4,6 +4,13 @@ import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { Grid, Button } from 'shared';
 import { StyledDropdown, DropdownDetailsWrapper } from './';
 
+const dateDisplay = (date, time) => {
+  const isTimeValid = moment(time, 'HH:mm').isValid();
+  return `${moment(date, 'DD-MM-YYYY').format('ddd DD MMMM YYYY')}${
+    isTimeValid ? `, ${moment(time, 'HH:mm').format('HH:mm')}` : ''
+  }`;
+};
+
 const FestivalDetails = ({ festivalDetails, onSaveChanges, selectedStatus, onChangeStatus }) => (
   <Grid>
     {festivalDetails && (
@@ -37,20 +44,8 @@ const FestivalDetails = ({ festivalDetails, onSaveChanges, selectedStatus, onCha
             </DropdownButton>
           </StyledDropdown>
         </DropdownDetailsWrapper>
-        <p>
-          Starts:{' '}
-          {`${moment(festivalDetails.startDate, 'DD-MM-YYYY').format('ddd DD MMMM YYYY')}, ${moment(
-            festivalDetails.startTime,
-            'HH:mm'
-          ).format('HH:mm')}`}
-        </p>
-        <p>
-          Ends:{' '}
-          {`${moment(festivalDetails.endDate, 'DD-MM-YYYY').format('ddd DD MMMM YYYY')}, ${moment(
-            festivalDetails.endTime,
-            'HH:mm'
-          ).format('HH:mm')}`}
-        </p>
+        <p>Starts: {dateDisplay(festivalDetails.startDate, festivalDetails.startTime)}</p>
+        <p>Ends: {dateDisplay(festivalDetails.endDate, festivalDetails.endTime)}</p>
         {festivalDetails.description && <p>Description: {festivalDetails.description}</p>}
       </div>
     )}

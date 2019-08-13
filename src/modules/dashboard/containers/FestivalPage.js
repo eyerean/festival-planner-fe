@@ -159,8 +159,10 @@ class FestivalPage extends React.Component {
               _map(day.stagesCols, stage => ({
                 label: '',
                 amountOfTimeslots: 1,
+                stage: stage.label,
                 stageOrder: stage.stageOrder,
                 dayOrder: day.dayOrder,
+                day: day.label,
               }))
             )
           ),
@@ -193,7 +195,9 @@ class FestivalPage extends React.Component {
             label: '',
             amountOfTimeslots: 1,
             stageOrder: day.stagesCols.length + 1,
+            stage: `stage ${day.stagesCols.length + 1}`,
             dayOrder: day.dayOrder,
+            day: day.label,
           })),
         ]),
       })),

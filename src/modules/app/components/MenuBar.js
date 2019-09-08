@@ -6,7 +6,7 @@ import StyledNavbar from './StyledNavbar';
 const MenuBar = ({ onLogout, user, location }) => {
   return (
     <StyledNavbar isNavbar>
-      <Nav>
+      {/*<Nav>
         <NavItem componentClass={Link} href="/" to="/" active={location.pathname === '/'}>
           Overview
         </NavItem>
@@ -42,7 +42,7 @@ const MenuBar = ({ onLogout, user, location }) => {
         >
           Planner
         </NavItem>
-      </Nav>
+      </Nav>*/}
       <Nav pullRight>
         <NavDropdown title={user} id="basic-nav-dropdown">
           <MenuItem>Account</MenuItem>

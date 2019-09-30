@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+// import { Link } from 'react-router-dom';
+import { Nav, /* NavItem, */ NavDropdown, MenuItem } from 'react-bootstrap';
 import StyledNavbar from './StyledNavbar';
 
 const MenuBar = ({ onLogout, user, location }) => {

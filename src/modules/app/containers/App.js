@@ -36,12 +36,16 @@ class App extends React.Component {
     this.props.logout();
   };
 
+  handleHeaderClick = () => {
+    this.props.history.push('/');
+  };
+
   render() {
     const { isAuthenticated, user, location } = this.props;
 
     return (
       <AppWrapper height={HEIGHT} isAuthenticated={isAuthenticated}>
-        <Header isAuthenticated={isAuthenticated} />
+        <Header isAuthenticated={isAuthenticated} onHeaderClick={this.handleHeaderClick} />
         {isAuthenticated && (
           <MenuBar onLogout={this.handleLogout} user={user} location={location} />
         )}

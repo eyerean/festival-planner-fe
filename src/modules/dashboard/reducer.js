@@ -1,8 +1,8 @@
 import Immutable from 'seamless-immutable';
-import {STORE_FESTIVALS} from './actionTypes';
+import { STORE_FESTIVALS } from './actionTypes';
 
 const INITIAL_STATE = {
-  festivals: []
+  festivals: [],
 };
 
 const festivalReducer = (state = Immutable.from(INITIAL_STATE), action) => {

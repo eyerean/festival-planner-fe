@@ -1,10 +1,10 @@
-import {STORE_FESTIVALS} from './actionTypes';
+import { STORE_FESTIVALS } from './actionTypes';
 
-const storeFestivals = (festivals) => ({
+const storeFestivals = festivals => ({
   type: STORE_FESTIVALS,
-  payload: festivals
+  payload: festivals,
 });
 
 export default {
   storeFestivals,
-}
+};

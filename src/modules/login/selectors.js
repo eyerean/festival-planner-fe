@@ -5,5 +5,5 @@ const getToken = state => state.login.token;
 export default {
   isAuthenticated,
   getUser,
-  getToken
+  getToken,
 };

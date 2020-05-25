@@ -1,11 +1,11 @@
-import {STORE_SESSION, LOGOUT, AUTHENTICATE} from './actionTypes';
+import { STORE_SESSION, LOGOUT, AUTHENTICATE } from './actionTypes';
 
 const storeSession = (token, user) => ({
   type: STORE_SESSION,
   payload: {
     token,
-    user
-  }
+    user,
+  },
 });
 
 const logout = () => ({
@@ -15,11 +15,11 @@ const logout = () => ({
 
 const authenticate = () => ({
   type: AUTHENTICATE,
-  payload: {}
-})
+  payload: {},
+});
 
 export default {
   storeSession,
   logout,
-  authenticate
-}
+  authenticate,
+};

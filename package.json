@@ -28,7 +28,7 @@
     "flow-watch": "^1.1.2",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.0",
-    "prettier": "^1.11.1",
+    "prettier": "1.19.1",
     "react-scripts": "1.1.4",
     "teamcity-properties": "^2.0.0"
   },

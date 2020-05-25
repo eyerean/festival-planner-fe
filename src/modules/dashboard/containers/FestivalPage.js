@@ -269,27 +269,23 @@ class FestivalPage extends React.Component {
     this.setState(prevState => ({
       selectedCell: undefined,
       showUpdateModal: false,
-      bodyData: _map(
-        prevState.bodyData,
-        row =>
-          row.timeslotOrder === prevState.selectedCell.tsOrder
-            ? {
-                ...row,
-                artistsCols: orderArtistsByStageOrder(
-                  _map(
-                    row.artistsCols,
-                    ar =>
-                      ar.dayOrder === prevState.selectedCell.dayOrder &&
-                      ar.stageOrder === prevState.selectedCell.stageOrder
-                        ? {
-                            ...ar,
-                            label: _find(prevState.cellFields, { name: 'artistName' }).value,
-                          }
-                        : ar
-                  )
-                ),
-              }
-            : row
+      bodyData: _map(prevState.bodyData, row =>
+        row.timeslotOrder === prevState.selectedCell.tsOrder
+          ? {
+              ...row,
+              artistsCols: orderArtistsByStageOrder(
+                _map(row.artistsCols, ar =>
+                  ar.dayOrder === prevState.selectedCell.dayOrder &&
+                  ar.stageOrder === prevState.selectedCell.stageOrder
+                    ? {
+                        ...ar,
+                        label: _find(prevState.cellFields, { name: 'artistName' }).value,
+                      }
+                    : ar
+                )
+              ),
+            }
+          : row
       ),
     }));
   };
@@ -308,37 +304,33 @@ class FestivalPage extends React.Component {
         selectedCell: undefined,
         showUpdateModal: false,
         headData: sortDaysByDayOrder(
-          _map(
-            prevState.headData,
-            day =>
-              day.label === prevState.selectedCell.label
-                ? {
-                    ...day,
-                    dayOrder: newOrderedDays.indexOf(newName) + 1, //newOrder?
-                    label: newName,
-                  }
-                : {
-                    ...day,
-                    dayOrder: newOrderedDays.indexOf(day.label) + 1,
-                  }
+          _map(prevState.headData, day =>
+            day.label === prevState.selectedCell.label
+              ? {
+                  ...day,
+                  dayOrder: newOrderedDays.indexOf(newName) + 1, //newOrder?
+                  label: newName,
+                }
+              : {
+                  ...day,
+                  dayOrder: newOrderedDays.indexOf(day.label) + 1,
+                }
           )
         ),
         bodyData: _map(prevState.bodyData, ts => ({
           ...ts,
           artistsCols: orderArtistsByStageOrder(
-            _map(
-              ts.artistsCols,
-              artist =>
-                artist.day === prevState.selectedCell.label
-                  ? {
-                      ...artist,
-                      day: newName,
-                      dayOrder: newOrderedDays.indexOf(newName) + 1, //newOrder?
-                    }
-                  : {
-                      ...artist,
-                      dayOrder: newOrderedDays.indexOf(artist.day) + 1,
-                    }
+            _map(ts.artistsCols, artist =>
+              artist.day === prevState.selectedCell.label
+                ? {
+                    ...artist,
+                    day: newName,
+                    dayOrder: newOrderedDays.indexOf(newName) + 1, //newOrder?
+                  }
+                : {
+                    ...artist,
+                    dayOrder: newOrderedDays.indexOf(artist.day) + 1,
+                  }
             )
           ),
         })),
@@ -365,40 +357,36 @@ class FestivalPage extends React.Component {
           headData: _map(prevState.headData, day => ({
             ...day,
             stagesCols: sortStagesByStageOrder(
-              _map(
-                day.stagesCols,
-                stage =>
-                  stage.label === prevState.selectedCell.label &&
-                  stage.stageOrder === prevState.selectedCell.stageOrder
-                    ? {
-                        ...stage,
-                        label: newName,
-                        stageOrder: newOrderedStagesPerDay.indexOf(newName) + 1,
-                      }
-                    : {
-                        ...stage,
-                        // always update order because otherwise it's getting way too messy
-                        stageOrder: newOrderedStagesPerDay.indexOf(stage.label) + 1,
-                      }
+              _map(day.stagesCols, stage =>
+                stage.label === prevState.selectedCell.label &&
+                stage.stageOrder === prevState.selectedCell.stageOrder
+                  ? {
+                      ...stage,
+                      label: newName,
+                      stageOrder: newOrderedStagesPerDay.indexOf(newName) + 1,
+                    }
+                  : {
+                      ...stage,
+                      // always update order because otherwise it's getting way too messy
+                      stageOrder: newOrderedStagesPerDay.indexOf(stage.label) + 1,
+                    }
               )
             ),
           })),
           bodyData: _map(prevState.bodyData, ts => ({
             ...ts,
             artistsCols: orderArtistsByStageOrder(
-              _map(
-                ts.artistsCols,
-                artist =>
-                  artist.stage === prevState.selectedCell.label
-                    ? {
-                        ...artist,
-                        stage: newName,
-                        stageOrder: newOrderedStagesPerDay.indexOf(newName) + 1,
-                      }
-                    : {
-                        ...artist,
-                        stageOrder: newOrderedStagesPerDay.indexOf(artist.stage) + 1,
-                      }
+              _map(ts.artistsCols, artist =>
+                artist.stage === prevState.selectedCell.label
+                  ? {
+                      ...artist,
+                      stage: newName,
+                      stageOrder: newOrderedStagesPerDay.indexOf(newName) + 1,
+                    }
+                  : {
+                      ...artist,
+                      stageOrder: newOrderedStagesPerDay.indexOf(artist.stage) + 1,
+                    }
               )
             ),
           })),
@@ -539,9 +527,6 @@ const mapPropsToDispatchToProps = props => [
   },
 ];
 
-const enhance = compose(
-  reduxFetch(mapPropsToDispatchToProps),
-  connect(mapStateToProps)
-);
+const enhance = compose(reduxFetch(mapPropsToDispatchToProps), connect(mapStateToProps));
 
 export default enhance(FestivalPage);

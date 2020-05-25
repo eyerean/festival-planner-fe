@@ -79,7 +79,10 @@ class Login extends React.Component<Props, State> {
 
     if (_every(fields, value => value) && invalidFieldsTemp.length === 0) {
       this.setState({ invalidFields: [] });
-      const cleanFields = _zipObject(_map(fields, f => f.name), _map(fields, f => f.value));
+      const cleanFields = _zipObject(
+        _map(fields, f => f.name),
+        _map(fields, f => f.value)
+      );
       this.props.dispatchLoginPost(cleanFields);
     }
   };
@@ -154,10 +157,7 @@ const mapPropsToDispatchToProps = props => [
 
 const enhance = compose(
   reduxFetch(mapPropsToDispatchToProps),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
+  connect(mapStateToProps, mapDispatchToProps)
 );
 
 export default enhance(Login);

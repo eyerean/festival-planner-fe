@@ -41,8 +41,5 @@ export const requireAuthentication = Component => {
     storeLastLocation: bindActionCreators(appActions.storeLastLocation, dispatch),
   });
 
-  return connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(AuthenticatedComponent);
+  return connect(mapStateToProps, mapDispatchToProps)(AuthenticatedComponent);
 };
